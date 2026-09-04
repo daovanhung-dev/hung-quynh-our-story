@@ -1,15 +1,17 @@
 :root {
-  --background: #fbf7f4;
-  --surface: #fffdfb;
-  --surface-muted: #f3ebe7;
-  --text-primary: #2b2525;
-  --text-secondary: #6e6364;
-  --text-muted: #96898a;
-  --accent: #b97882;
+  --background: #f5e9dc;
+  --surface: #fffaf2;
+  --surface-muted: #f1dfd2;
+  --text-primary: #302526;
+  --text-secondary: #6e5d5d;
+  --text-muted: #9a8582;
+  --accent: #bf7c80;
   --accent-deep: #8f515d;
-  --border: rgba(64, 46, 49, .12);
+  --champagne: #d8ad82;
+  --ink: #3c2a2b;
+  --border: rgba(83, 52, 48, .14);
   --radius-xl: 20px;
-  --shadow-soft: 0 24px 70px rgba(70, 48, 51, .09);
+  --shadow-soft: 0 24px 70px rgba(89, 53, 48, .11);
   --font-display: Georgia, 'Times New Roman', serif;
   --font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --ease-soft: cubic-bezier(.22, .61, .36, 1);
@@ -20,9 +22,9 @@ html { scroll-behavior: smooth; background: var(--background); }
 body {
   margin: 0;
   background:
-    radial-gradient(circle at 20% 10%, rgba(185,120,130,.06), transparent 20%),
-    radial-gradient(circle at 85% 25%, rgba(127,92,126,.05), transparent 24%),
-    linear-gradient(180deg, #fbf8f6 0%, #faf5f2 100%);
+    radial-gradient(circle at 20% 10%, rgba(185,120,130,.1), transparent 20%),
+    radial-gradient(circle at 85% 25%, rgba(216,173,130,.12), transparent 24%),
+    linear-gradient(180deg, #fbf6ef 0%, #f5e9dc 100%);
   color: var(--text-primary);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
@@ -30,6 +32,7 @@ body {
 img { max-width: 100%; }
 button, input, textarea, select { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible { outline: 3px solid rgba(191, 124, 128, .6); outline-offset: 4px; }
 ::selection { background: color-mix(in srgb, var(--accent) 28%, transparent); }
 
 .reveal-pending {

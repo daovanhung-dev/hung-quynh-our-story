@@ -73,18 +73,18 @@ import { RevealOnScrollDirective } from '../../directives/reveal-on-scroll.direc
     </section>
   `,
   styles: [`
-    .month-section { display: grid; gap: 1.35rem; scroll-margin-top: 96px; }
+    .month-section { display: grid; gap: 1.35rem; scroll-margin-top: 102px; }
 
     .month-heading {
       position: sticky;
-      top: 76px;
+      top: 78px;
       z-index: 3;
       display: flex;
       align-items: end;
       justify-content: space-between;
       gap: 1rem;
-      padding: 1rem 0 0.2rem;
-      background: linear-gradient(180deg, color-mix(in srgb, var(--background) 92%, transparent) 0%, color-mix(in srgb, var(--background) 92%, transparent) 72%, transparent 100%);
+      padding: 1.2rem 0 .45rem;
+      background: linear-gradient(180deg, color-mix(in srgb, var(--background) 98%, transparent) 0%, color-mix(in srgb, var(--background) 92%, transparent) 72%, transparent 100%);
       backdrop-filter: blur(10px);
     }
 
@@ -94,7 +94,7 @@ import { RevealOnScrollDirective } from '../../directives/reveal-on-scroll.direc
     .title { margin: 0; }
     .month-kicker {
       color: var(--accent-deep);
-      font-size: .78rem;
+      font-size: .7rem;
       font-weight: 800;
       letter-spacing: .18em;
       text-transform: uppercase;
@@ -103,7 +103,8 @@ import { RevealOnScrollDirective } from '../../directives/reveal-on-scroll.direc
     h3 {
       margin: .25rem 0;
       font-family: var(--font-display);
-      font-size: clamp(2rem, 5vw, 4rem);
+      font-size: clamp(2.2rem, 5vw, 4.2rem);
+      font-weight: 400;
       letter-spacing: -.04em;
       line-height: .94;
     }
@@ -118,11 +119,13 @@ import { RevealOnScrollDirective } from '../../directives/reveal-on-scroll.direc
       height: 42px;
       border: 1px solid var(--border);
       border-radius: 999px;
-      background: color-mix(in srgb, var(--surface) 86%, transparent);
+      background: rgba(255,250,242,.78);
       color: var(--text-primary);
       cursor: pointer;
       box-shadow: var(--shadow-soft);
+      transition: transform 180ms ease, background 180ms ease;
     }
+    .controls button:hover { transform: translateY(-2px); background: var(--surface); }
 
     .rail-mask {
       overflow: hidden;
@@ -161,17 +164,17 @@ import { RevealOnScrollDirective } from '../../directives/reveal-on-scroll.direc
     .thumb {
       overflow: hidden;
       aspect-ratio: 4 / 5;
-      border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+      border: 1px solid rgba(143,81,93,.13);
       border-radius: var(--radius-xl);
       background: var(--surface-muted);
-      box-shadow: var(--shadow-soft);
+      box-shadow: 0 14px 36px rgba(89,53,48,.08);
     }
 
     .thumb img, .thumb video {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 340ms var(--ease-soft), filter 340ms var(--ease-soft);
+      transition: transform 340ms var(--ease-soft), filter 340ms var(--ease-soft), opacity 340ms var(--ease-soft);
     }
 
     .photo-card a:hover img, .photo-card a:hover video { transform: scale(1.03); }
@@ -196,7 +199,7 @@ import { RevealOnScrollDirective } from '../../directives/reveal-on-scroll.direc
     }
 
     @media (max-width: 680px) {
-      .month-heading { top: 72px; align-items: center; }
+      .month-heading { top: 70px; align-items: center; }
       .controls button { width: 38px; height: 38px; }
       .rail { grid-auto-columns: calc((100% - var(--gap)) / 2); }
     }

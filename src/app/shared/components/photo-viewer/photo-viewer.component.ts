@@ -19,14 +19,14 @@ import type { MemoryMedia } from '../../../core/models/memory.model';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="viewer" role="dialog" aria-modal="true" aria-label="Xem ảnh toàn màn hình" (click)="close()">
+    <div class="viewer" role="dialog" aria-modal="true" aria-label="Xem kỷ niệm toàn màn hình" (click)="close()">
       <button class="close" type="button" aria-label="Đóng" (click)="$event.stopPropagation(); close()">×</button>
 
       @if (images.length > 1) {
         <button class="nav prev" type="button" aria-label="Ảnh trước" (click)="$event.stopPropagation(); previous()">←</button>
       }
 
-      <figure (click)="$event.stopPropagation()">
+      <figure class="viewer-figure" (click)="$event.stopPropagation()">
         @if (currentImage.kind === 'video') {
           <video
             [src]="currentImage.src"
@@ -40,7 +40,7 @@ import type { MemoryMedia } from '../../../core/models/memory.model';
           ></video>
         } @else {
           <img
-            [src]="currentImage.src"
+            [src]="imageSource"
             [alt]="currentImage.alt || 'Ảnh kỷ niệm'"
             (touchstart)="onTouchStart($event)"
             (touchend)="onTouchEnd($event)"
@@ -64,15 +64,17 @@ import type { MemoryMedia } from '../../../core/models/memory.model';
       z-index: 1000;
       display: grid;
       place-items: center;
-      padding: 4rem 5rem;
-      background: rgba(16, 13, 14, .94);
+      padding: 4rem 5rem 4.5rem;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(104, 46, 66, .22), transparent 35%),
+        rgba(20, 14, 16, .96);
       backdrop-filter: blur(12px);
       animation: viewer-in 260ms ease both;
     }
 
-    figure { display: grid; gap: 1rem; max-width: min(92vw, 1500px); max-height: 86dvh; margin: 0; }
-    img, video { max-width: 100%; max-height: 78dvh; margin: auto; object-fit: contain; border-radius: 12px; animation: image-in 300ms var(--ease-soft) both; }
-    figcaption { max-width: 780px; margin: auto; color: rgba(255,255,255,.82); text-align: center; line-height: 1.6; }
+    .viewer-figure { display: grid; gap: 1rem; max-width: min(92vw, 1500px); max-height: 86dvh; margin: 0; }
+    img, video { max-width: 100%; max-height: 76dvh; margin: auto; object-fit: contain; border: 1px solid rgba(255,255,255,.12); border-radius: 14px; box-shadow: 0 30px 90px rgba(0,0,0,.3); animation: image-in 300ms var(--ease-soft) both; }
+    figcaption { max-width: 780px; margin: auto; color: rgba(255,255,255,.82); font-family: var(--font-display); font-size: 1.05rem; text-align: center; line-height: 1.6; }
 
     button {
       position: fixed;
@@ -86,13 +88,16 @@ import type { MemoryMedia } from '../../../core/models/memory.model';
       color: white;
       cursor: pointer;
       backdrop-filter: blur(10px);
+      transition: background 180ms ease, transform 180ms ease, border-color 180ms ease;
     }
+
+    button:hover { border-color: rgba(255,255,255,.38); background: rgba(255,255,255,.14); }
 
     .close { top: 1rem; right: 1rem; font-size: 1.6rem; }
     .nav { top: 50%; transform: translateY(-50%); font-size: 1.2rem; }
     .prev { left: 1rem; }
     .next { right: 1rem; }
-    .counter { position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,.72); font-size: .85rem; }
+    .counter { position: fixed; bottom: 1.3rem; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,.72); font-size: .75rem; letter-spacing: .16em; }
 
     @keyframes viewer-in { from { opacity: 0; } to { opacity: 1; } }
     @keyframes image-in { from { opacity: 0; transform: scale(.975); } to { opacity: 1; transform: scale(1); } }
@@ -100,7 +105,7 @@ import type { MemoryMedia } from '../../../core/models/memory.model';
     @media (max-width: 720px) {
       .viewer { padding: 4.5rem 1rem 4rem; }
       .nav { display: none; }
-      img, video { max-height: 72dvh; }
+      img, video { max-height: 70dvh; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -117,9 +122,14 @@ export class PhotoViewerComponent implements OnInit, OnChanges, OnDestroy {
   @Output() readonly closed = new EventEmitter<void>();
 
   protected activeIndex = 0;
+  private previousOverflow = '';
 
   protected get currentImage(): MemoryMedia {
     return this.images[this.activeIndex] ?? { id: 'missing', kind: 'image', src: '' };
+  }
+
+  protected get imageSource(): string {
+    return this.currentImage.mediumSrc || this.currentImage.src;
   }
 
   ngOnInit(): void {
@@ -129,11 +139,12 @@ export class PhotoViewerComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['initialIndex'] || changes['images']) {
       this.activeIndex = Math.min(Math.max(this.initialIndex, 0), Math.max(this.images.length - 1, 0));
+      this.prefetchAdjacent();
     }
   }
 
   ngOnDestroy(): void {
-    this.document.body.style.overflow = '';
+    this.document.body.style.overflow = this.previousOverflow;
   }
 
   @HostListener('document:keydown.escape')
@@ -145,12 +156,14 @@ export class PhotoViewerComponent implements OnInit, OnChanges, OnDestroy {
   next(): void {
     if (!this.images.length) return;
     this.activeIndex = (this.activeIndex + 1) % this.images.length;
+    this.prefetchAdjacent();
   }
 
   @HostListener('document:keydown.arrowleft')
   previous(): void {
     if (!this.images.length) return;
     this.activeIndex = (this.activeIndex - 1 + this.images.length) % this.images.length;
+    this.prefetchAdjacent();
   }
 
   protected onTouchStart(event: TouchEvent): void {
@@ -165,6 +178,20 @@ export class PhotoViewerComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private lockScroll(): void {
+    this.previousOverflow = this.document.body.style.overflow;
     this.document.body.style.overflow = 'hidden';
+  }
+
+  private prefetchAdjacent(): void {
+    if (typeof Image === 'undefined' || this.images.length < 2) return;
+
+    for (const offset of [-1, 1]) {
+      const index = (this.activeIndex + offset + this.images.length) % this.images.length;
+      const image = this.images[index];
+      if (image?.kind === 'image') {
+        const preloaded = new Image();
+        preloaded.src = image.mediumSrc || image.src;
+      }
+    }
   }
 }

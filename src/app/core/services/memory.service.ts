@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MEMORIES, UNRESOLVED_MEDIA } from '../../generated/memories.generated';
 import { SITE_CONFIG } from '../constants/site.config';
+import type { IntroPhoto } from '../models/birthday.model';
 import type { Memory, MemoryMedia } from '../models/memory.model';
 import type { TimelineMedia, TimelineMonthGroup, UnresolvedMediaGroup } from '../models/timeline.model';
 
@@ -47,6 +48,29 @@ export class MemoryService {
 
   getUnresolvedMediaGroups(): readonly UnresolvedMediaGroup[] {
     return UNRESOLVED_MEDIA;
+  }
+
+  getIntroPhotos(): readonly IntroPhoto[] {
+    const datedPhotos = this.memories.flatMap((memory) =>
+      memory.images
+        .filter((image) => image.kind === 'image')
+        .map((image) => ({
+          id: image.id,
+          src: image.thumbnailSrc || image.src,
+          alt: image.alt || memory.title || 'Ảnh kỷ niệm'
+        }))
+    );
+    const unresolvedPhotos = UNRESOLVED_MEDIA.flatMap((group) =>
+      group.media
+        .filter((media) => media.kind === 'image')
+        .map((media) => ({
+          id: media.id,
+          src: media.thumbnailSrc || media.src,
+          alt: media.alt || 'Ảnh kỷ niệm'
+        }))
+    );
+
+    return [...datedPhotos, ...unresolvedPhotos];
   }
 
   getLatestPhotos(limit = 10): readonly TimelineMedia[] {

@@ -5,6 +5,8 @@ Starter này đã dựng phần khung để tiếp tục implementation theo BD:
 - Angular standalone architecture.
 - Static-only, không backend/database.
 - Home/Hero.
+- Birthday Journey: pháo hoa, photo stream thumbnail, phong thư và lá thư sinh nhật.
+- Route `/birthday` để xem lại lời chúc; lần đầu vào `/` chỉ phát một lần trong browser session.
 - Timeline theo năm.
 - Memory card.
 - Memory detail.
