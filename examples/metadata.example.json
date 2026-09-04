@@ -1,0 +1,18 @@
+{
+  "id": "2026-09-04-mot-ngay-cua-hai-dua",
+  "title": "Một ngày của hai đứa",
+  "caption": "Không phải ngày đặc biệt, nhưng vì có em nên anh muốn lưu lại.",
+  "location": "Hà Nội",
+  "cover": "001.webp",
+  "images": [
+    {
+      "file": "001.webp",
+      "alt": "Hùng và Quỳnh trong một ngày tháng 9"
+    },
+    {
+      "file": "002.webp",
+      "caption": "Một khoảnh khắc nhỏ mình muốn giữ lại."
+    },
+    "003.webp"
+  ]
+}

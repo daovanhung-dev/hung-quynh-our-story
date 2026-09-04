@@ -1,0 +1,35 @@
+{
+  "name": "hung-quynh-our-story",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Static memory timeline website for Hùng and Quỳnh.",
+  "scripts": {
+    "prestart": "npm run generate:memories",
+    "start": "ng serve",
+    "validate:memories": "node scripts/validate-memories.mjs",
+    "generate:memories": "node scripts/generate-memory-index.mjs",
+    "prebuild": "npm run validate:memories && npm run generate:memories",
+    "build": "ng build && npm run prepare:static",
+    "build:dev": "ng build --configuration development",
+    "prepare:static": "node scripts/prepare-static-host.mjs",
+    "check:scripts": "node --check scripts/lib/memory-scanner.mjs && node --check scripts/validate-memories.mjs && node --check scripts/generate-memory-index.mjs && node --check scripts/prepare-static-host.mjs"
+  },
+  "engines": {
+    "node": ">=22.22.3"
+  },
+  "dependencies": {
+    "@angular/common": "^22.1.5",
+    "@angular/compiler": "^22.1.5",
+    "@angular/core": "^22.1.5",
+    "@angular/platform-browser": "^22.1.5",
+    "@angular/router": "^22.1.5",
+    "rxjs": "^7.8.2",
+    "tslib": "^2.8.1"
+  },
+  "devDependencies": {
+    "@angular/build": "^22.1.5",
+    "@angular/cli": "^22.1.5",
+    "@angular/compiler-cli": "^22.1.5",
+    "typescript": "~6.0.3"
+  }
+}
