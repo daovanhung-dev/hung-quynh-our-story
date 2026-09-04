@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: github-pages
   cancel-in-progress: true
 
 jobs:
@@ -19,31 +19,55 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "22.22.3"
+          cache: npm
 
-      - name: Install
-        run: npm install
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Validate and generate memories
-        run: npm run prebuild
+      - name: Prepare media variants
+        run: npm run prepare:media
 
-      - name: Build for repository path
+      - name: Validate memories
+        run: npm run validate:memories
+
+      - name: Generate memories
+        run: npm run generate:memories
+
+      - name: Build Angular
         shell: bash
         run: |
           REPO_NAME="${GITHUB_REPOSITORY#*/}"
-          npx ng build --base-href "/${REPO_NAME}/"
-          npm run prepare:static
+          npx ng build \
+            --configuration production \
+            --base-href "/${REPO_NAME}/"
+
+      - name: Prepare static hosting
+        run: npm run prepare:static
+
+      - name: Verify artifact
+        shell: bash
+        run: |
+          test -f dist/our-story/index.html
+          test -f dist/our-story/404.html
+          test -f dist/our-story/.nojekyll
+          test -f dist/our-story/favicon.svg
+          test -d dist/our-story/images/memories
+          grep -q '<base href="/hung-quynh-our-story/">' dist/our-story/index.html
+
+      - name: Verify manifest assets
+        run: npm run verify:artifact
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: dist/our-story
 

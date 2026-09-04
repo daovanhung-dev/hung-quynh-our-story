@@ -13,14 +13,26 @@ import { RevealOnScrollDirective } from '../../directives/reveal-on-scroll.direc
     <article class="memory-card" appRevealOnScroll>
       <a class="cover-link" [routerLink]="['/memory', memory.id]">
         <div class="image-shell">
-          <img
-            [src]="memory.cover"
-            [alt]="memory.title || ('Kỷ niệm ' + memory.date)"
-            loading="lazy"
-            decoding="async"
-          >
+          @if (memory.coverKind !== 'video') {
+            <img
+              [src]="memory.cover"
+              [alt]="memory.title || ('Kỷ niệm ' + memory.date)"
+              loading="lazy"
+              decoding="async"
+            >
+          }
+          @if (memory.coverKind === 'video') {
+            <video
+              [src]="memory.cover"
+              [poster]="memory.coverPosterSrc"
+              muted
+              playsinline
+              preload="none"
+              aria-label="Video kỷ niệm"
+            ></video>
+          }
           @if (memory.images.length > 1) {
-            <span class="photo-count">{{ memory.images.length }} ảnh</span>
+            <span class="photo-count">{{ memory.images.length }} media</span>
           }
         </div>
       </a>
@@ -52,14 +64,14 @@ import { RevealOnScrollDirective } from '../../directives/reveal-on-scroll.direc
       box-shadow: var(--shadow-soft);
     }
 
-    img {
+    img, video {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform 420ms var(--ease-soft), filter 420ms var(--ease-soft);
     }
 
-    .cover-link:hover img { transform: scale(1.018); }
+    .cover-link:hover img, .cover-link:hover video { transform: scale(1.018); }
 
     .photo-count {
       position: absolute;

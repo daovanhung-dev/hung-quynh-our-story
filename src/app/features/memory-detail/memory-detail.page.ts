@@ -22,8 +22,19 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
 
         <section class="gallery" aria-label="Ảnh kỷ niệm">
           @for (image of item.images; track image.id; let index = $index) {
-            <button type="button" class="photo" (click)="openViewer(index)" [attr.aria-label]="'Mở ảnh ' + (index + 1)">
-              <img [src]="image.src" [alt]="image.alt || item.title || 'Ảnh kỷ niệm'" loading="lazy" decoding="async">
+            <button type="button" class="photo" (click)="openViewer(index)" [attr.aria-label]="'Mở media ' + (index + 1)">
+              @if (image.kind === 'video') {
+                <video
+                  [src]="image.src"
+                  [poster]="image.posterSrc"
+                  muted
+                  playsinline
+                  preload="none"
+                  aria-label="Video kỷ niệm"
+                ></video>
+              } @else {
+                <img [src]="image.mediumSrc || image.src" [alt]="image.alt || item.title || 'Ảnh kỷ niệm'" loading="lazy" decoding="async">
+              }
             </button>
           }
         </section>
@@ -51,8 +62,8 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
 
     .gallery { columns: 2 420px; column-gap: 1.2rem; }
     .photo { display: block; width: 100%; margin: 0 0 1.2rem; padding: 0; overflow: hidden; break-inside: avoid; border: 0; border-radius: var(--radius-xl); background: var(--surface-muted); cursor: zoom-in; box-shadow: var(--shadow-soft); }
-    .photo img { display: block; width: 100%; height: auto; transition: transform 380ms var(--ease-soft); }
-    .photo:hover img { transform: scale(1.012); }
+    .photo img, .photo video { display: block; width: 100%; height: auto; transition: transform 380ms var(--ease-soft); }
+    .photo:hover img, .photo:hover video { transform: scale(1.012); }
 
     .missing { display: grid; place-items: center; min-height: 70dvh; padding: 2rem; text-align: center; }
     .missing span { color: var(--accent); font-size: 2.5rem; }

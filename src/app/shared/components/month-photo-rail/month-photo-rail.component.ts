@@ -24,7 +24,7 @@ import { RevealOnScrollDirective } from '../../directives/reveal-on-scroll.direc
         <div>
           <p class="month-kicker">Dòng thời gian</p>
           <h3>{{ group.monthLabel }}</h3>
-          <p class="month-meta">{{ group.photoCount }} ảnh trong tháng này</p>
+          <p class="month-meta">{{ group.photoCount }} ảnh/video trong tháng này</p>
         </div>
 
         <div class="controls">
@@ -48,7 +48,18 @@ import { RevealOnScrollDirective } from '../../directives/reveal-on-scroll.direc
             <article class="photo-card">
               <a [routerLink]="['/memory', photo.memoryId]">
                 <div class="thumb">
-                  <img [src]="photo.src" [alt]="photo.alt || photo.title || 'Ảnh kỷ niệm'" loading="lazy" decoding="async">
+                  @if (photo.kind === 'video') {
+                    <video
+                      [src]="photo.src"
+                      [poster]="photo.posterSrc"
+                      muted
+                      playsinline
+                      preload="none"
+                      aria-label="Video kỷ niệm"
+                    ></video>
+                  } @else {
+                    <img [src]="photo.src" [alt]="photo.alt || photo.title || 'Ảnh kỷ niệm'" loading="lazy" decoding="async">
+                  }
                 </div>
                 <span class="date">{{ formatDayMonth(photo.date) }}</span>
                 @if (photo.title) {
@@ -156,14 +167,14 @@ import { RevealOnScrollDirective } from '../../directives/reveal-on-scroll.direc
       box-shadow: var(--shadow-soft);
     }
 
-    .thumb img {
+    .thumb img, .thumb video {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform 340ms var(--ease-soft), filter 340ms var(--ease-soft);
     }
 
-    .photo-card a:hover img { transform: scale(1.03); }
+    .photo-card a:hover img, .photo-card a:hover video { transform: scale(1.03); }
     .date {
       color: var(--text-muted);
       font-size: .8rem;

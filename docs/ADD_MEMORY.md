@@ -12,15 +12,18 @@ Ví dụ:
 public/images/memories/2026/09/04/
 ```
 
-## 2. Copy ảnh
+## 2. Copy ảnh hoặc video
 
 ```text
 001.webp
 002.webp
 003.webp
+clip.mp4
 ```
 
-Các định dạng hỗ trợ trong init: `.jpg`, `.jpeg`, `.png`, `.webp`, `.avif`, `.gif`.
+Định dạng hỗ trợ: `.jpg`, `.jpeg`, `.png`, `.webp`, `.avif`, `.gif`, `.heic`, `.heif`, `.mp4`.
+
+HEIC được giữ bản gốc và chuyển thành WebP khi chạy `npm run prepare:media`. MP4 được phát native trong viewer.
 
 ## 3. Metadata là tùy chọn
 
@@ -62,6 +65,12 @@ npm start
 
 ```bash
 npm run build
+```
+
+Nếu vừa thêm HEIC hoặc ảnh lớn, chạy thêm:
+
+```bash
+npm run prepare:media
 ```
 
 Output:

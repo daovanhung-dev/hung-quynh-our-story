@@ -12,7 +12,7 @@ import {
   SimpleChanges,
   inject
 } from '@angular/core';
-import type { MemoryImage } from '../../../core/models/memory.model';
+import type { MemoryMedia } from '../../../core/models/memory.model';
 
 @Component({
   selector: 'app-photo-viewer',
@@ -27,12 +27,25 @@ import type { MemoryImage } from '../../../core/models/memory.model';
       }
 
       <figure (click)="$event.stopPropagation()">
-        <img
-          [src]="currentImage.src"
-          [alt]="currentImage.alt || 'Ảnh kỷ niệm'"
-          (touchstart)="onTouchStart($event)"
-          (touchend)="onTouchEnd($event)"
-        >
+        @if (currentImage.kind === 'video') {
+          <video
+            [src]="currentImage.src"
+            [poster]="currentImage.posterSrc"
+            controls
+            playsinline
+            preload="metadata"
+            [attr.aria-label]="currentImage.alt || 'Video kỷ niệm'"
+            (touchstart)="onTouchStart($event)"
+            (touchend)="onTouchEnd($event)"
+          ></video>
+        } @else {
+          <img
+            [src]="currentImage.src"
+            [alt]="currentImage.alt || 'Ảnh kỷ niệm'"
+            (touchstart)="onTouchStart($event)"
+            (touchend)="onTouchEnd($event)"
+          >
+        }
         @if (currentImage.caption) {
           <figcaption>{{ currentImage.caption }}</figcaption>
         }
@@ -58,7 +71,7 @@ import type { MemoryImage } from '../../../core/models/memory.model';
     }
 
     figure { display: grid; gap: 1rem; max-width: min(92vw, 1500px); max-height: 86dvh; margin: 0; }
-    img { max-width: 100%; max-height: 78dvh; margin: auto; object-fit: contain; border-radius: 12px; animation: image-in 300ms var(--ease-soft) both; }
+    img, video { max-width: 100%; max-height: 78dvh; margin: auto; object-fit: contain; border-radius: 12px; animation: image-in 300ms var(--ease-soft) both; }
     figcaption { max-width: 780px; margin: auto; color: rgba(255,255,255,.82); text-align: center; line-height: 1.6; }
 
     button {
@@ -87,7 +100,7 @@ import type { MemoryImage } from '../../../core/models/memory.model';
     @media (max-width: 720px) {
       .viewer { padding: 4.5rem 1rem 4rem; }
       .nav { display: none; }
-      img { max-height: 72dvh; }
+      img, video { max-height: 72dvh; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -99,14 +112,14 @@ export class PhotoViewerComponent implements OnInit, OnChanges, OnDestroy {
   private readonly document = inject(DOCUMENT);
   private touchStartX = 0;
 
-  @Input({ required: true }) images: readonly MemoryImage[] = [];
+  @Input({ required: true }) images: readonly MemoryMedia[] = [];
   @Input() initialIndex = 0;
   @Output() readonly closed = new EventEmitter<void>();
 
   protected activeIndex = 0;
 
-  protected get currentImage(): MemoryImage {
-    return this.images[this.activeIndex] ?? { id: 'missing', src: '' };
+  protected get currentImage(): MemoryMedia {
+    return this.images[this.activeIndex] ?? { id: 'missing', kind: 'image', src: '' };
   }
 
   ngOnInit(): void {

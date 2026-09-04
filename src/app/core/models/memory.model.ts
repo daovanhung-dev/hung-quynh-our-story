@@ -1,12 +1,21 @@
-export interface MemoryImage {
+export type MemoryMediaKind = 'image' | 'video';
+
+export interface MemoryMedia {
   id: string;
+  kind: MemoryMediaKind;
   src: string;
   thumbnailSrc?: string;
+  mediumSrc?: string;
+  posterSrc?: string;
+  originalSrc?: string;
   alt?: string;
   width?: number;
   height?: number;
   caption?: string;
 }
+
+/** Backwards-compatible name for code that still refers to media as images. */
+export type MemoryImage = MemoryMedia;
 
 export interface Memory {
   id: string;
@@ -15,7 +24,9 @@ export interface Memory {
   caption?: string;
   location?: string;
   cover: string;
-  images: MemoryImage[];
+  coverKind: MemoryMediaKind;
+  coverPosterSrc?: string;
+  images: MemoryMedia[];
   year: number;
   month: number;
   day: number;

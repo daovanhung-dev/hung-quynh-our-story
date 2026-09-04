@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { MEMORIES } from '../../generated/memories.generated';
+import { MEMORIES, UNRESOLVED_MEDIA } from '../../generated/memories.generated';
 import { SITE_CONFIG } from '../constants/site.config';
-import type { Memory } from '../models/memory.model';
-import type { TimelineMonthGroup, TimelinePhoto } from '../models/timeline.model';
+import type { Memory, MemoryMedia } from '../models/memory.model';
+import type { TimelineMedia, TimelineMonthGroup, UnresolvedMediaGroup } from '../models/timeline.model';
 
 export interface MemoryYearGroup {
   year: number;
@@ -45,7 +45,11 @@ export class MemoryService {
     return this.monthPhotos;
   }
 
-  getLatestPhotos(limit = 10): readonly TimelinePhoto[] {
+  getUnresolvedMediaGroups(): readonly UnresolvedMediaGroup[] {
+    return UNRESOLVED_MEDIA;
+  }
+
+  getLatestPhotos(limit = 10): readonly TimelineMedia[] {
     return this.monthPhotos
       .flatMap((group) => group.photos)
       .slice(-limit)
@@ -85,7 +89,7 @@ export class MemoryService {
     for (const memory of this.memories) {
       const monthKey = `${memory.year}-${String(memory.month).padStart(2, '0')}`;
       const monthLabel = this.formatMonthLabel(memory.year, memory.month);
-      const photos: TimelinePhoto[] = memory.images.map((image, index) => ({
+      const photos: TimelineMedia[] = memory.images.map((image: MemoryMedia, index) => ({
         id: `${memory.id}-photo-${index + 1}`,
         memoryId: memory.id,
         date: memory.date,
@@ -94,7 +98,9 @@ export class MemoryService {
         day: memory.day,
         monthKey,
         monthLabel,
+        kind: image.kind,
         src: image.thumbnailSrc || image.src,
+        posterSrc: image.posterSrc,
         alt: image.alt,
         title: memory.title,
         imageCount: memory.images.length

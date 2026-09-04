@@ -70,7 +70,18 @@ import { WelcomeOverlayComponent } from '../../shared/components/welcome-overlay
           @for (photo of latestPhotos(); track photo.id) {
             <a class="latest-card" [routerLink]="['/memory', photo.memoryId]">
               <div class="thumb">
-                <img [src]="photo.src" [alt]="photo.alt || photo.title || 'Ảnh kỷ niệm'" loading="lazy" decoding="async">
+                @if (photo.kind === 'video') {
+                  <video
+                    [src]="photo.src"
+                    [poster]="photo.posterSrc"
+                    muted
+                    playsinline
+                    preload="none"
+                    aria-label="Video kỷ niệm"
+                  ></video>
+                } @else {
+                  <img [src]="photo.src" [alt]="photo.alt || photo.title || 'Ảnh kỷ niệm'" loading="lazy" decoding="async">
+                }
               </div>
               <strong>{{ photo.monthLabel }}</strong>
               <span>{{ formatDayMonth(photo.date) }}</span>
@@ -179,8 +190,8 @@ import { WelcomeOverlayComponent } from '../../shared/components/welcome-overlay
       border-radius: 18px;
       background: var(--surface-muted);
     }
-    .latest-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 320ms var(--ease-soft); }
-    .latest-card:hover img { transform: scale(1.03); }
+    .latest-card img, .latest-card video { width: 100%; height: 100%; object-fit: cover; transition: transform 320ms var(--ease-soft); }
+    .latest-card:hover img, .latest-card:hover video { transform: scale(1.03); }
     .latest-card strong { font-size: .88rem; }
     .latest-card span { color: var(--text-muted); font-size: .8rem; }
 
