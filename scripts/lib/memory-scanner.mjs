@@ -1,9 +1,7 @@
 import { access, readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const IMAGE_EXTENSIONS = new Set([
-  '.jpg', '.jpeg', '.png', '.webp', '.avif', '.gif', '.heic', '.heif'
-]);
+const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif', '.gif', '.heic', '.heif']);
 const VIDEO_EXTENSIONS = new Set(['.mp4']);
 const MEDIA_EXTENSIONS = new Set([...IMAGE_EXTENSIONS, ...VIDEO_EXTENSIONS]);
 const GENERATED_MEDIA_ROOT = path.join('public', 'images', 'generated', 'memories');
@@ -23,8 +21,8 @@ function isVideo(file) {
   return VIDEO_EXTENSIONS.has(path.extname(file).toLowerCase());
 }
 
-function isHeic(file) {
-  return ['.heic', '.heif'].includes(path.extname(file).toLowerCase());
+function isImage(file) {
+  return IMAGE_EXTENSIONS.has(path.extname(file).toLowerCase());
 }
 
 function toPublicAssetPath(...segments) {
@@ -37,6 +35,14 @@ function toPublicAssetPath(...segments) {
 
 function withoutExtension(file) {
   return file.slice(0, file.length - path.extname(file).length);
+}
+
+function relativeKey(relativeDirectory, file) {
+  return path.join(relativeDirectory, file).split(path.sep).join('/');
+}
+
+function positiveNumber(value) {
+  return Number.isFinite(value) && Number(value) > 0 ? Number(value) : undefined;
 }
 
 async function exists(filePath) {
@@ -57,10 +63,16 @@ async function readJsonIfPresent(filePath, fallback = {}) {
   }
 }
 
+async function loadVariantManifest(projectRoot) {
+  const manifest = await readJsonIfPresent(
+    path.join(projectRoot, GENERATED_MEDIA_ROOT, 'media-manifest.json'),
+    { dimensions: {} }
+  );
+  return manifest?.dimensions && typeof manifest.dimensions === 'object' ? manifest.dimensions : {};
+}
+
 function normalizeMediaSelection(metadataImages, availableMedia) {
-  if (!Array.isArray(metadataImages) || metadataImages.length === 0) {
-    return availableMedia.map((file) => ({ file }));
-  }
+  if (!Array.isArray(metadataImages) || metadataImages.length === 0) return availableMedia.map((file) => ({ file }));
 
   return metadataImages.map((item) => {
     if (typeof item === 'string') return { file: item };
@@ -69,43 +81,69 @@ function normalizeMediaSelection(metadataImages, availableMedia) {
   });
 }
 
-async function mediaManifest({ projectRoot, relativeDirectory, file, item = {}, id }) {
+async function posterAsset({ projectRoot, relativeDirectory, poster }) {
+  if (typeof poster !== 'string' || !poster.trim()) return undefined;
+  if (!isImage(poster)) return undefined;
+
+  const generated = path.join(GENERATED_MEDIA_ROOT, relativeDirectory, `${withoutExtension(poster)}-display.webp`);
+  return await exists(path.join(projectRoot, generated))
+    ? toPublicAssetPath('images', 'generated', 'memories', relativeDirectory, `${withoutExtension(poster)}-display.webp`)
+    : undefined;
+}
+
+async function mediaManifest({ projectRoot, relativeDirectory, file, item = {}, id, dimensions }) {
   const kind = isVideo(file) ? 'video' : 'image';
-  const generatedDirectory = path.join(GENERATED_MEDIA_ROOT, relativeDirectory);
-  const stem = withoutExtension(file);
-  const generatedDisplayFile = `${stem}.webp`;
-  const generatedThumbFile = `${stem}-thumb.webp`;
-  const generatedMediumFile = `${stem}-medium.webp`;
-  const generatedDisplayPath = path.join(projectRoot, generatedDirectory, generatedDisplayFile);
-  const generatedThumbPath = path.join(projectRoot, generatedDirectory, generatedThumbFile);
-  const generatedMediumPath = path.join(projectRoot, generatedDirectory, generatedMediumFile);
   const sourceAsset = toPublicAssetPath('images', 'memories', relativeDirectory, file);
-  const generatedDisplayAsset = toPublicAssetPath('images', 'generated', 'memories', relativeDirectory, generatedDisplayFile);
-  const generatedThumbAsset = toPublicAssetPath('images', 'generated', 'memories', relativeDirectory, generatedThumbFile);
-  const generatedMediumAsset = toPublicAssetPath('images', 'generated', 'memories', relativeDirectory, generatedMediumFile);
+  const stem = withoutExtension(file);
 
-  const displayPath = isHeic(file) && await exists(generatedDisplayPath)
-    ? generatedDisplayAsset
-    : sourceAsset;
+  if (kind === 'video') {
+    return {
+      id: String(item.id ?? `${id}-${stem.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`),
+      kind,
+      src: sourceAsset,
+      originalSrc: sourceAsset,
+      posterSrc: await posterAsset({ projectRoot, relativeDirectory, poster: item.poster }),
+      alt: typeof item.alt === 'string' ? item.alt : undefined,
+      caption: typeof item.caption === 'string' ? item.caption : undefined
+    };
+  }
 
+  const generatedDirectory = path.join(GENERATED_MEDIA_ROOT, relativeDirectory);
+  const candidates = {
+    thumbnailSrc: `${stem}-thumb.webp`,
+    displaySrc: `${stem}-display.webp`,
+    mediumSrc: `${stem}-medium.webp`
+  };
+  const assets = {};
+  for (const [property, generatedFile] of Object.entries(candidates)) {
+    if (await exists(path.join(projectRoot, generatedDirectory, generatedFile))) {
+      assets[property] = toPublicAssetPath('images', 'generated', 'memories', relativeDirectory, generatedFile);
+    }
+  }
+
+  const size = dimensions[relativeKey(relativeDirectory, file)] ?? {};
   return {
-    id: String(item.id ?? `${id}-${withoutExtension(file).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`),
+    id: String(item.id ?? `${id}-${stem.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`),
     kind,
-    src: displayPath,
-    thumbnailSrc: kind === 'image' && await exists(generatedThumbPath) ? generatedThumbAsset : undefined,
-    mediumSrc: kind === 'image' && await exists(generatedMediumPath) ? generatedMediumAsset : undefined,
-    originalSrc: isHeic(file) || kind === 'video' ? sourceAsset : undefined,
-    posterSrc: typeof item.poster === 'string'
-      ? toPublicAssetPath('images', 'memories', relativeDirectory, item.poster)
-      : undefined,
+    src: assets.mediumSrc ?? assets.displaySrc ?? assets.thumbnailSrc ?? sourceAsset,
+    ...assets,
+    posterSrc: await posterAsset({ projectRoot, relativeDirectory, poster: item.poster }),
     alt: typeof item.alt === 'string' ? item.alt : undefined,
-    width: Number.isFinite(item.width) ? item.width : undefined,
-    height: Number.isFinite(item.height) ? item.height : undefined,
+    width: positiveNumber(item.width) ?? positiveNumber(size.width),
+    height: positiveNumber(item.height) ?? positiveNumber(size.height),
     caption: typeof item.caption === 'string' ? item.caption : undefined
   };
 }
 
-async function scanDatedMemory({ projectRoot, year, month, day, errors }) {
+function validateImageVariants(media, context, errors) {
+  if (media.kind !== 'image') return;
+  if (!media.thumbnailSrc || !media.displaySrc || !media.mediumSrc) {
+    errors.push(`[${context}] Thiếu WebP variants; hãy chạy npm run prepare:media.`);
+  }
+  if (!media.width || !media.height) errors.push(`[${context}] Thiếu kích thước ảnh generated.`);
+}
+
+async function scanDatedMemory({ projectRoot, year, month, day, errors, dimensions }) {
   const relativeDirectory = path.join(year, month, day);
   const dayPath = path.join(projectRoot, 'public', 'images', 'memories', relativeDirectory);
   const context = `${year}/${month}/${day}`;
@@ -116,11 +154,9 @@ async function scanDatedMemory({ projectRoot, year, month, day, errors }) {
   }
 
   const files = await readdir(dayPath, { withFileTypes: true });
-  const availableMedia = naturalSort(
-    files
-      .filter((entry) => entry.isFile() && MEDIA_EXTENSIONS.has(path.extname(entry.name).toLowerCase()))
-      .map((entry) => entry.name)
-  );
+  const availableMedia = naturalSort(files
+    .filter((entry) => entry.isFile() && MEDIA_EXTENSIONS.has(path.extname(entry.name).toLowerCase()))
+    .map((entry) => entry.name));
   const metadataPath = path.join(dayPath, 'metadata.json');
   let metadata;
   try {
@@ -144,14 +180,14 @@ async function scanDatedMemory({ projectRoot, year, month, day, errors }) {
   }
 
   for (const item of selectedMedia) {
-    if (!availableMedia.includes(item.file)) {
-      errors.push(`[${context}] metadata tham chiếu media không tồn tại: ${item.file}`);
-    }
+    if (!availableMedia.includes(item.file)) errors.push(`[${context}] metadata tham chiếu media không tồn tại: ${item.file}`);
   }
 
   const coverFile = metadata.cover ?? selectedMedia[0]?.file ?? availableMedia[0];
-  if (!availableMedia.includes(coverFile)) {
-    errors.push(`[${context}] Cover không tồn tại: ${coverFile}`);
+  if (!availableMedia.includes(coverFile)) errors.push(`[${context}] Cover không tồn tại: ${coverFile}`);
+  if (!selectedMedia.some((item) => item.file === coverFile)) errors.push(`[${context}] Cover phải có trong metadata.images.`);
+  if (typeof metadata.poster === 'string' && (!availableMedia.includes(metadata.poster) || !isImage(metadata.poster))) {
+    errors.push(`[${context}] Poster phải là ảnh có trong thư mục ngày: ${metadata.poster}`);
   }
 
   const date = `${year}-${month}-${day}`;
@@ -161,13 +197,16 @@ async function scanDatedMemory({ projectRoot, year, month, day, errors }) {
   const validSelectedMedia = selectedMedia.filter((item) => availableMedia.includes(item.file));
   const images = [];
   for (const item of validSelectedMedia) {
-    images.push(await mediaManifest({ projectRoot, relativeDirectory, file: item.file, item, id }));
+    const media = await mediaManifest({ projectRoot, relativeDirectory, file: item.file, item, id, dimensions });
+    validateImageVariants(media, `${context}/${item.file}`, errors);
+    images.push(media);
   }
 
-  const coverItem = validSelectedMedia.find((item) => item.file === coverFile) ?? validSelectedMedia[0];
-  const coverMedia = coverItem
-    ? await mediaManifest({ projectRoot, relativeDirectory, file: coverItem.file, item: coverItem, id })
-    : undefined;
+  const cover = images.find((media) => media.id === String(
+    validSelectedMedia.find((item) => item.file === coverFile)?.id
+      ?? `${id}-${withoutExtension(coverFile).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
+  )) ?? images[0];
+  if (!cover) return undefined;
 
   return {
     id,
@@ -175,9 +214,7 @@ async function scanDatedMemory({ projectRoot, year, month, day, errors }) {
     title: typeof metadata.title === 'string' ? metadata.title : undefined,
     caption: typeof metadata.caption === 'string' ? metadata.caption : undefined,
     location: typeof metadata.location === 'string' ? metadata.location : undefined,
-    cover: coverMedia?.src ?? '',
-    coverKind: coverMedia?.kind ?? 'image',
-    coverPosterSrc: coverMedia?.posterSrc,
+    cover,
     images,
     year: Number(year),
     month: Number(month),
@@ -185,16 +222,12 @@ async function scanDatedMemory({ projectRoot, year, month, day, errors }) {
   };
 }
 
-async function scanUnresolvedMedia({ projectRoot }) {
+async function scanUnresolvedMedia({ projectRoot, dimensions, errors }) {
   const root = path.join(projectRoot, 'public', 'images', 'memories', '_unresolved');
   if (!(await exists(root))) return [];
 
   const audit = await readJsonIfPresent(path.join(projectRoot, 'migration-unresolved.json'), []);
-  const auditByTarget = new Map(
-    Array.isArray(audit)
-      ? audit.map((item) => [item.targetPath, item])
-      : []
-  );
+  const auditByTarget = new Map(Array.isArray(audit) ? audit.map((item) => [item.targetPath, item]) : []);
   const groups = [];
   const monthEntries = (await readdir(root, { withFileTypes: true }))
     .filter((entry) => entry.isDirectory())
@@ -203,33 +236,24 @@ async function scanUnresolvedMedia({ projectRoot }) {
   for (const monthEntry of monthEntries) {
     const sourceMonth = monthEntry.name;
     const monthPath = path.join(root, sourceMonth);
-    const files = naturalSort(
-      (await readdir(monthPath, { withFileTypes: true }))
-        .filter((entry) => entry.isFile() && MEDIA_EXTENSIONS.has(path.extname(entry.name).toLowerCase()))
-        .map((entry) => entry.name)
-    );
+    const files = naturalSort((await readdir(monthPath, { withFileTypes: true }))
+      .filter((entry) => entry.isFile() && MEDIA_EXTENSIONS.has(path.extname(entry.name).toLowerCase()))
+      .map((entry) => entry.name));
     const media = [];
     for (const file of files) {
       const relativeDirectory = path.join('_unresolved', sourceMonth);
-      const targetPath = path.join('public', 'images', 'memories', relativeDirectory, file)
-        .replaceAll(path.sep, '/');
+      const targetPath = path.join('public', 'images', 'memories', relativeDirectory, file).replaceAll(path.sep, '/');
       const auditItem = auditByTarget.get(targetPath) ?? {};
+      const entry = await mediaManifest({ projectRoot, relativeDirectory, file, item: {}, id: `unresolved-${sourceMonth}`, dimensions });
+      validateImageVariants(entry, `${relativeDirectory}/${file}`, errors);
       media.push({
-        ...(await mediaManifest({
-          projectRoot,
-          relativeDirectory,
-          file,
-          item: {},
-          id: `unresolved-${sourceMonth}`
-        })),
+        ...entry,
         id: `unresolved-${sourceMonth}-${withoutExtension(file).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
         sourceMonth,
         reason: auditItem.reason ?? 'NO_EXIF_DATE'
       });
     }
-    if (media.length > 0) {
-      groups.push({ sourceMonth, label: `Chưa xác định ngày · ${sourceMonth}`, media });
-    }
+    if (media.length > 0) groups.push({ sourceMonth, label: `Chưa xác định ngày · ${sourceMonth}`, media });
   }
   return groups;
 }
@@ -238,22 +262,17 @@ export async function scanMemories({ projectRoot = process.cwd() } = {}) {
   const root = path.join(projectRoot, 'public', 'images', 'memories');
   const errors = [];
   const memories = [];
+  if (!(await exists(root))) return { memories, unresolvedMedia: [], errors: [`Không tìm thấy thư mục: ${root}`] };
 
-  if (!(await exists(root))) {
-    return { memories, unresolvedMedia: [], errors: [`Không tìm thấy thư mục: ${root}`] };
-  }
-
+  const dimensions = await loadVariantManifest(projectRoot);
   const years = (await readdir(root, { withFileTypes: true })).filter((entry) => entry.isDirectory());
-
   for (const yearEntry of years) {
     const year = yearEntry.name;
-    if (year === '_unresolved' || year === 'generated') continue;
-    if (/^\d{4}-\d{2}$/.test(year)) continue;
+    if (year === '_unresolved' || /^\d{4}-\d{2}$/.test(year)) continue;
     if (!/^\d{4}$/.test(year)) {
       errors.push(`[${year}] Folder phải là năm YYYY.`);
       continue;
     }
-
     const yearPath = path.join(root, year);
     const months = (await readdir(yearPath, { withFileTypes: true })).filter((entry) => entry.isDirectory());
     for (const monthEntry of months) {
@@ -265,13 +284,7 @@ export async function scanMemories({ projectRoot = process.cwd() } = {}) {
       const monthPath = path.join(yearPath, month);
       const days = (await readdir(monthPath, { withFileTypes: true })).filter((entry) => entry.isDirectory());
       for (const dayEntry of days) {
-        const memory = await scanDatedMemory({
-          projectRoot,
-          year,
-          month,
-          day: dayEntry.name,
-          errors
-        });
+        const memory = await scanDatedMemory({ projectRoot, year, month, day: dayEntry.name, errors, dimensions });
         if (memory) memories.push(memory);
       }
     }
@@ -284,6 +297,6 @@ export async function scanMemories({ projectRoot = process.cwd() } = {}) {
   }
 
   memories.sort((a, b) => a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
-  const unresolvedMedia = await scanUnresolvedMedia({ projectRoot });
+  const unresolvedMedia = await scanUnresolvedMedia({ projectRoot, dimensions, errors });
   return { memories, unresolvedMedia, errors };
 }

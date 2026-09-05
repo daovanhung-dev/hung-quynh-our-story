@@ -1,4 +1,4 @@
-import { mkdir, readdir, readFile, stat } from 'node:fs/promises';
+import { mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import convertHeic from 'heic-convert';
 import sharp from 'sharp';
@@ -6,16 +6,20 @@ import sharp from 'sharp';
 const PROJECT_ROOT = process.cwd();
 const SOURCE_ROOT = path.join(PROJECT_ROOT, 'public', 'images', 'memories');
 const GENERATED_ROOT = path.join(PROJECT_ROOT, 'public', 'images', 'generated', 'memories');
-const IMAGE_EXTENSIONS = new Set([
-  '.jpg', '.jpeg', '.png', '.webp', '.avif', '.gif', '.heic', '.heif'
-]);
+const MANIFEST_PATH = path.join(GENERATED_ROOT, 'media-manifest.json');
+const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif', '.gif', '.heic', '.heif']);
+const VARIANTS = [
+  { suffix: '-thumb.webp', width: 480, quality: 82 },
+  { suffix: '-display.webp', width: 960, quality: 84 },
+  { suffix: '-medium.webp', width: 1440, quality: 86 }
+];
 
 function isImage(file) {
   return IMAGE_EXTENSIONS.has(path.extname(file).toLowerCase());
 }
 
-function relativeSourcePath(filePath) {
-  return path.relative(SOURCE_ROOT, filePath);
+function normalizedRelativePath(filePath) {
+  return path.relative(SOURCE_ROOT, filePath).split(path.sep).join('/');
 }
 
 async function listImages(directory) {
@@ -23,14 +27,26 @@ async function listImages(directory) {
   const images = [];
   for (const entry of entries) {
     const filePath = path.join(directory, entry.name);
-    if (entry.isDirectory()) {
-      if (entry.name === 'generated') continue;
-      images.push(...await listImages(filePath));
-    } else if (entry.isFile() && isImage(entry.name)) {
-      images.push(filePath);
-    }
+    if (entry.isDirectory()) images.push(...await listImages(filePath));
+    else if (entry.isFile() && isImage(entry.name)) images.push(filePath);
   }
   return images;
+}
+
+async function listFiles(directory) {
+  try {
+    const entries = await readdir(directory, { withFileTypes: true });
+    const files = [];
+    for (const entry of entries) {
+      const filePath = path.join(directory, entry.name);
+      if (entry.isDirectory()) files.push(...await listFiles(filePath));
+      else if (entry.isFile()) files.push(filePath);
+    }
+    return files;
+  } catch (error) {
+    if (error?.code === 'ENOENT') return [];
+    throw error;
+  }
 }
 
 async function openImage(filePath) {
@@ -38,21 +54,13 @@ async function openImage(filePath) {
   if (!['.heic', '.heif'].includes(extension)) return sharp(filePath).rotate();
 
   const inputBuffer = await readFile(filePath);
-  const jpegBuffer = await convertHeic({
-    buffer: inputBuffer,
-    format: 'JPEG',
-    quality: 1
-  });
+  const jpegBuffer = await convertHeic({ buffer: inputBuffer, format: 'JPEG', quality: 1 });
   return sharp(jpegBuffer).rotate();
 }
 
 async function writeVariant(image, outputPath, width, quality) {
   await mkdir(path.dirname(outputPath), { recursive: true });
-  await image
-    .clone()
-    .resize({ width, withoutEnlargement: true })
-    .webp({ quality })
-    .toFile(outputPath);
+  await image.clone().resize({ width, withoutEnlargement: true }).webp({ quality }).toFile(outputPath);
 }
 
 async function variantsAreFresh(sourcePath, outputPaths) {
@@ -66,34 +74,26 @@ async function variantsAreFresh(sourcePath, outputPaths) {
 }
 
 const sourceFiles = await listImages(SOURCE_ROOT);
+const allowedOutputs = new Set([MANIFEST_PATH]);
+const dimensions = {};
 let generatedCount = 0;
 
 async function processFile(filePath) {
-  const relativePath = relativeSourcePath(filePath);
+  const relativePath = normalizedRelativePath(filePath);
   const relativeDirectory = path.dirname(relativePath);
   const stem = path.basename(filePath, path.extname(filePath));
   const outputDirectory = path.join(GENERATED_ROOT, relativeDirectory);
-  const thumbPath = path.join(outputDirectory, `${stem}-thumb.webp`);
-  const mediumPath = path.join(outputDirectory, `${stem}-medium.webp`);
-  const displayPath = path.join(outputDirectory, `${stem}.webp`);
-  const outputPaths = ['.heic', '.heif'].includes(path.extname(filePath).toLowerCase())
-    ? [thumbPath, mediumPath, displayPath]
-    : [thumbPath, mediumPath];
+  const outputPaths = VARIANTS.map((variant) => path.join(outputDirectory, `${stem}${variant.suffix}`));
+  outputPaths.forEach((outputPath) => allowedOutputs.add(outputPath));
 
-  if (await variantsAreFresh(filePath, outputPaths)) {
-    generatedCount += 1;
-    return;
+  if (!(await variantsAreFresh(filePath, outputPaths))) {
+    const image = await openImage(filePath);
+    await Promise.all(VARIANTS.map((variant, index) => writeVariant(image, outputPaths[index], variant.width, variant.quality)));
   }
 
-  const image = await openImage(filePath);
-  await writeVariant(image, thumbPath, 480, 82);
-  await writeVariant(image, mediumPath, 1440, 86);
-
-  if (['.heic', '.heif'].includes(path.extname(filePath).toLowerCase())) {
-    await mkdir(outputDirectory, { recursive: true });
-    await image.clone().webp({ quality: 88 }).toFile(displayPath);
-  }
-
+  const metadata = await sharp(outputPaths[2]).metadata();
+  if (!metadata.width || !metadata.height) throw new Error(`Không đọc được kích thước ảnh: ${relativePath}`);
+  dimensions[relativePath] = { width: metadata.width, height: metadata.height };
   generatedCount += 1;
 }
 
@@ -108,5 +108,10 @@ async function worker() {
 }
 
 await Promise.all(Array.from({ length: concurrency }, () => worker()));
+await mkdir(GENERATED_ROOT, { recursive: true });
+await writeFile(MANIFEST_PATH, `${JSON.stringify({ version: 1, dimensions }, null, 2)}\n`, 'utf8');
 
-console.log(`Generated media variants for ${generatedCount} images.`);
+const staleFiles = (await listFiles(GENERATED_ROOT)).filter((filePath) => !allowedOutputs.has(filePath));
+await Promise.all(staleFiles.map((filePath) => rm(filePath)));
+
+console.log(`Generated responsive variants for ${generatedCount} images; removed ${staleFiles.length} stale files.`);

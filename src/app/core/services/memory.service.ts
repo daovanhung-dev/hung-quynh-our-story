@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { MEMORIES, UNRESOLVED_MEDIA } from '../../generated/memories.generated';
 import { SITE_CONFIG } from '../constants/site.config';
 import type { IntroPhoto } from '../models/birthday.model';
-import type { Memory, MemoryMedia } from '../models/memory.model';
-import type { TimelineMedia, TimelineMonthGroup, UnresolvedMediaGroup } from '../models/timeline.model';
+import type { Memory } from '../models/memory.model';
+import type { MemoryMonthGroup, UnresolvedMediaGroup } from '../models/timeline.model';
 
 export interface MemoryYearGroup {
   year: number;
@@ -17,7 +17,7 @@ export class MemoryService {
     return a.date.localeCompare(b.date) * direction;
   });
 
-  private readonly monthPhotos = this.buildMonthPhotos();
+  private readonly monthGroups = this.buildMonthGroups();
 
   getAllMemories(): readonly Memory[] {
     return this.memories;
@@ -42,8 +42,8 @@ export class MemoryService {
     }));
   }
 
-  getMonthPhotoGroups(): readonly TimelineMonthGroup[] {
-    return this.monthPhotos;
+  getMonthMemoryGroups(): readonly MemoryMonthGroup[] {
+    return this.monthGroups;
   }
 
   getUnresolvedMediaGroups(): readonly UnresolvedMediaGroup[] {
@@ -73,13 +73,6 @@ export class MemoryService {
     return [...datedPhotos, ...unresolvedPhotos];
   }
 
-  getLatestPhotos(limit = 10): readonly TimelineMedia[] {
-    return this.monthPhotos
-      .flatMap((group) => group.photos)
-      .slice(-limit)
-      .reverse();
-  }
-
   formatDate(date: string): string {
     const value = new Date(`${date}T00:00:00`);
     return new Intl.DateTimeFormat('vi-VN', {
@@ -107,36 +100,20 @@ export class MemoryService {
     return `${monthLabel.charAt(0).toUpperCase()}${monthLabel.slice(1)} ${year}`;
   }
 
-  private buildMonthPhotos(): readonly TimelineMonthGroup[] {
-    const groupMap = new Map<string, TimelineMonthGroup>();
+  private buildMonthGroups(): readonly MemoryMonthGroup[] {
+    const groupMap = new Map<string, MemoryMonthGroup>();
 
     for (const memory of this.memories) {
       const monthKey = `${memory.year}-${String(memory.month).padStart(2, '0')}`;
       const monthLabel = this.formatMonthLabel(memory.year, memory.month);
-      const photos: TimelineMedia[] = memory.images.map((image: MemoryMedia, index) => ({
-        id: `${memory.id}-photo-${index + 1}`,
-        memoryId: memory.id,
-        date: memory.date,
-        year: memory.year,
-        month: memory.month,
-        day: memory.day,
-        monthKey,
-        monthLabel,
-        kind: image.kind,
-        src: image.thumbnailSrc || image.src,
-        posterSrc: image.posterSrc,
-        alt: image.alt,
-        title: memory.title,
-        imageCount: memory.images.length
-      }));
-
       const existing = groupMap.get(monthKey);
       if (existing) {
-        const combined = [...existing.photos, ...photos];
+        const memories = [...existing.memories, memory];
         groupMap.set(monthKey, {
           ...existing,
-          photoCount: combined.length,
-          photos: combined
+          memoryCount: memories.length,
+          mediaCount: existing.mediaCount + memory.images.length,
+          memories
         });
       } else {
         groupMap.set(monthKey, {
@@ -144,8 +121,9 @@ export class MemoryService {
           monthLabel,
           year: memory.year,
           month: memory.month,
-          photoCount: photos.length,
-          photos
+          memoryCount: 1,
+          mediaCount: memory.images.length,
+          memories: [memory]
         });
       }
     }

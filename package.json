@@ -13,10 +13,12 @@
     "prebuild": "npm run prepare:media && npm run validate:memories && npm run generate:memories",
     "build": "ng build && npm run prepare:static",
     "build:pages": "npm run prebuild && ng build --configuration production --base-href /hung-quynh-our-story/ && npm run prepare:static && npm run verify:artifact",
-    "build:dev": "ng build --configuration development",
+    "build:dev": "npm run prebuild && ng build --configuration development",
     "prepare:static": "node scripts/prepare-static-host.mjs",
     "verify:artifact": "node scripts/verify-static-artifact.mjs",
-    "check:scripts": "node --check scripts/lib/memory-scanner.mjs && node --check scripts/validate-memories.mjs && node --check scripts/generate-memory-index.mjs && node --check scripts/prepare-static-host.mjs && node --check scripts/migrate-memory-images.mjs && node --check scripts/generate-media-variants.mjs && node --check scripts/verify-static-artifact.mjs"
+    "check:scripts": "node --check scripts/lib/memory-scanner.mjs && node --check scripts/validate-memories.mjs && node --check scripts/generate-memory-index.mjs && node --check scripts/prepare-static-host.mjs && node --check scripts/migrate-memory-images.mjs && node --check scripts/generate-media-variants.mjs && node --check scripts/verify-static-artifact.mjs",
+    "test": "npm run prepare:media && node --test test/**/*.test.mjs",
+    "test:e2e": "playwright test"
   },
   "engines": {
     "node": ">=22.22.3"
@@ -34,6 +36,7 @@
     "@angular/build": "^22.1.5",
     "@angular/cli": "^22.1.5",
     "@angular/compiler-cli": "^22.1.5",
+    "@playwright/test": "^1.62.1",
     "exifr": "^7.1.3",
     "heic-convert": "^2.1.0",
     "sharp": "^0.35.4",

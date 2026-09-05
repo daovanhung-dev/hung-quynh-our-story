@@ -2,108 +2,79 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import type { Memory } from '../../core/models/memory.model';
 import { MemoryService } from '../../core/services/memory.service';
+import { MediaFrameComponent } from '../../shared/components/media-frame/media-frame.component';
 import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo-viewer.component';
 
 @Component({
   standalone: true,
-  imports: [RouterLink, PhotoViewerComponent],
+  imports: [RouterLink, MediaFrameComponent, PhotoViewerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (memory; as item) {
       <article class="memory-page">
-        <a class="back" routerLink="/timeline">← Quay lại dòng thời gian</a>
-
-        <header>
-          <p class="eyebrow">Một ngày của chúng mình</p>
+        <a class="back" routerLink="/timeline">← Trở lại dòng thời gian</a>
+        <header class="essay-header">
+          <p class="eyebrow">Photo essay · {{ item.images.length }} khoảnh khắc</p>
           <time [attr.datetime]="item.date">{{ formatDate(item.date) }}</time>
-          <h1>{{ item.title || 'Một ngày rất đáng nhớ' }}</h1>
+          @if (item.title) { <h1>{{ item.title }}</h1> }
           @if (item.caption) { <p class="caption">{{ item.caption }}</p> }
-          @if (item.location) { <p class="location">⌖ {{ item.location }}</p> }
-          <p class="media-count">{{ item.images.length }} ảnh / video trong ngày này</p>
+          @if (item.location) { <p class="location">{{ item.location }}</p> }
         </header>
-
-        <section class="gallery" aria-label="Ảnh kỷ niệm">
-          @for (image of item.images; track image.id; let index = $index) {
-            <button type="button" class="photo" (click)="openViewer(index)" [attr.aria-label]="'Mở media ' + (index + 1)">
-              @if (image.kind === 'video') {
-                <video
-                  [src]="image.src"
-                  [poster]="image.posterSrc"
-                  muted
-                  playsinline
-                  preload="none"
-                  aria-label="Video kỷ niệm"
-                ></video>
-              } @else {
-                <img [src]="image.mediumSrc || image.src" [alt]="image.alt || item.title || 'Ảnh kỷ niệm'" loading="lazy" decoding="async">
-              }
-            </button>
+        <section class="essay" aria-label="Ảnh kỷ niệm">
+          @for (media of item.images; track media.id; let index = $index) {
+            <figure class="essay-frame" [class.cover]="index === 0" [class.portrait]="isPortrait(media.width, media.height)" [class.wide]="!isPortrait(media.width, media.height)">
+              <button type="button" (click)="openViewer(index)" [attr.aria-label]="'Mở media ' + (index + 1) + ' của ngày ' + formatDate(item.date)">
+                <app-media-frame [media]="media" [alt]="media.alt || 'Kỷ niệm ngày ' + formatDate(item.date)" [priority]="index === 0" [sizes]="index === 0 ? '100vw' : '(max-width: 720px) 100vw, 72vw'" />
+              </button>
+              @if (media.caption) { <figcaption>{{ media.caption }}</figcaption> }
+            </figure>
           }
         </section>
       </article>
-
-      @if (viewerOpen) {
-        <app-photo-viewer [images]="item.images" [initialIndex]="viewerIndex" (closed)="closeViewer()" />
-      }
+      @if (viewerOpen) { <app-photo-viewer [images]="item.images" [initialIndex]="viewerIndex" (closed)="closeViewer()" /> }
     } @else {
       <section class="missing">
-        <span>♡</span>
-        <h1>Có vẻ kỷ niệm này đang trốn đâu đó.</h1>
+        <span aria-hidden="true">H ♡ Q</span>
+        <h1>Kỷ niệm này chưa ở trong cuốn lưu ký.</h1>
         <a routerLink="/timeline">Trở lại những ngày của chúng mình</a>
       </section>
     }
   `,
   styles: [`
-    .memory-page { width: min(1180px, 90vw); margin: 0 auto; padding: 3rem 0 5rem; }
-    .back { display: inline-flex; margin-bottom: 4rem; color: var(--text-secondary); text-decoration: none; transition: color 180ms ease, transform 180ms ease; }
-    .back:hover { color: var(--accent-deep); transform: translateX(-3px); }
-    header { max-width: 880px; margin-bottom: 3.5rem; }
-    .eyebrow { margin: 0 0 .7rem; color: var(--accent-deep); font-size: .7rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
-    time, .location { color: var(--text-muted); font-size: .86rem; }
-    h1 { margin: .6rem 0 1.2rem; font-family: var(--font-display); font-size: clamp(3.4rem, 8vw, 7.3rem); font-weight: 400; line-height: .88; letter-spacing: -.065em; }
-    .caption { max-width: 720px; margin: 0; color: var(--text-secondary); font-family: var(--font-display); font-size: clamp(1.3rem, 3vw, 2rem); line-height: 1.45; }
-    .location { margin-top: 1rem; }
-    .media-count { margin: 1.4rem 0 0; color: var(--text-muted); font-size: .78rem; letter-spacing: .04em; }
-
-    .gallery { columns: 2 420px; column-gap: 1.2rem; }
-    .photo { display: block; width: 100%; margin: 0 0 1.2rem; padding: 0; overflow: hidden; break-inside: avoid; border: 1px solid rgba(143,81,93,.1); border-radius: var(--radius-xl); background: var(--surface-muted); cursor: zoom-in; box-shadow: var(--shadow-soft); }
-    .photo img, .photo video { display: block; width: 100%; height: auto; transition: transform 380ms var(--ease-soft), filter 380ms var(--ease-soft); }
-    .photo:hover img, .photo:hover video { transform: scale(1.012); }
-
-    .missing { display: grid; place-items: center; min-height: 70dvh; padding: 2rem; text-align: center; }
-    .missing span { color: var(--accent); font-size: 2.5rem; }
-    .missing h1 { max-width: 760px; margin: 1rem 0; }
-    .missing a { color: var(--accent-deep); }
-
-    @media (max-width: 640px) {
-      .memory-page { width: calc(100% - 2rem); padding-top: 2rem; }
-      .back { margin-bottom: 2.5rem; }
-      header { margin-bottom: 2.4rem; }
-      .gallery { columns: 1; }
-    }
+    .memory-page { width: min(1280px, calc(100% - 3rem)); margin: 0 auto; padding: clamp(2.5rem, 6vw, 5rem) 0 7rem; }
+    .back { display: inline-flex; min-height: 44px; align-items: center; margin-bottom: clamp(3rem, 8vw, 7rem); color: var(--wine); font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; }
+    .essay-header { max-width: 840px; margin: 0 auto clamp(3rem, 9vw, 8rem); text-align: center; }
+    .eyebrow { margin: 0 0 1rem; color: var(--wine); font-size: .68rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+    time { display: block; color: var(--text-secondary); font-family: var(--font-display); font-size: clamp(2.1rem, 5vw, 4.8rem); line-height: .96; }
+    h1 { margin: .7rem 0 1.1rem; font-family: var(--font-display); font-size: clamp(1.7rem, 3.2vw, 3rem); font-weight: 400; line-height: 1.15; }
+    .caption { max-width: 650px; margin: 0 auto; color: var(--text-secondary); font-family: var(--font-display); font-size: clamp(1.1rem, 2.1vw, 1.5rem); line-height: 1.6; }
+    .location { margin: 1rem 0 0; color: var(--text-muted); font-size: .78rem; }
+    .essay { display: grid; gap: clamp(2.25rem, 6vw, 6rem); }
+    .essay-frame { width: min(72vw, 820px); margin: 0 auto; }
+    .essay-frame.cover, .essay-frame.wide { width: min(100%, 1240px); }
+    .essay-frame:nth-child(3n) { margin-left: 0; }
+    .essay-frame:nth-child(4n) { margin-right: 0; }
+    figure { margin-top: 0; margin-bottom: 0; }
+    button { display: block; width: 100%; padding: 0; overflow: hidden; border: 0; background: var(--surface-soft); cursor: zoom-in; }
+    app-media-frame { display: block; min-height: 200px; }
+    button app-media-frame { transition: transform 360ms var(--ease-out); }
+    button:hover app-media-frame { transform: scale(1.008); }
+    figcaption { max-width: 580px; margin: .8rem auto 0; color: var(--text-muted); font-size: .78rem; line-height: 1.65; text-align: center; }
+    .missing { display: grid; min-height: 70dvh; place-items: center; align-content: center; padding: 2rem; text-align: center; }
+    .missing span { color: var(--wine); font-size: .7rem; font-weight: 600; letter-spacing: .16em; }
+    .missing h1 { max-width: 600px; font-size: clamp(2.2rem, 6vw, 4.8rem); }
+    .missing a { min-height: 44px; color: var(--wine); }
+    @media (max-width: 720px) { .memory-page { width: calc(100% - 2rem); padding-bottom: 4rem; } .essay-header { text-align: left; } .caption { margin-left: 0; } .essay-frame, .essay-frame.cover, .essay-frame.wide { width: 100%; } .essay-frame:nth-child(3n), .essay-frame:nth-child(4n) { margin-left: auto; margin-right: auto; } }
   `]
 })
 export class MemoryDetailPage {
   private readonly route = inject(ActivatedRoute);
   private readonly memoryService = inject(MemoryService);
-
-  protected readonly memory: Memory | undefined = this.memoryService.getMemoryById(
-    this.route.snapshot.paramMap.get('id') ?? ''
-  );
-
+  protected readonly memory: Memory | undefined = this.memoryService.getMemoryById(this.route.snapshot.paramMap.get('id') ?? '');
   protected viewerOpen = false;
   protected viewerIndex = 0;
-
-  protected formatDate(date: string): string {
-    return this.memoryService.formatDate(date);
-  }
-
-  protected openViewer(index: number): void {
-    this.viewerIndex = index;
-    this.viewerOpen = true;
-  }
-
-  protected closeViewer(): void {
-    this.viewerOpen = false;
-  }
+  protected formatDate(date: string): string { return this.memoryService.formatDate(date); }
+  protected isPortrait(width?: number, height?: number): boolean { return Boolean(width && height && height > width); }
+  protected openViewer(index: number): void { this.viewerIndex = index; this.viewerOpen = true; }
+  protected closeViewer(): void { this.viewerOpen = false; }
 }

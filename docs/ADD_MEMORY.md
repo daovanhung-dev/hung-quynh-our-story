@@ -23,7 +23,7 @@ clip.mp4
 
 Định dạng hỗ trợ: `.jpg`, `.jpeg`, `.png`, `.webp`, `.avif`, `.gif`, `.heic`, `.heif`, `.mp4`.
 
-HEIC được giữ bản gốc và chuyển thành WebP khi chạy `npm run prepare:media`. MP4 được phát native trong viewer.
+HEIC được giữ làm source và chuyển thành ba WebP 480/960/1440 khi chạy `npm run prepare:media`. MP4 chỉ được gắn `src` khi mở viewer.
 
 ## 3. Metadata là tùy chọn
 
@@ -44,6 +44,7 @@ metadata.json
 ## 4. Generate dữ liệu
 
 ```bash
+npm run prepare:media
 npm run generate:memories
 ```
 
@@ -67,11 +68,7 @@ npm start
 npm run build
 ```
 
-Nếu vừa thêm HEIC hoặc ảnh lớn, chạy thêm:
-
-```bash
-npm run prepare:media
-```
+`npm run build` và `npm start` tự gọi pipeline variants; không chỉnh `memories.generated.ts` bằng tay.
 
 Output:
 

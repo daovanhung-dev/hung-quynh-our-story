@@ -5,6 +5,8 @@ export interface MemoryMedia {
   kind: MemoryMediaKind;
   src: string;
   thumbnailSrc?: string;
+  /** A responsive 960px rendition used by cards and the photo essay. */
+  displaySrc?: string;
   mediumSrc?: string;
   posterSrc?: string;
   originalSrc?: string;
@@ -23,10 +25,8 @@ export interface Memory {
   title?: string;
   caption?: string;
   location?: string;
-  cover: string;
-  coverKind: MemoryMediaKind;
-  coverPosterSrc?: string;
-  images: MemoryMedia[];
+  cover: MemoryMedia;
+  images: readonly MemoryMedia[];
   year: number;
   month: number;
   day: number;

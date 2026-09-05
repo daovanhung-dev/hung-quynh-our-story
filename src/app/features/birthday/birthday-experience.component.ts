@@ -1,615 +1,221 @@
 import { DOCUMENT } from '@angular/common';
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  HostListener,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  inject,
-  signal
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, HostListener, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BIRTHDAY_LETTER } from '../../core/constants/birthday.config';
-import type { BirthdayLetterBlock, BirthdayStage, IntroPhoto } from '../../core/models/birthday.model';
+import type { BirthdayStage, IntroPhoto } from '../../core/models/birthday.model';
 import { BirthdayJourneyService } from '../../core/services/birthday-journey.service';
 import { MemoryService } from '../../core/services/memory.service';
-
-interface FireworkParticle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  alpha: number;
-  size: number;
-  hue: number;
-  decay: number;
-}
-
-interface IntroFrame extends IntroPhoto {
-  key: string;
-  top: string;
-  delay: string;
-  duration: string;
-  rotation: string;
-}
 
 @Component({
   selector: 'app-birthday-experience',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    @if (stage() === 'fireworks') {
-      <section class="birthday-stage fireworks-stage" role="dialog" aria-modal="true" aria-labelledby="birthday-title">
-        <div class="photo-stream" aria-hidden="true">
-          @for (photo of visiblePhotos(); track photo.key) {
-            <figure
-              class="floating-photo"
-              [style.--photo-top]="photo.top"
-              [style.--photo-delay]="photo.delay"
-              [style.--photo-duration]="photo.duration"
-              [style.--photo-rotation]="photo.rotation"
-            >
-              <img [src]="photo.src" [alt]="photo.alt || ''" loading="lazy" decoding="async">
-            </figure>
-          }
-        </div>
+    <section class="birthday-experience" [attr.data-stage]="stage()" aria-labelledby="birthday-title">
+      @switch (stage()) {
+        @case ('prologue') {
+          <div class="prologue stage-shell">
+            <div class="prologue-glow" aria-hidden="true"></div>
+            @if (introPhotos.length) {
+              <div class="photo-triptych" aria-hidden="true">
+                @for (photo of introPhotos; track photo.id; let index = $index) {
+                  <img [class]="'memory memory-' + index" [src]="photo.src" [alt]="" [attr.fetchpriority]="index === 1 ? 'high' : null" decoding="async">
+                }
+              </div>
+            }
+            <div class="prologue-copy">
+              <p class="kicker">Hùng ♡ Quỳnh</p>
+              <p class="overline">Một lời nhắn cho người anh yêu</p>
+              <h1 id="birthday-title">Có một điều nhỏ<br>anh muốn gửi đến em.</h1>
+              <p class="lede">Đi chậm một chút nhé, mình cùng mở lại những ngày đã có nhau.</p>
+              <button class="primary-action" type="button" (click)="next()">Mở lời nhắn <span aria-hidden="true">↘</span></button>
+              <button class="quiet-action" type="button" (click)="skip()">Đi tới dòng thời gian</button>
+            </div>
+            <p class="stage-index" aria-hidden="true">01 <i></i> 03</p>
+          </div>
+        }
 
-        <canvas #fireworksCanvas class="fireworks-canvas" aria-hidden="true"></canvas>
-        <div class="fireworks-veil" aria-hidden="true"></div>
-
-        <div class="birthday-content">
-          <p class="stage-mark">Hùng ♡ Quỳnh · a little celebration</p>
-          <h1 id="birthday-title" aria-label="happy birthday Hung's Love">
-            <span>happy birthday</span>
-            <strong>Hung's Love</strong>
-          </h1>
-          <p class="birthday-intro">Một điều nhỏ anh đã chuẩn bị riêng cho em.</p>
-        </div>
-
-        <div class="stage-actions">
-          <button class="primary-action" type="button" (click)="next()">
-            Mở lá thư của anh
-            <span aria-hidden="true">↗</span>
-          </button>
-          <button class="quiet-action light-action" type="button" (click)="skip()">Bỏ qua đến những kỷ niệm</button>
-        </div>
-
-        <p class="stage-index" aria-hidden="true"><span>01</span><i></i><span>03</span></p>
-      </section>
-    } @else if (stage() === 'envelope') {
-      <section class="birthday-stage envelope-stage" role="dialog" aria-modal="true" aria-labelledby="envelope-title">
-        <div class="paper-aura" aria-hidden="true"></div>
-        <div class="envelope-content">
-          <p class="stage-mark dark-mark">A letter for you · 02 / 03</p>
-          <h1 id="envelope-title">Có một điều anh muốn nói với em.</h1>
-          <p class="stage-description">Một lá thư nhỏ, dành cho người con gái anh yêu thương nhất.</p>
-
-          <button class="envelope-button" type="button" aria-label="Chạm để mở phong thư tình" (click)="next()">
-            <span class="envelope-shape" aria-hidden="true">
+        @case ('envelope') {
+          <div class="envelope-stage stage-shell">
+            <div class="envelope-copy">
+              <p class="kicker">Một phong thư nhỏ</p>
+              <h1 id="birthday-title">Gửi cô gái<br>của anh.</h1>
+              <p>Không cần vội. Chỉ cần chạm vào phong thư này khi em đã sẵn sàng.</p>
+            </div>
+            <button class="envelope-button" type="button" (click)="next()" aria-label="Mở phong thư">
               <span class="envelope-paper"></span>
               <span class="envelope-flap"></span>
-              <span class="envelope-fold envelope-fold-left"></span>
-              <span class="envelope-fold envelope-fold-right"></span>
+              <span class="envelope-fold fold-left"></span>
+              <span class="envelope-fold fold-right"></span>
               <span class="wax-seal">H<span>♡</span>Q</span>
-            </span>
-            <span class="envelope-hint">Chạm vào để mở</span>
-          </button>
+            </button>
+            <button class="quiet-action dark-action" type="button" (click)="skip()">Bỏ qua lời nhắn</button>
+            <p class="stage-index dark-index" aria-hidden="true">02 <i></i> 03</p>
+          </div>
+        }
 
-          <button class="quiet-action dark-action" type="button" (click)="skip()">Bỏ qua đến những kỷ niệm</button>
-        </div>
-      </section>
-    } @else {
-      <section class="birthday-stage letter-stage" role="dialog" aria-modal="true" aria-labelledby="letter-title">
-        <div class="letter-layout">
-          <aside class="letter-aside" aria-label="Thông tin lá thư">
-            <span class="aside-stamp">H ♡ Q</span>
-            <span class="aside-label">Birthday letter</span>
-            <span class="aside-number">03<br>of<br>03</span>
-          </aside>
-
-          <article class="love-letter">
-            <header class="letter-header">
-              <p class="stage-mark dark-mark">Hùng ♡ Quỳnh · viết cho em</p>
-              <h1 id="letter-title" tabindex="-1">Một lá thư dành cho em</h1>
-              <div class="letter-rule" aria-hidden="true"><span>♡</span></div>
-            </header>
-
-            <div class="letter-body">
-              @for (block of letter; track $index) {
-                @switch (block.kind) {
-                  @case ('salutation') {
-                    <p class="letter-salutation"><strong>{{ block.text }}</strong></p>
+        @case ('letter') {
+          <div class="letter-stage stage-shell">
+            <div class="letter-layout">
+              <aside aria-hidden="true">
+                <span>H</span><i></i><span>Q</span>
+                <small>03 / 03</small>
+              </aside>
+              <article class="love-letter" aria-labelledby="birthday-title" tabindex="-1">
+                <header>
+                  <p class="kicker">Happy birthday, my love</p>
+                  <h1 id="birthday-title">Cho em,<br>người anh thương.</h1>
+                  <div class="letter-rule" aria-hidden="true"><i></i><span>♡</span><i></i></div>
+                </header>
+                <div class="letter-body">
+                  @for (block of letter; track $index) {
+                    <p [class]="'letter-' + block.kind">{{ block.text }}</p>
                   }
-                  @case ('emphasis') {
-                    <p class="letter-emphasis"><strong>{{ block.text }}</strong></p>
-                  }
-                  @case ('signature') {
-                    <p class="letter-signature"><strong>{{ block.text }}</strong></p>
-                  }
-                  @default {
-                    <p>{{ block.text }}</p>
-                  }
-                }
-              }
+                </div>
+                <footer>
+                  <p>Những ngày đẹp nhất luôn đáng được giữ lại.</p>
+                  <button class="primary-action paper-action" type="button" (click)="goToTimeline()">Mở những kỷ niệm <span aria-hidden="true">↘</span></button>
+                  <button class="quiet-action" type="button" (click)="skip()">Đi tới dòng thời gian</button>
+                </footer>
+              </article>
             </div>
-
-            <footer class="letter-footer">
-              <p>Thư đã mở. Những ngày của chúng mình vẫn còn ở phía trước.</p>
-              <button class="primary-action paper-action" type="button" (click)="goToTimeline()">
-                Đi tới những kỷ niệm của chúng mình
-                <span aria-hidden="true">↗</span>
-              </button>
-            </footer>
-          </article>
-        </div>
-
-        <button class="letter-skip" type="button" (click)="skip()">Bỏ qua thư · đi tới timeline</button>
-      </section>
-    }
+          </div>
+        }
+      }
+    </section>
   `,
   styles: [`
     :host { display: block; }
+    .birthday-experience, .stage-shell { min-height: 100dvh; }
+    .stage-shell { position: relative; isolation: isolate; display: grid; overflow: hidden; }
+    .kicker, .overline { margin: 0; font-size: .69rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0; font-family: var(--font-display); font-size: clamp(3.3rem, 9vw, 8rem); font-weight: 400; letter-spacing: -.07em; line-height: .84; }
+    .primary-action { display: inline-flex; align-items: center; justify-content: center; gap: .75rem; min-height: 48px; padding: .78rem 1.1rem; border: 1px solid transparent; border-radius: 0; background: #fffdf9; color: var(--button); cursor: pointer; font-size: .74rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; transition: transform 180ms var(--ease-out), background 180ms var(--ease-out); }
+    .primary-action:hover { transform: translateY(-2px); background: #fff; }
+    .primary-action span { font-size: 1.1rem; }
+    .quiet-action { min-height: 44px; border: 0; background: transparent; color: inherit; cursor: pointer; font-size: .75rem; text-decoration: underline; text-underline-offset: .3rem; }
+    .stage-index { position: absolute; right: clamp(1.25rem, 4vw, 3rem); bottom: 2rem; display: flex; align-items: center; gap: .7rem; font-size: .66rem; letter-spacing: .15em; }
+    .stage-index i { display: block; width: 2rem; height: 1px; background: currentColor; opacity: .5; }
 
-    .birthday-stage {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      min-height: 100dvh;
-      overflow: hidden;
-      isolation: isolate;
-    }
+    .prologue { place-items: center; padding: clamp(2rem, 5vw, 4rem); background: #25171b; color: #fffdf9; }
+    .prologue::before { position: absolute; inset: 1rem; z-index: -1; border: 1px solid rgba(216,181,122,.27); content: ''; }
+    .prologue-glow { position: absolute; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 30%, rgba(166,84,98,.3), transparent 34%), radial-gradient(circle at 80% 90%, rgba(216,181,122,.16), transparent 25%); }
+    .prologue-copy { display: grid; justify-items: center; max-width: 720px; text-align: center; }
+    .prologue-copy .kicker { color: var(--champagne); }
+    .overline { margin-top: 2.1rem; color: rgba(255,253,249,.65); }
+    .prologue-copy h1 { margin-top: .9rem; }
+    .lede { max-width: 410px; margin: 1.5rem 0 2rem; color: rgba(255,253,249,.74); font-family: var(--font-display); font-size: clamp(1.05rem, 2vw, 1.3rem); line-height: 1.6; }
+    .prologue .quiet-action { margin-top: .7rem; color: rgba(255,253,249,.66); }
+    .photo-triptych { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+    .memory { position: absolute; width: clamp(7rem, 16vw, 13rem); aspect-ratio: 4 / 5; object-fit: cover; opacity: .24; box-shadow: 0 20px 50px rgba(0,0,0,.2); animation: memory-in 620ms var(--ease-out) both; }
+    .memory-0 { top: 11%; left: 7%; transform: rotate(-8deg); }
+    .memory-1 { right: 8%; bottom: 10%; transform: rotate(7deg); animation-delay: 120ms; }
+    .memory-2 { top: 17%; right: 18%; width: clamp(5.5rem, 12vw, 10rem); transform: rotate(-3deg); animation-delay: 220ms; }
+    @keyframes memory-in { from { opacity: 0; transform: translateY(12px) rotate(var(--rotation, 0deg)); } to { opacity: .24; } }
 
-    .fireworks-stage {
-      display: grid;
-      place-items: center;
-      padding: clamp(1.25rem, 4vw, 3rem);
-      background:
-        radial-gradient(circle at 50% 45%, rgba(111, 35, 70, .22), transparent 35%),
-        radial-gradient(circle at 15% 85%, rgba(48, 47, 116, .18), transparent 32%),
-        #050507;
-      color: #fff;
-    }
+    .envelope-stage { align-content: center; justify-items: center; gap: 2rem; padding: 2rem; background: linear-gradient(145deg, #f6e9df, #ead5c8); color: var(--ink); text-align: center; }
+    .envelope-stage::before { position: absolute; inset: 7%; border: 1px solid rgba(127,59,75,.14); content: ''; pointer-events: none; }
+    .envelope-copy { display: grid; justify-items: center; gap: 1rem; max-width: 620px; }
+    .envelope-copy .kicker { color: var(--wine); }
+    .envelope-copy p:last-child { max-width: 420px; margin: 0; color: var(--text-secondary); line-height: 1.7; }
+    .envelope-button { position: relative; width: min(78vw, 430px); aspect-ratio: 1.55; border: 0; background: transparent; cursor: pointer; filter: drop-shadow(0 24px 18px rgba(87,45,49,.17)); transition: transform 220ms var(--ease-out); }
+    .envelope-button:hover { transform: translateY(-5px); }
+    .envelope-paper, .envelope-flap, .envelope-fold { position: absolute; inset: 0; display: block; }
+    .envelope-paper { border: 1px solid rgba(108,51,65,.16); background: #fffaf2; }
+    .envelope-flap { z-index: 3; height: 71%; background: #efd9cd; clip-path: polygon(0 0,100% 0,50% 100%); }
+    .envelope-fold { top: auto; z-index: 2; width: 72%; height: 72%; background: #e7c7b9; }
+    .fold-left { left: 0; clip-path: polygon(0 0,100% 100%,0 100%); }
+    .fold-right { right: 0; clip-path: polygon(100% 0,100% 100%,0 100%); background: #e1bcae; }
+    .wax-seal { position: absolute; top: 45%; left: 50%; z-index: 4; display: grid; place-items: center; width: 4rem; height: 4rem; border: 2px solid rgba(255,255,255,.38); border-radius: 50%; background: var(--button); color: #fffaf2; font-family: var(--font-display); transform: translate(-50%,-50%) rotate(-7deg); box-shadow: inset 0 0 0 3px rgba(255,255,255,.08); }
+    .wax-seal span { font-size: .65rem; }
+    .dark-action, .dark-index { color: var(--text-muted); }
 
-    .fireworks-canvas,
-    .fireworks-veil,
-    .photo-stream {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .photo-stream {
-      z-index: 0;
-      overflow: hidden;
-      opacity: .52;
-      mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
-    }
-
-    .floating-photo {
-      position: absolute;
-      top: var(--photo-top);
-      left: 0;
-      width: clamp(7.5rem, 14vw, 13rem);
-      aspect-ratio: 4 / 5;
-      margin: 0;
-      padding: .35rem;
-      border: 1px solid rgba(255, 225, 196, .2);
-      border-radius: 1.15rem;
-      background: rgba(255, 243, 231, .08);
-      box-shadow: 0 18px 60px rgba(0, 0, 0, .3);
-      transform: translateX(-24vw) rotate(var(--photo-rotation));
-      animation: photo-drift var(--photo-duration) var(--photo-delay) linear both;
-      will-change: transform;
-    }
-
-    .floating-photo img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border-radius: .85rem;
-      object-fit: cover;
-      filter: saturate(.78) brightness(.7) contrast(1.05);
-    }
-
-    .fireworks-canvas { z-index: 1; pointer-events: none; }
-    .fireworks-veil {
-      z-index: 2;
-      pointer-events: none;
-      background: radial-gradient(ellipse at center, transparent 15%, rgba(5, 5, 7, .38) 72%, rgba(5, 5, 7, .92) 100%);
-    }
-
-    .birthday-content,
-    .stage-actions,
-    .stage-index {
-      position: relative;
-      z-index: 3;
-    }
-
-    .birthday-content {
-      width: min(760px, 100%);
-      margin-top: -5rem;
-      text-align: center;
-    }
-
-    .stage-mark {
-      margin: 0 0 1.1rem;
-      color: rgba(255, 239, 222, .72);
-      font-size: .7rem;
-      font-weight: 800;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-    }
-
-    .dark-mark { color: var(--accent-deep); }
-
-    .birthday-content h1 {
-      display: grid;
-      gap: .12em;
-      margin: 0;
-      font-family: var(--font-display);
-      font-size: clamp(3.8rem, 12vw, 9rem);
-      font-weight: 400;
-      letter-spacing: -.07em;
-      line-height: .82;
-      text-shadow: 0 10px 50px rgba(255, 115, 132, .18);
-    }
-
-    .birthday-content h1 span {
-      color: #f7c8a4;
-      font-family: var(--font-body);
-      font-size: .16em;
-      font-weight: 700;
-      letter-spacing: .38em;
-      line-height: 1;
-      text-transform: uppercase;
-    }
-
-    .birthday-content h1 strong { font-weight: 400; }
-    .birthday-intro { margin: 1.5rem 0 0; color: rgba(255,255,255,.67); font-size: .96rem; letter-spacing: .03em; }
-
-    .stage-actions {
-      position: absolute;
-      bottom: clamp(2.3rem, 8vh, 5rem);
-      display: grid;
-      justify-items: center;
-      gap: .8rem;
-    }
-
-    .primary-action {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: .8rem;
-      min-height: 3.1rem;
-      padding: .8rem 1.15rem .8rem 1.35rem;
-      border: 1px solid rgba(255, 219, 190, .28);
-      border-radius: 999px;
-      background: linear-gradient(135deg, #f4c19d, #c97880);
-      color: #2b171b;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 16px 36px rgba(205, 101, 119, .22);
-      transition: transform 240ms var(--ease-soft), box-shadow 240ms var(--ease-soft), filter 240ms var(--ease-soft);
-    }
-
-    .primary-action span { font-size: 1.15em; transition: transform 240ms var(--ease-soft); }
-    .primary-action:hover { filter: brightness(1.05); transform: translateY(-2px); box-shadow: 0 20px 44px rgba(205, 101, 119, .3); }
-    .primary-action:hover span { transform: translate(2px, -2px); }
-
-    .quiet-action,
-    .letter-skip {
-      border: 0;
-      background: transparent;
-      cursor: pointer;
-      font-size: .78rem;
-      letter-spacing: .02em;
-      text-decoration: underline;
-      text-underline-offset: .25rem;
-    }
-
-    .light-action { color: rgba(255,255,255,.58); }
-    .light-action:hover { color: #fff; }
-    .stage-index {
-      position: absolute;
-      right: clamp(1.25rem, 4vw, 3rem);
-      bottom: clamp(2.3rem, 8vh, 5rem);
-      display: flex;
-      align-items: center;
-      gap: .65rem;
-      color: rgba(255,255,255,.5);
-      font-size: .68rem;
-      letter-spacing: .18em;
-    }
-    .stage-index i { display: block; width: 2rem; height: 1px; background: rgba(255,255,255,.35); }
-
-    .envelope-stage {
-      display: grid;
-      place-items: center;
-      overflow-y: auto;
-      padding: 2rem 1rem;
-      background:
-        radial-gradient(circle at 50% 12%, rgba(255, 255, 255, .9), transparent 28%),
-        linear-gradient(145deg, #f9ede3 0%, #f1d9ca 52%, #e5c2b8 100%);
-      color: var(--text-primary);
-    }
-
-    .paper-aura {
-      position: absolute;
-      inset: 8% 12%;
-      border: 1px solid rgba(143, 81, 93, .1);
-      border-radius: 50%;
-      box-shadow: 0 0 0 28px rgba(255,255,255,.08), 0 0 0 56px rgba(255,255,255,.04);
-      pointer-events: none;
-    }
-
-    .envelope-content { position: relative; z-index: 1; display: grid; justify-items: center; width: min(700px, 100%); text-align: center; }
-    .envelope-content h1 { max-width: 620px; margin: 0; font-family: var(--font-display); font-size: clamp(2.8rem, 7vw, 6rem); font-weight: 400; letter-spacing: -.06em; line-height: .9; }
-    .stage-description { max-width: 430px; margin: 1.15rem auto 0; color: var(--text-secondary); line-height: 1.7; }
-
-    .envelope-button { display: grid; justify-items: center; gap: 1rem; margin: clamp(2.5rem, 7vh, 5rem) 0 1.7rem; border: 0; background: transparent; color: var(--text-primary); cursor: pointer; }
-    .envelope-shape { position: relative; display: block; width: clamp(17rem, 46vw, 30rem); aspect-ratio: 1.55; filter: drop-shadow(0 24px 22px rgba(105, 55, 59, .2)); transition: transform 360ms var(--ease-soft), filter 360ms var(--ease-soft); }
-    .envelope-button:hover .envelope-shape, .envelope-button:focus-visible .envelope-shape { transform: translateY(-8px) rotate(-1deg); filter: drop-shadow(0 32px 28px rgba(105, 55, 59, .26)); }
-    .envelope-paper { position: absolute; inset: 0; z-index: 1; border: 1px solid rgba(112, 57, 64, .15); border-radius: .6rem; background: #fcf4ea; }
-    .envelope-flap { position: absolute; top: 0; left: 0; z-index: 4; width: 100%; height: 72%; clip-path: polygon(0 0, 100% 0, 50% 100%); border: 1px solid rgba(112, 57, 64, .12); background: #f5dfd0; transform-origin: top center; }
-    .envelope-fold { position: absolute; bottom: 0; z-index: 3; width: 72%; height: 72%; background: #efd3c4; }
-    .envelope-fold-left { left: 0; clip-path: polygon(0 0, 100% 100%, 0 100%); }
-    .envelope-fold-right { right: 0; clip-path: polygon(100% 0, 100% 100%, 0 100%); background: #e9c8bc; }
-    .wax-seal { position: absolute; top: 43%; left: 50%; z-index: 6; display: grid; place-items: center; width: 4rem; height: 4rem; border: 3px solid #9a4f5b; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #cc7d84, #8f3f4d); color: #ffe8d8; font-family: var(--font-display); font-size: 1.1rem; line-height: .8; transform: translate(-50%, -50%) rotate(-8deg); box-shadow: inset 0 0 0 3px rgba(255,255,255,.12), 0 6px 12px rgba(97, 39, 48, .18); }
-    .wax-seal span { font-size: .72rem; }
-    .envelope-hint { color: var(--accent-deep); font-size: .8rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
-    .dark-action { color: var(--text-muted); }
-    .dark-action:hover { color: var(--accent-deep); }
-
-    .letter-stage {
-      overflow-y: auto;
-      padding: clamp(2rem, 5vw, 4rem) 1rem 4rem;
-      background:
-        radial-gradient(circle at 8% 10%, rgba(185, 120, 130, .13), transparent 22%),
-        radial-gradient(circle at 90% 84%, rgba(205, 164, 117, .13), transparent 24%),
-        #f3e5d7;
-      color: var(--text-primary);
-    }
-
-    .letter-layout { display: grid; grid-template-columns: 100px minmax(0, 820px); gap: 1.5rem; width: min(1060px, 100%); margin: 0 auto; align-items: start; }
-    .letter-aside { position: sticky; top: 1rem; display: grid; justify-items: center; gap: 1rem; padding-top: 1rem; color: var(--accent-deep); text-align: center; }
-    .aside-stamp { display: grid; place-items: center; width: 4.2rem; height: 4.2rem; border: 1px solid rgba(143,81,93,.45); border-radius: 50%; font-family: var(--font-display); font-size: 1.1rem; transform: rotate(-10deg); }
-    .aside-label, .aside-number { color: var(--text-muted); font-size: .64rem; font-weight: 800; letter-spacing: .14em; line-height: 1.5; text-transform: uppercase; }
-
-    .love-letter { position: relative; overflow: hidden; padding: clamp(2rem, 6vw, 5.5rem) clamp(1.35rem, 7vw, 6.5rem); border: 1px solid rgba(128, 83, 68, .15); background: #fffaf2; box-shadow: 0 28px 80px rgba(104, 64, 54, .14); }
-    .love-letter::before, .love-letter::after { position: absolute; content: ''; pointer-events: none; }
-    .love-letter::before { inset: .7rem; border: 1px solid rgba(185,120,130,.16); }
-    .love-letter::after { top: -10rem; right: -7rem; width: 20rem; height: 20rem; border-radius: 50%; background: rgba(214, 172, 133, .11); }
-    .letter-header, .letter-body, .letter-footer { position: relative; z-index: 1; }
-    .letter-header { text-align: center; }
-    .letter-header h1 { margin: 0; font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 400; letter-spacing: -.055em; line-height: .92; }
-    .letter-rule { display: flex; align-items: center; gap: .8rem; max-width: 230px; margin: 1.5rem auto 2.4rem; color: var(--accent); }
-    .letter-rule::before, .letter-rule::after { flex: 1; height: 1px; content: ''; background: rgba(185,120,130,.32); }
-    .letter-rule span { font-size: 1.2rem; }
-
-    .letter-body { color: #55494a; font-family: var(--font-display); font-size: clamp(1.05rem, 1.6vw, 1.18rem); line-height: 1.92; }
-    .letter-body p { margin: 0 0 1.35em; text-align: justify; text-wrap: pretty; }
-    .letter-body p:not(.letter-emphasis):not(.letter-salutation):not(.letter-signature)::first-letter { initial-letter: 1; }
-    .letter-salutation { margin-bottom: 2rem !important; color: var(--accent-deep); font-size: clamp(1.3rem, 2.2vw, 1.7rem); line-height: 1.35; text-align: left !important; }
-    .letter-emphasis { margin-block: 1.65rem !important; padding-left: 1.1rem; border-left: 2px solid rgba(185,120,130,.42); color: var(--accent-deep); line-height: 1.55; text-align: left !important; }
-    .letter-signature { margin-top: 2.7rem !important; color: var(--accent-deep); font-size: 1.18em; text-align: right !important; }
-    .letter-footer { display: grid; justify-items: center; gap: 1.1rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(128,83,68,.16); text-align: center; }
-    .letter-footer p { margin: 0; color: var(--text-muted); font-family: var(--font-body); font-size: .78rem; line-height: 1.6; }
-    .paper-action { border-color: rgba(143,81,93,.18); }
-    .letter-skip { display: block; margin: 1.5rem auto 0; color: var(--text-muted); }
-    .letter-skip:hover { color: var(--accent-deep); }
-
-    @keyframes photo-drift { from { transform: translateX(-24vw) rotate(var(--photo-rotation)); } to { transform: translateX(124vw) rotate(calc(var(--photo-rotation) + 8deg)); } }
-
-    @media (max-width: 700px) {
-      .birthday-content { margin-top: -4rem; }
-      .birthday-content h1 { font-size: clamp(3.2rem, 17vw, 6.4rem); }
-      .stage-index { display: none; }
-      .floating-photo { width: 7.5rem; }
+    .letter-stage { padding: clamp(2rem, 5vw, 5rem) 1rem; background: linear-gradient(135deg, #f1e4d7, #f8f4ee); color: var(--ink); }
+    .letter-layout { display: grid; grid-template-columns: 72px minmax(0, 800px); gap: clamp(1rem, 3vw, 2.5rem); width: min(100%, 980px); margin: auto; }
+    aside { display: grid; align-content: start; justify-items: center; gap: .65rem; padding-top: 1rem; color: var(--wine); font-family: var(--font-display); font-size: 1.35rem; }
+    aside i { width: 1px; height: 4rem; background: var(--champagne); }
+    aside small { margin-top: .4rem; color: var(--text-muted); font-family: var(--font-body); font-size: .63rem; letter-spacing: .12em; writing-mode: vertical-rl; }
+    .love-letter { position: relative; padding: clamp(2rem, 7vw, 6rem); border: 1px solid rgba(127,59,75,.18); background: var(--surface); box-shadow: var(--shadow-soft); }
+    .love-letter::before { position: absolute; inset: .65rem; border: 1px solid rgba(216,181,122,.3); content: ''; pointer-events: none; }
+    .love-letter header, .letter-body, .love-letter footer { position: relative; z-index: 1; }
+    .love-letter header { text-align: center; }
+    .love-letter header .kicker { color: var(--wine); }
+    .love-letter h1 { margin-top: .75rem; font-size: clamp(2.8rem, 6vw, 5.7rem); }
+    .letter-rule { display: flex; align-items: center; gap: .8rem; width: min(100%, 230px); margin: 1.7rem auto 3rem; color: var(--wine); }
+    .letter-rule i { flex: 1; height: 1px; background: var(--champagne); }
+    .letter-body { color: var(--text-secondary); font-family: var(--font-display); font-size: clamp(1.08rem, 1.8vw, 1.22rem); line-height: 1.9; }
+    .letter-body p { margin: 0 0 1.25em; }
+    .letter-salutation { color: var(--wine); font-size: 1.25em; }
+    .letter-emphasis { margin-left: .3rem !important; padding-left: 1rem; border-left: 2px solid var(--champagne); color: var(--wine); line-height: 1.55; }
+    .letter-signature { margin-top: 2.3rem !important; color: var(--wine); text-align: right; }
+    .love-letter footer { display: grid; justify-items: center; gap: .85rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); text-align: center; }
+    .love-letter footer p { margin: 0; color: var(--text-muted); font-size: .78rem; }
+    .paper-action { border-color: var(--button); background: var(--button); color: #fffdf9; }
+    .paper-action:hover { background: var(--wine); }
+    @media (max-width: 640px) {
+      .prologue { padding-inline: 1.2rem; }
+      .memory-2 { display: none; }
       .letter-layout { display: block; }
-      .letter-aside { position: static; display: flex; justify-content: space-between; margin: 0 auto 1rem; padding: 0; }
-      .aside-stamp { width: 3.2rem; height: 3.2rem; font-size: .86rem; }
-      .aside-number { display: none; }
-      .love-letter { padding: 2.1rem 1.3rem 2.5rem; }
-      .love-letter::before { inset: .45rem; }
-      .letter-body { font-size: 1.04rem; line-height: 1.82; }
-      .letter-body p { text-align: left; }
-      .letter-emphasis { margin-left: .2rem !important; }
-      .letter-signature { text-align: left !important; }
+      aside { display: flex; justify-content: center; margin-bottom: 1rem; padding: 0; }
+      aside i { width: 3rem; height: 1px; }
+      aside small { display: none; }
+      .love-letter { padding: 2rem 1.3rem 2.7rem; }
+      .letter-body { font-size: 1.05rem; line-height: 1.8; }
+      .letter-signature { text-align: left; }
     }
-
-    @media (prefers-reduced-motion: reduce) {
-      .floating-photo { animation: none; opacity: .45; transform: none; }
-      .primary-action, .envelope-shape { transition: none; }
-    }
+    @media (prefers-reduced-motion: reduce) { .memory { animation: none; } }
   `]
 })
 export class BirthdayExperienceComponent implements AfterViewInit, OnDestroy, OnInit {
   private readonly document = inject(DOCUMENT);
   private readonly journey = inject(BirthdayJourneyService);
-  private readonly memoryService = inject(MemoryService);
   private readonly router = inject(Router);
+  private readonly memoryService = inject(MemoryService);
 
-  @ViewChild('fireworksCanvas', { static: false }) private readonly canvasRef?: ElementRef<HTMLCanvasElement>;
-
-  protected readonly stage = signal<BirthdayStage>('fireworks');
-  protected readonly letter: readonly BirthdayLetterBlock[] = BIRTHDAY_LETTER;
-  protected readonly visiblePhotos = signal<readonly IntroFrame[]>([]);
-
-  private readonly introPhotos = this.memoryService.getIntroPhotos();
-  private readonly particles: FireworkParticle[] = [];
-  private photoCursor = 0;
-  private photoWindowId = 0;
-  private photoTimer = 0;
-  private frameId = 0;
-  private lastFirework = 0;
-  private context?: CanvasRenderingContext2D | null;
-  private previousOverflow = '';
+  protected readonly stage = signal<BirthdayStage>('prologue');
+  protected readonly letter = BIRTHDAY_LETTER;
+  protected readonly introPhotos = this.pickIntroPhotos(this.memoryService.getIntroPhotos());
 
   ngOnInit(): void {
     this.journey.start();
-    this.previousOverflow = this.document.body.style.overflow;
-    this.document.body.style.overflow = 'hidden';
-    this.refreshPhotoWindow();
-    this.photoTimer = window.setInterval(() => this.refreshPhotoWindow(), 7600);
   }
 
   ngAfterViewInit(): void {
-    window.setTimeout(() => this.focusSelector('.fireworks-stage .primary-action'), 80);
-    if (this.prefersReducedMotion()) return;
-
-    this.setupCanvas();
-    this.frameId = window.requestAnimationFrame(this.animateFireworks);
-    window.addEventListener('resize', this.handleResize);
-    this.document.addEventListener('visibilitychange', this.handleVisibility);
+    this.focus('.primary-action');
   }
 
   ngOnDestroy(): void {
-    if (this.photoTimer) window.clearInterval(this.photoTimer);
-    if (this.frameId) window.cancelAnimationFrame(this.frameId);
-    window.removeEventListener('resize', this.handleResize);
-    this.document.removeEventListener('visibilitychange', this.handleVisibility);
-    this.document.body.style.overflow = this.previousOverflow;
     this.journey.stop();
   }
 
   @HostListener('document:keydown.escape')
-  protected onEscape(): void {
-    this.skip();
-  }
-
-  protected next(): void {
-    if (this.stage() === 'fireworks') {
-      this.stage.set('envelope');
-      this.particles.length = 0;
-      window.setTimeout(() => this.focusSelector('.envelope-button'), 80);
-      return;
-    }
-
-    if (this.stage() === 'envelope') {
-      this.stage.set('letter');
-      window.setTimeout(() => this.document.getElementById('letter-title')?.focus(), 80);
-    }
-  }
-
   protected skip(): void {
     this.goToTimeline();
   }
 
-  protected goToTimeline(): void {
-    this.journey.markSeen();
-    void this.router.navigateByUrl('/timeline').finally(() => this.journey.stop());
-  }
-
-  private refreshPhotoWindow(): void {
-    if (this.introPhotos.length === 0) return;
-
-    const size = Math.min(18, this.introPhotos.length);
-    const frames = Array.from({ length: size }, (_, index): IntroFrame => {
-      const photo = this.introPhotos[(this.photoCursor + index) % this.introPhotos.length];
-      return {
-        ...photo,
-        key: `${photo.id}-${this.photoWindowId}`,
-        top: `${4 + (index % 5) * 19}%`,
-        delay: `${-((index % 6) * 1.7)}s`,
-        duration: `${15 + (index % 5) * 1.8}s`,
-        rotation: `${-7 + (index % 5) * 3}deg`
-      };
-    });
-
-    this.visiblePhotos.set(frames);
-    this.photoCursor = (this.photoCursor + Math.max(1, size - 5)) % this.introPhotos.length;
-    this.photoWindowId += 1;
-  }
-
-  private readonly handleResize = (): void => {
-    this.setupCanvas();
-  };
-
-  private readonly handleVisibility = (): void => {
-    if (!this.document.hidden && this.stage() === 'fireworks' && !this.prefersReducedMotion()) {
-      this.lastFirework = 0;
-      this.frameId = window.requestAnimationFrame(this.animateFireworks);
-    }
-  };
-
-  private prefersReducedMotion(): boolean {
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }
-
-  private focusSelector(selector: string): void {
-    (this.document.querySelector(selector) as HTMLButtonElement | HTMLHeadingElement | null)?.focus();
-  }
-
-  private setupCanvas(): void {
-    const canvas = this.canvasRef?.nativeElement;
-    if (!canvas) return;
-
-    const ratio = Math.min(Math.max(window.devicePixelRatio || 1, 1), 2);
-    canvas.width = Math.floor(window.innerWidth * ratio);
-    canvas.height = Math.floor(window.innerHeight * ratio);
-    canvas.style.width = `${window.innerWidth}px`;
-    canvas.style.height = `${window.innerHeight}px`;
-    this.context = canvas.getContext('2d');
-    this.context?.setTransform(ratio, 0, 0, ratio, 0, 0);
-  }
-
-  private readonly animateFireworks = (time = 0): void => {
-    const ctx = this.context;
-    if (!ctx || this.stage() !== 'fireworks' || this.document.hidden) {
-      this.frameId = 0;
+  protected next(): void {
+    if (this.stage() === 'prologue') {
+      this.stage.set('envelope');
+      queueMicrotask(() => this.focus('.envelope-button'));
       return;
     }
-
-    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    ctx.globalCompositeOperation = 'lighter';
-
-    if (time - this.lastFirework > 480) {
-      this.spawnFirework();
-      this.lastFirework = time;
+    if (this.stage() === 'envelope') {
+      this.stage.set('letter');
+      queueMicrotask(() => this.focus('.love-letter'));
     }
+  }
 
-    for (const particle of this.particles) {
-      particle.x += particle.vx;
-      particle.y += particle.vy;
-      particle.vy += .018;
-      particle.alpha -= particle.decay;
+  protected goToTimeline(): void {
+    this.journey.complete();
+    void this.router.navigateByUrl('/timeline');
+  }
 
-      ctx.beginPath();
-      ctx.shadowBlur = 12;
-      ctx.shadowColor = `hsla(${particle.hue}, 100%, 72%, ${particle.alpha})`;
-      ctx.fillStyle = `hsla(${particle.hue}, 100%, 76%, ${Math.max(particle.alpha, 0)})`;
-      ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-      ctx.fill();
-    }
+  private pickIntroPhotos(photos: readonly IntroPhoto[]): readonly IntroPhoto[] {
+    if (photos.length <= 3) return photos;
+    return [photos[0], photos[Math.floor(photos.length / 2)], photos[photos.length - 1]];
+  }
 
-    ctx.shadowBlur = 0;
-    this.particles.splice(0, this.particles.length, ...this.particles.filter((particle) => particle.alpha > 0));
-    this.frameId = window.requestAnimationFrame(this.animateFireworks);
-  };
-
-  private spawnFirework(): void {
-    const centerX = window.innerWidth * (.12 + Math.random() * .76);
-    const centerY = window.innerHeight * (.12 + Math.random() * .47);
-    const hue = [36, 346, 319, 278, 48][Math.floor(Math.random() * 5)];
-    const count = 58;
-
-    for (let index = 0; index < count; index += 1) {
-      const angle = (Math.PI * 2 * index) / count;
-      const speed = 1.15 + Math.random() * 2.7;
-      this.particles.push({
-        x: centerX,
-        y: centerY,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        alpha: .95,
-        size: 1.1 + Math.random() * 2.4,
-        hue: hue + Math.round((Math.random() - .5) * 18),
-        decay: .009 + Math.random() * .014
-      });
-    }
+  private focus(selector: string): void {
+    (this.document.querySelector(selector) as HTMLElement | null)?.focus();
   }
 }

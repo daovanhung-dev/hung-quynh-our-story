@@ -7,16 +7,26 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2025-11-04",
     "date": "2025-11-04",
-    "cover": "images/generated/memories/2025/11/04/IMG_2037.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2025-11-04-img-2037",
+      "kind": "image",
+      "src": "images/generated/memories/2025/11/04/IMG_2037-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2025/11/04/IMG_2037-thumb.webp",
+      "displaySrc": "images/generated/memories/2025/11/04/IMG_2037-display.webp",
+      "mediumSrc": "images/generated/memories/2025/11/04/IMG_2037-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2025-11-04-img-2037",
         "kind": "image",
-        "src": "images/generated/memories/2025/11/04/IMG_2037.webp",
+        "src": "images/generated/memories/2025/11/04/IMG_2037-medium.webp",
         "thumbnailSrc": "images/generated/memories/2025/11/04/IMG_2037-thumb.webp",
+        "displaySrc": "images/generated/memories/2025/11/04/IMG_2037-display.webp",
         "mediumSrc": "images/generated/memories/2025/11/04/IMG_2037-medium.webp",
-        "originalSrc": "images/memories/2025/11/04/IMG_2037.HEIC"
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2025,
@@ -26,16 +36,26 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2025-12-16",
     "date": "2025-12-16",
-    "cover": "images/generated/memories/2025/12/16/IMG_E3309.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2025-12-16-img-e3309",
+      "kind": "image",
+      "src": "images/generated/memories/2025/12/16/IMG_E3309-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2025/12/16/IMG_E3309-thumb.webp",
+      "displaySrc": "images/generated/memories/2025/12/16/IMG_E3309-display.webp",
+      "mediumSrc": "images/generated/memories/2025/12/16/IMG_E3309-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2025-12-16-img-e3309",
         "kind": "image",
-        "src": "images/generated/memories/2025/12/16/IMG_E3309.webp",
+        "src": "images/generated/memories/2025/12/16/IMG_E3309-medium.webp",
         "thumbnailSrc": "images/generated/memories/2025/12/16/IMG_E3309-thumb.webp",
+        "displaySrc": "images/generated/memories/2025/12/16/IMG_E3309-display.webp",
         "mediumSrc": "images/generated/memories/2025/12/16/IMG_E3309-medium.webp",
-        "originalSrc": "images/memories/2025/12/16/IMG_E3309.HEIC"
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2025,
@@ -45,114 +65,166 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-01-04",
     "date": "2026-01-04",
-    "cover": "images/generated/memories/2026/01/04/IMG_3745.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-01-04-img-3745",
+      "kind": "image",
+      "src": "images/generated/memories/2026/01/04/IMG_3745-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/01/04/IMG_3745-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/01/04/IMG_3745-display.webp",
+      "mediumSrc": "images/generated/memories/2026/01/04/IMG_3745-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-01-04-img-3745",
         "kind": "image",
-        "src": "images/generated/memories/2026/01/04/IMG_3745.webp",
+        "src": "images/generated/memories/2026/01/04/IMG_3745-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/04/IMG_3745-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/01/04/IMG_3745-display.webp",
         "mediumSrc": "images/generated/memories/2026/01/04/IMG_3745-medium.webp",
-        "originalSrc": "images/memories/2026/01/04/IMG_3745.HEIC"
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-04-img-7226",
         "kind": "image",
-        "src": "images/memories/2026/01/04/IMG_7226.JPG",
+        "src": "images/generated/memories/2026/01/04/IMG_7226-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/04/IMG_7226-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7226-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/04/IMG_7226-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7226-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-04-img-7227",
         "kind": "image",
-        "src": "images/memories/2026/01/04/IMG_7227.JPG",
+        "src": "images/generated/memories/2026/01/04/IMG_7227-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/04/IMG_7227-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7227-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/04/IMG_7227-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7227-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-04-img-7228",
         "kind": "image",
-        "src": "images/memories/2026/01/04/IMG_7228.JPG",
+        "src": "images/generated/memories/2026/01/04/IMG_7228-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/04/IMG_7228-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7228-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/04/IMG_7228-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7228-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-04-img-7229",
         "kind": "image",
-        "src": "images/memories/2026/01/04/IMG_7229.JPG",
+        "src": "images/generated/memories/2026/01/04/IMG_7229-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/04/IMG_7229-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7229-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/04/IMG_7229-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7229-medium.webp",
+        "width": 1440,
+        "height": 1080
       },
       {
         "id": "2026-01-04-img-7230",
         "kind": "image",
-        "src": "images/memories/2026/01/04/IMG_7230.JPG",
+        "src": "images/generated/memories/2026/01/04/IMG_7230-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/04/IMG_7230-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7230-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/04/IMG_7230-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7230-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-04-img-7231",
         "kind": "image",
-        "src": "images/memories/2026/01/04/IMG_7231.JPG",
+        "src": "images/generated/memories/2026/01/04/IMG_7231-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/04/IMG_7231-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7231-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/04/IMG_7231-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7231-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-04-img-7232",
         "kind": "image",
-        "src": "images/memories/2026/01/04/IMG_7232.JPG",
+        "src": "images/generated/memories/2026/01/04/IMG_7232-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/04/IMG_7232-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7232-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/04/IMG_7232-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7232-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-04-img-7233",
         "kind": "image",
-        "src": "images/memories/2026/01/04/IMG_7233.JPG",
+        "src": "images/generated/memories/2026/01/04/IMG_7233-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/04/IMG_7233-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7233-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/04/IMG_7233-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7233-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-04-img-7234",
         "kind": "image",
-        "src": "images/memories/2026/01/04/IMG_7234.JPG",
+        "src": "images/generated/memories/2026/01/04/IMG_7234-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/04/IMG_7234-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7234-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/04/IMG_7234-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7234-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-04-img-7235",
         "kind": "image",
-        "src": "images/memories/2026/01/04/IMG_7235.JPG",
+        "src": "images/generated/memories/2026/01/04/IMG_7235-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/04/IMG_7235-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7235-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/04/IMG_7235-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7235-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-04-img-7236",
         "kind": "image",
-        "src": "images/memories/2026/01/04/IMG_7236.JPG",
+        "src": "images/generated/memories/2026/01/04/IMG_7236-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/04/IMG_7236-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7236-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/04/IMG_7236-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7236-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-04-img-7237",
         "kind": "image",
-        "src": "images/memories/2026/01/04/IMG_7237.JPG",
+        "src": "images/generated/memories/2026/01/04/IMG_7237-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/04/IMG_7237-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7237-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/04/IMG_7237-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7237-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-04-img-7238",
         "kind": "image",
-        "src": "images/memories/2026/01/04/IMG_7238.JPG",
+        "src": "images/generated/memories/2026/01/04/IMG_7238-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/04/IMG_7238-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7238-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/04/IMG_7238-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7238-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-04-img-7239",
         "kind": "image",
-        "src": "images/memories/2026/01/04/IMG_7239.JPG",
+        "src": "images/generated/memories/2026/01/04/IMG_7239-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/04/IMG_7239-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7239-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/04/IMG_7239-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/04/IMG_7239-medium.webp",
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -162,115 +234,166 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-01-17",
     "date": "2026-01-17",
-    "cover": "images/generated/memories/2026/01/17/IMG_3946.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-01-17-img-3946",
+      "kind": "image",
+      "src": "images/generated/memories/2026/01/17/IMG_3946-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/01/17/IMG_3946-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/01/17/IMG_3946-display.webp",
+      "mediumSrc": "images/generated/memories/2026/01/17/IMG_3946-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-01-17-img-3946",
         "kind": "image",
-        "src": "images/generated/memories/2026/01/17/IMG_3946.webp",
+        "src": "images/generated/memories/2026/01/17/IMG_3946-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/17/IMG_3946-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/01/17/IMG_3946-display.webp",
         "mediumSrc": "images/generated/memories/2026/01/17/IMG_3946-medium.webp",
-        "originalSrc": "images/memories/2026/01/17/IMG_3946.HEIC"
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-17-img-3950",
         "kind": "image",
-        "src": "images/generated/memories/2026/01/17/IMG_3950.webp",
+        "src": "images/generated/memories/2026/01/17/IMG_3950-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/17/IMG_3950-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/01/17/IMG_3950-display.webp",
         "mediumSrc": "images/generated/memories/2026/01/17/IMG_3950-medium.webp",
-        "originalSrc": "images/memories/2026/01/17/IMG_3950.HEIC"
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-17-img-7154",
         "kind": "image",
-        "src": "images/memories/2026/01/17/IMG_7154.JPG",
+        "src": "images/generated/memories/2026/01/17/IMG_7154-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/17/IMG_7154-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7154-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/17/IMG_7154-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7154-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-17-img-7240",
         "kind": "image",
-        "src": "images/memories/2026/01/17/IMG_7240.JPG",
+        "src": "images/generated/memories/2026/01/17/IMG_7240-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/17/IMG_7240-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7240-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/17/IMG_7240-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7240-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-17-img-7241",
         "kind": "image",
-        "src": "images/memories/2026/01/17/IMG_7241.JPG",
+        "src": "images/generated/memories/2026/01/17/IMG_7241-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/17/IMG_7241-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7241-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/17/IMG_7241-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7241-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-17-img-7242",
         "kind": "image",
-        "src": "images/memories/2026/01/17/IMG_7242.JPG",
+        "src": "images/generated/memories/2026/01/17/IMG_7242-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/17/IMG_7242-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7242-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/17/IMG_7242-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7242-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-17-img-7243",
         "kind": "image",
-        "src": "images/memories/2026/01/17/IMG_7243.JPG",
+        "src": "images/generated/memories/2026/01/17/IMG_7243-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/17/IMG_7243-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7243-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/17/IMG_7243-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7243-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-17-img-7244",
         "kind": "image",
-        "src": "images/memories/2026/01/17/IMG_7244.JPG",
+        "src": "images/generated/memories/2026/01/17/IMG_7244-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/17/IMG_7244-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7244-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/17/IMG_7244-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7244-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-17-img-7245",
         "kind": "image",
-        "src": "images/memories/2026/01/17/IMG_7245.JPG",
+        "src": "images/generated/memories/2026/01/17/IMG_7245-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/17/IMG_7245-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7245-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/17/IMG_7245-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7245-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-17-img-7246",
         "kind": "image",
-        "src": "images/memories/2026/01/17/IMG_7246.JPG",
+        "src": "images/generated/memories/2026/01/17/IMG_7246-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/17/IMG_7246-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7246-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/17/IMG_7246-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7246-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-17-img-7247",
         "kind": "image",
-        "src": "images/memories/2026/01/17/IMG_7247.JPG",
+        "src": "images/generated/memories/2026/01/17/IMG_7247-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/17/IMG_7247-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7247-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/17/IMG_7247-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7247-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-17-img-7248",
         "kind": "image",
-        "src": "images/memories/2026/01/17/IMG_7248.JPG",
+        "src": "images/generated/memories/2026/01/17/IMG_7248-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/17/IMG_7248-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7248-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/17/IMG_7248-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7248-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-17-img-7250",
         "kind": "image",
-        "src": "images/memories/2026/01/17/IMG_7250.JPG",
+        "src": "images/generated/memories/2026/01/17/IMG_7250-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/17/IMG_7250-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7250-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/17/IMG_7250-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7250-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-17-img-7251",
         "kind": "image",
-        "src": "images/memories/2026/01/17/IMG_7251.JPG",
+        "src": "images/generated/memories/2026/01/17/IMG_7251-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/17/IMG_7251-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7251-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/17/IMG_7251-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7251-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-01-17-img-7253",
         "kind": "image",
-        "src": "images/memories/2026/01/17/IMG_7253.JPG",
+        "src": "images/generated/memories/2026/01/17/IMG_7253-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/17/IMG_7253-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7253-medium.webp"
+        "displaySrc": "images/generated/memories/2026/01/17/IMG_7253-display.webp",
+        "mediumSrc": "images/generated/memories/2026/01/17/IMG_7253-medium.webp",
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -280,16 +403,26 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-01-20",
     "date": "2026-01-20",
-    "cover": "images/generated/memories/2026/01/20/IMG_3982.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-01-20-img-3982",
+      "kind": "image",
+      "src": "images/generated/memories/2026/01/20/IMG_3982-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/01/20/IMG_3982-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/01/20/IMG_3982-display.webp",
+      "mediumSrc": "images/generated/memories/2026/01/20/IMG_3982-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-01-20-img-3982",
         "kind": "image",
-        "src": "images/generated/memories/2026/01/20/IMG_3982.webp",
+        "src": "images/generated/memories/2026/01/20/IMG_3982-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/20/IMG_3982-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/01/20/IMG_3982-display.webp",
         "mediumSrc": "images/generated/memories/2026/01/20/IMG_3982-medium.webp",
-        "originalSrc": "images/memories/2026/01/20/IMG_3982.HEIC"
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -299,16 +432,26 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-01-24",
     "date": "2026-01-24",
-    "cover": "images/generated/memories/2026/01/24/IMG_4060.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-01-24-img-4060",
+      "kind": "image",
+      "src": "images/generated/memories/2026/01/24/IMG_4060-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/01/24/IMG_4060-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/01/24/IMG_4060-display.webp",
+      "mediumSrc": "images/generated/memories/2026/01/24/IMG_4060-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-01-24-img-4060",
         "kind": "image",
-        "src": "images/generated/memories/2026/01/24/IMG_4060.webp",
+        "src": "images/generated/memories/2026/01/24/IMG_4060-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/24/IMG_4060-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/01/24/IMG_4060-display.webp",
         "mediumSrc": "images/generated/memories/2026/01/24/IMG_4060-medium.webp",
-        "originalSrc": "images/memories/2026/01/24/IMG_4060.HEIC"
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -318,16 +461,26 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-01-25",
     "date": "2026-01-25",
-    "cover": "images/generated/memories/2026/01/25/IMG_4064.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-01-25-img-4064",
+      "kind": "image",
+      "src": "images/generated/memories/2026/01/25/IMG_4064-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/01/25/IMG_4064-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/01/25/IMG_4064-display.webp",
+      "mediumSrc": "images/generated/memories/2026/01/25/IMG_4064-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-01-25-img-4064",
         "kind": "image",
-        "src": "images/generated/memories/2026/01/25/IMG_4064.webp",
+        "src": "images/generated/memories/2026/01/25/IMG_4064-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/01/25/IMG_4064-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/01/25/IMG_4064-display.webp",
         "mediumSrc": "images/generated/memories/2026/01/25/IMG_4064-medium.webp",
-        "originalSrc": "images/memories/2026/01/25/IMG_4064.HEIC"
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -337,65 +490,96 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-02-01",
     "date": "2026-02-01",
-    "cover": "images/generated/memories/2026/02/01/IMG_4150.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-02-01-img-4150",
+      "kind": "image",
+      "src": "images/generated/memories/2026/02/01/IMG_4150-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/02/01/IMG_4150-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/02/01/IMG_4150-display.webp",
+      "mediumSrc": "images/generated/memories/2026/02/01/IMG_4150-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-02-01-img-4150",
         "kind": "image",
-        "src": "images/generated/memories/2026/02/01/IMG_4150.webp",
+        "src": "images/generated/memories/2026/02/01/IMG_4150-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/01/IMG_4150-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/02/01/IMG_4150-display.webp",
         "mediumSrc": "images/generated/memories/2026/02/01/IMG_4150-medium.webp",
-        "originalSrc": "images/memories/2026/02/01/IMG_4150.HEIC"
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-01-img-7254",
         "kind": "image",
-        "src": "images/memories/2026/02/01/IMG_7254.JPG",
+        "src": "images/generated/memories/2026/02/01/IMG_7254-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/01/IMG_7254-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/01/IMG_7254-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/01/IMG_7254-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/01/IMG_7254-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-01-img-7255",
         "kind": "image",
-        "src": "images/memories/2026/02/01/IMG_7255.JPG",
+        "src": "images/generated/memories/2026/02/01/IMG_7255-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/01/IMG_7255-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/01/IMG_7255-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/01/IMG_7255-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/01/IMG_7255-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-01-img-7256",
         "kind": "image",
-        "src": "images/memories/2026/02/01/IMG_7256.JPG",
+        "src": "images/generated/memories/2026/02/01/IMG_7256-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/01/IMG_7256-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/01/IMG_7256-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/01/IMG_7256-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/01/IMG_7256-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-01-img-7257",
         "kind": "image",
-        "src": "images/memories/2026/02/01/IMG_7257.JPG",
+        "src": "images/generated/memories/2026/02/01/IMG_7257-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/01/IMG_7257-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/01/IMG_7257-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/01/IMG_7257-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/01/IMG_7257-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-01-img-7258",
         "kind": "image",
-        "src": "images/memories/2026/02/01/IMG_7258.JPG",
+        "src": "images/generated/memories/2026/02/01/IMG_7258-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/01/IMG_7258-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/01/IMG_7258-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/01/IMG_7258-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/01/IMG_7258-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-01-img-7259",
         "kind": "image",
-        "src": "images/memories/2026/02/01/IMG_7259.JPG",
+        "src": "images/generated/memories/2026/02/01/IMG_7259-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/01/IMG_7259-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/01/IMG_7259-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/01/IMG_7259-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/01/IMG_7259-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-01-img-7260",
         "kind": "image",
-        "src": "images/memories/2026/02/01/IMG_7260.JPG",
+        "src": "images/generated/memories/2026/02/01/IMG_7260-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/01/IMG_7260-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/01/IMG_7260-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/01/IMG_7260-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/01/IMG_7260-medium.webp",
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -405,16 +589,26 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-02-03",
     "date": "2026-02-03",
-    "cover": "images/generated/memories/2026/02/03/IMG_4192.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-02-03-img-4192",
+      "kind": "image",
+      "src": "images/generated/memories/2026/02/03/IMG_4192-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/02/03/IMG_4192-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/02/03/IMG_4192-display.webp",
+      "mediumSrc": "images/generated/memories/2026/02/03/IMG_4192-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-02-03-img-4192",
         "kind": "image",
-        "src": "images/generated/memories/2026/02/03/IMG_4192.webp",
+        "src": "images/generated/memories/2026/02/03/IMG_4192-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/03/IMG_4192-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/02/03/IMG_4192-display.webp",
         "mediumSrc": "images/generated/memories/2026/02/03/IMG_4192-medium.webp",
-        "originalSrc": "images/memories/2026/02/03/IMG_4192.HEIC"
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -424,16 +618,26 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-02-08",
     "date": "2026-02-08",
-    "cover": "images/generated/memories/2026/02/08/IMG_4242.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-02-08-img-4242",
+      "kind": "image",
+      "src": "images/generated/memories/2026/02/08/IMG_4242-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/02/08/IMG_4242-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/02/08/IMG_4242-display.webp",
+      "mediumSrc": "images/generated/memories/2026/02/08/IMG_4242-medium.webp",
+      "width": 1440,
+      "height": 1080
+    },
     "images": [
       {
         "id": "2026-02-08-img-4242",
         "kind": "image",
-        "src": "images/generated/memories/2026/02/08/IMG_4242.webp",
+        "src": "images/generated/memories/2026/02/08/IMG_4242-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/08/IMG_4242-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/02/08/IMG_4242-display.webp",
         "mediumSrc": "images/generated/memories/2026/02/08/IMG_4242-medium.webp",
-        "originalSrc": "images/memories/2026/02/08/IMG_4242.HEIC"
+        "width": 1440,
+        "height": 1080
       }
     ],
     "year": 2026,
@@ -443,410 +647,586 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-02-14",
     "date": "2026-02-14",
-    "cover": "images/generated/memories/2026/02/14/IMG_4375.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-02-14-img-4375",
+      "kind": "image",
+      "src": "images/generated/memories/2026/02/14/IMG_4375-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_4375-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/02/14/IMG_4375-display.webp",
+      "mediumSrc": "images/generated/memories/2026/02/14/IMG_4375-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-02-14-img-4375",
         "kind": "image",
-        "src": "images/generated/memories/2026/02/14/IMG_4375.webp",
+        "src": "images/generated/memories/2026/02/14/IMG_4375-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_4375-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_4375-display.webp",
         "mediumSrc": "images/generated/memories/2026/02/14/IMG_4375-medium.webp",
-        "originalSrc": "images/memories/2026/02/14/IMG_4375.HEIC"
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-4403",
         "kind": "image",
-        "src": "images/generated/memories/2026/02/14/IMG_4403.webp",
+        "src": "images/generated/memories/2026/02/14/IMG_4403-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_4403-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_4403-display.webp",
         "mediumSrc": "images/generated/memories/2026/02/14/IMG_4403-medium.webp",
-        "originalSrc": "images/memories/2026/02/14/IMG_4403.HEIC"
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-4423",
         "kind": "image",
-        "src": "images/generated/memories/2026/02/14/IMG_4423.webp",
+        "src": "images/generated/memories/2026/02/14/IMG_4423-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_4423-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_4423-display.webp",
         "mediumSrc": "images/generated/memories/2026/02/14/IMG_4423-medium.webp",
-        "originalSrc": "images/memories/2026/02/14/IMG_4423.HEIC"
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7261",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7261.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7261-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7261-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7261-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7261-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7261-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7262",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7262.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7262-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7262-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7262-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7262-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7262-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7263",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7263.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7263-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7263-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7263-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7263-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7263-medium.webp",
+        "width": 1440,
+        "height": 1080
       },
       {
         "id": "2026-02-14-img-7264",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7264.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7264-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7264-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7264-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7264-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7264-medium.webp",
+        "width": 1440,
+        "height": 1080
       },
       {
         "id": "2026-02-14-img-7265",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7265.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7265-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7265-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7265-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7265-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7265-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7266",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7266.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7266-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7266-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7266-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7266-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7266-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7267",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7267.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7267-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7267-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7267-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7267-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7267-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7268",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7268.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7268-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7268-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7268-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7268-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7268-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7269",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7269.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7269-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7269-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7269-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7269-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7269-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7270",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7270.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7270-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7270-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7270-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7270-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7270-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7271",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7271.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7271-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7271-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7271-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7271-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7271-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7272",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7272.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7272-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7272-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7272-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7272-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7272-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7273",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7273.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7273-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7273-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7273-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7273-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7273-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7274",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7274.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7274-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7274-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7274-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7274-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7274-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7275",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7275.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7275-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7275-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7275-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7275-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7275-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7276",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7276.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7276-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7276-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7276-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7276-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7276-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7277",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7277.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7277-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7277-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7277-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7277-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7277-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7278",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7278.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7278-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7278-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7278-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7278-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7278-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7279",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7279.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7279-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7279-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7279-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7279-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7279-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7280",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7280.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7280-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7280-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7280-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7280-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7280-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7281",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7281.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7281-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7281-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7281-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7281-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7281-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7282",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7282.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7282-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7282-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7282-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7282-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7282-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7283",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7283.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7283-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7283-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7283-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7283-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7283-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7284",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7284.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7284-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7284-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7284-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7284-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7284-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7285",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7285.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7285-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7285-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7285-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7285-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7285-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7286",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7286.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7286-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7286-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7286-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7286-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7286-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7287",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7287.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7287-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7287-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7287-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7287-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7287-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7288",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7288.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7288-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7288-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7288-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7288-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7288-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7289",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7289.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7289-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7289-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7289-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7289-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7289-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7290",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7290.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7290-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7290-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7290-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7290-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7290-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7291",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7291.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7291-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7291-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7291-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7291-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7291-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7292",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7292.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7292-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7292-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7292-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7292-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7292-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7293",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7293.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7293-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7293-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7293-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7293-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7293-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7294",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7294.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7294-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7294-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7294-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7294-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7294-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7295",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7295.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7295-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7295-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7295-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7295-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7295-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7296",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7296.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7296-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7296-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7296-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7296-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7296-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7297",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7297.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7297-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7297-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7297-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7297-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7297-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7298",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7298.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7298-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7298-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7298-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7298-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7298-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7299",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7299.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7299-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7299-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7299-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7299-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7299-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7300",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7300.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7300-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7300-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7300-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7300-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7300-medium.webp",
+        "width": 1440,
+        "height": 1080
       },
       {
         "id": "2026-02-14-img-7301",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7301.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7301-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7301-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7301-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7301-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7301-medium.webp",
+        "width": 1440,
+        "height": 1080
       },
       {
         "id": "2026-02-14-img-7302",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7302.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7302-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7302-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7302-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7302-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7302-medium.webp",
+        "width": 1440,
+        "height": 1080
       },
       {
         "id": "2026-02-14-img-7303",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7303.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7303-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7303-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7303-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7303-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7303-medium.webp",
+        "width": 1440,
+        "height": 1080
       },
       {
         "id": "2026-02-14-img-7304",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7304.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7304-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7304-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7304-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7304-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7304-medium.webp",
+        "width": 1440,
+        "height": 1080
       },
       {
         "id": "2026-02-14-img-7305",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7305.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7305-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7305-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7305-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7305-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7305-medium.webp",
+        "width": 1440,
+        "height": 1080
       },
       {
         "id": "2026-02-14-img-7306",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7306.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7306-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7306-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7306-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7306-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7306-medium.webp",
+        "width": 1440,
+        "height": 1080
       },
       {
         "id": "2026-02-14-img-7307",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7307.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7307-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7307-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7307-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7307-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7307-medium.webp",
+        "width": 1440,
+        "height": 1080
       },
       {
         "id": "2026-02-14-img-7308",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7308.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7308-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7308-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7308-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7308-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7308-medium.webp",
+        "width": 1440,
+        "height": 810
       },
       {
         "id": "2026-02-14-img-7309",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7309.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7309-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7309-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7309-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7309-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7309-medium.webp",
+        "width": 1440,
+        "height": 810
       },
       {
         "id": "2026-02-14-img-7310",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7310.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7310-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7310-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7310-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7310-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7310-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7311",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7311.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7311-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7311-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7311-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7311-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7311-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7312",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7312.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7312-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7312-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7312-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7312-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7312-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-7313",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_7313.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_7313-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_7313-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7313-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_7313-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_7313-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-02-14-img-e4419",
         "kind": "image",
-        "src": "images/memories/2026/02/14/IMG_E4419.JPG",
+        "src": "images/generated/memories/2026/02/14/IMG_E4419-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/14/IMG_E4419-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/02/14/IMG_E4419-medium.webp"
+        "displaySrc": "images/generated/memories/2026/02/14/IMG_E4419-display.webp",
+        "mediumSrc": "images/generated/memories/2026/02/14/IMG_E4419-medium.webp",
+        "width": 1440,
+        "height": 810
       }
     ],
     "year": 2026,
@@ -856,16 +1236,26 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-02-23",
     "date": "2026-02-23",
-    "cover": "images/generated/memories/2026/02/23/IMG_4592.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-02-23-img-4592",
+      "kind": "image",
+      "src": "images/generated/memories/2026/02/23/IMG_4592-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/02/23/IMG_4592-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/02/23/IMG_4592-display.webp",
+      "mediumSrc": "images/generated/memories/2026/02/23/IMG_4592-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-02-23-img-4592",
         "kind": "image",
-        "src": "images/generated/memories/2026/02/23/IMG_4592.webp",
+        "src": "images/generated/memories/2026/02/23/IMG_4592-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/23/IMG_4592-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/02/23/IMG_4592-display.webp",
         "mediumSrc": "images/generated/memories/2026/02/23/IMG_4592-medium.webp",
-        "originalSrc": "images/memories/2026/02/23/IMG_4592.HEIC"
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -875,16 +1265,26 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-02-24",
     "date": "2026-02-24",
-    "cover": "images/generated/memories/2026/02/24/IMG_4597.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-02-24-img-4597",
+      "kind": "image",
+      "src": "images/generated/memories/2026/02/24/IMG_4597-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/02/24/IMG_4597-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/02/24/IMG_4597-display.webp",
+      "mediumSrc": "images/generated/memories/2026/02/24/IMG_4597-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-02-24-img-4597",
         "kind": "image",
-        "src": "images/generated/memories/2026/02/24/IMG_4597.webp",
+        "src": "images/generated/memories/2026/02/24/IMG_4597-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/02/24/IMG_4597-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/02/24/IMG_4597-display.webp",
         "mediumSrc": "images/generated/memories/2026/02/24/IMG_4597-medium.webp",
-        "originalSrc": "images/memories/2026/02/24/IMG_4597.HEIC"
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -894,64 +1294,96 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-03-08",
     "date": "2026-03-08",
-    "cover": "images/memories/2026/03/08/IMG_7314.JPG",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-03-08-img-7314",
+      "kind": "image",
+      "src": "images/generated/memories/2026/03/08/IMG_7314-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/03/08/IMG_7314-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/03/08/IMG_7314-display.webp",
+      "mediumSrc": "images/generated/memories/2026/03/08/IMG_7314-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-03-08-img-7314",
         "kind": "image",
-        "src": "images/memories/2026/03/08/IMG_7314.JPG",
+        "src": "images/generated/memories/2026/03/08/IMG_7314-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/08/IMG_7314-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/08/IMG_7314-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/08/IMG_7314-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/08/IMG_7314-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-08-img-7315",
         "kind": "image",
-        "src": "images/memories/2026/03/08/IMG_7315.JPG",
+        "src": "images/generated/memories/2026/03/08/IMG_7315-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/08/IMG_7315-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/08/IMG_7315-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/08/IMG_7315-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/08/IMG_7315-medium.webp",
+        "width": 1440,
+        "height": 1080
       },
       {
         "id": "2026-03-08-img-7316",
         "kind": "image",
-        "src": "images/memories/2026/03/08/IMG_7316.JPG",
+        "src": "images/generated/memories/2026/03/08/IMG_7316-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/08/IMG_7316-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/08/IMG_7316-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/08/IMG_7316-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/08/IMG_7316-medium.webp",
+        "width": 1440,
+        "height": 1080
       },
       {
         "id": "2026-03-08-img-7317",
         "kind": "image",
-        "src": "images/memories/2026/03/08/IMG_7317.JPG",
+        "src": "images/generated/memories/2026/03/08/IMG_7317-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/08/IMG_7317-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/08/IMG_7317-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/08/IMG_7317-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/08/IMG_7317-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-08-img-7318",
         "kind": "image",
-        "src": "images/memories/2026/03/08/IMG_7318.JPG",
+        "src": "images/generated/memories/2026/03/08/IMG_7318-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/08/IMG_7318-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/08/IMG_7318-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/08/IMG_7318-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/08/IMG_7318-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-08-img-7319",
         "kind": "image",
-        "src": "images/memories/2026/03/08/IMG_7319.JPG",
+        "src": "images/generated/memories/2026/03/08/IMG_7319-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/08/IMG_7319-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/08/IMG_7319-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/08/IMG_7319-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/08/IMG_7319-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-08-img-7320",
         "kind": "image",
-        "src": "images/memories/2026/03/08/IMG_7320.JPG",
+        "src": "images/generated/memories/2026/03/08/IMG_7320-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/08/IMG_7320-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/08/IMG_7320-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/08/IMG_7320-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/08/IMG_7320-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-08-img-7321",
         "kind": "image",
-        "src": "images/memories/2026/03/08/IMG_7321.JPG",
+        "src": "images/generated/memories/2026/03/08/IMG_7321-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/08/IMG_7321-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/08/IMG_7321-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/08/IMG_7321-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/08/IMG_7321-medium.webp",
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -961,15 +1393,26 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-03-11",
     "date": "2026-03-11",
-    "cover": "images/memories/2026/03/11/IMG_4834.PNG",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-03-11-img-4834",
+      "kind": "image",
+      "src": "images/generated/memories/2026/03/11/IMG_4834-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/03/11/IMG_4834-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/03/11/IMG_4834-display.webp",
+      "mediumSrc": "images/generated/memories/2026/03/11/IMG_4834-medium.webp",
+      "width": 1125,
+      "height": 2436
+    },
     "images": [
       {
         "id": "2026-03-11-img-4834",
         "kind": "image",
-        "src": "images/memories/2026/03/11/IMG_4834.PNG",
+        "src": "images/generated/memories/2026/03/11/IMG_4834-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/11/IMG_4834-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/11/IMG_4834-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/11/IMG_4834-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/11/IMG_4834-medium.webp",
+        "width": 1125,
+        "height": 2436
       }
     ],
     "year": 2026,
@@ -979,45 +1422,66 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-03-15",
     "date": "2026-03-15",
-    "cover": "images/generated/memories/2026/03/15/IMG_4889.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-03-15-img-4889",
+      "kind": "image",
+      "src": "images/generated/memories/2026/03/15/IMG_4889-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/03/15/IMG_4889-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/03/15/IMG_4889-display.webp",
+      "mediumSrc": "images/generated/memories/2026/03/15/IMG_4889-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-03-15-img-4889",
         "kind": "image",
-        "src": "images/generated/memories/2026/03/15/IMG_4889.webp",
+        "src": "images/generated/memories/2026/03/15/IMG_4889-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/15/IMG_4889-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/03/15/IMG_4889-display.webp",
         "mediumSrc": "images/generated/memories/2026/03/15/IMG_4889-medium.webp",
-        "originalSrc": "images/memories/2026/03/15/IMG_4889.HEIC"
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-15-img-4902",
         "kind": "image",
-        "src": "images/generated/memories/2026/03/15/IMG_4902.webp",
+        "src": "images/generated/memories/2026/03/15/IMG_4902-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/15/IMG_4902-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/03/15/IMG_4902-display.webp",
         "mediumSrc": "images/generated/memories/2026/03/15/IMG_4902-medium.webp",
-        "originalSrc": "images/memories/2026/03/15/IMG_4902.HEIC"
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-15-img-7323",
         "kind": "image",
-        "src": "images/memories/2026/03/15/IMG_7323.JPG",
+        "src": "images/generated/memories/2026/03/15/IMG_7323-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/15/IMG_7323-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/15/IMG_7323-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/15/IMG_7323-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/15/IMG_7323-medium.webp",
+        "width": 1440,
+        "height": 1080
       },
       {
         "id": "2026-03-15-img-7324",
         "kind": "image",
-        "src": "images/memories/2026/03/15/IMG_7324.JPG",
+        "src": "images/generated/memories/2026/03/15/IMG_7324-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/15/IMG_7324-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/15/IMG_7324-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/15/IMG_7324-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/15/IMG_7324-medium.webp",
+        "width": 1440,
+        "height": 1080
       },
       {
         "id": "2026-03-15-img-7325",
         "kind": "image",
-        "src": "images/memories/2026/03/15/IMG_7325.JPG",
+        "src": "images/generated/memories/2026/03/15/IMG_7325-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/15/IMG_7325-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/15/IMG_7325-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/15/IMG_7325-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/15/IMG_7325-medium.webp",
+        "width": 1440,
+        "height": 1080
       }
     ],
     "year": 2026,
@@ -1027,156 +1491,226 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-03-18",
     "date": "2026-03-18",
-    "cover": "images/generated/memories/2026/03/18/IMG_4923.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-03-18-img-4923",
+      "kind": "image",
+      "src": "images/generated/memories/2026/03/18/IMG_4923-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_4923-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/03/18/IMG_4923-display.webp",
+      "mediumSrc": "images/generated/memories/2026/03/18/IMG_4923-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-03-18-img-4923",
         "kind": "image",
-        "src": "images/generated/memories/2026/03/18/IMG_4923.webp",
+        "src": "images/generated/memories/2026/03/18/IMG_4923-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_4923-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_4923-display.webp",
         "mediumSrc": "images/generated/memories/2026/03/18/IMG_4923-medium.webp",
-        "originalSrc": "images/memories/2026/03/18/IMG_4923.HEIC"
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7326",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7326.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7326-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7326-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7326-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7326-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7326-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7327",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7327.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7327-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7327-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7327-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7327-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7327-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7328",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7328.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7328-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7328-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7328-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7328-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7328-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7329",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7329.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7329-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7329-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7329-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7329-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7329-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7330",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7330.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7330-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7330-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7330-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7330-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7330-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7331",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7331.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7331-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7331-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7331-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7331-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7331-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7332",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7332.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7332-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7332-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7332-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7332-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7332-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7333",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7333.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7333-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7333-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7333-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7333-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7333-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7334",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7334.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7334-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7334-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7334-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7334-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7334-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7335",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7335.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7335-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7335-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7335-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7335-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7335-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7336",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7336.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7336-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7336-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7336-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7336-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7336-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7337",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7337.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7337-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7337-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7337-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7337-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7337-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7338",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7338.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7338-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7338-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7338-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7338-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7338-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7339",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7339.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7339-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7339-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7339-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7339-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7339-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7340",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7340.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7340-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7340-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7340-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7340-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7340-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7341",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7341.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7341-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7341-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7341-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7341-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7341-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7342",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7342.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7342-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7342-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7342-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7342-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7342-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7343",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7343.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7343-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7343-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7343-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7343-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7343-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-7344",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_7344.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_7344-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_7344-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7344-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_7344-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_7344-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-03-18-img-e0140",
         "kind": "image",
-        "src": "images/memories/2026/03/18/IMG_E0140.JPG",
+        "src": "images/generated/memories/2026/03/18/IMG_E0140-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/18/IMG_E0140-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/03/18/IMG_E0140-medium.webp"
+        "displaySrc": "images/generated/memories/2026/03/18/IMG_E0140-display.webp",
+        "mediumSrc": "images/generated/memories/2026/03/18/IMG_E0140-medium.webp",
+        "width": 726,
+        "height": 908
       }
     ],
     "year": 2026,
@@ -1186,16 +1720,26 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-03-31",
     "date": "2026-03-31",
-    "cover": "images/generated/memories/2026/03/31/IMG_5123.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-03-31-img-5123",
+      "kind": "image",
+      "src": "images/generated/memories/2026/03/31/IMG_5123-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/03/31/IMG_5123-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/03/31/IMG_5123-display.webp",
+      "mediumSrc": "images/generated/memories/2026/03/31/IMG_5123-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-03-31-img-5123",
         "kind": "image",
-        "src": "images/generated/memories/2026/03/31/IMG_5123.webp",
+        "src": "images/generated/memories/2026/03/31/IMG_5123-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/03/31/IMG_5123-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/03/31/IMG_5123-display.webp",
         "mediumSrc": "images/generated/memories/2026/03/31/IMG_5123-medium.webp",
-        "originalSrc": "images/memories/2026/03/31/IMG_5123.HEIC"
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -1205,183 +1749,266 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-04-05",
     "date": "2026-04-05",
-    "cover": "images/memories/2026/04/05/IMG_5730.JPG",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-04-05-img-5730",
+      "kind": "image",
+      "src": "images/generated/memories/2026/04/05/IMG_5730-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_5730-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/04/05/IMG_5730-display.webp",
+      "mediumSrc": "images/generated/memories/2026/04/05/IMG_5730-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-04-05-img-5730",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_5730.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_5730-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_5730-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_5730-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_5730-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_5730-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-5732",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_5732.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_5732-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_5732-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_5732-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_5732-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_5732-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7345",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7345.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7345-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7345-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7345-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7345-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7345-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7346",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7346.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7346-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7346-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7346-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7346-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7346-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7347",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7347.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7347-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7347-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7347-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7347-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7347-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7348",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7348.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7348-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7348-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7348-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7348-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7348-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7350",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7350.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7350-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7350-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7350-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7350-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7350-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7351",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7351.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7351-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7351-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7351-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7351-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7351-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7352",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7352.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7352-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7352-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7352-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7352-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7352-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7353",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7353.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7353-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7353-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7353-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7353-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7353-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7354",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7354.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7354-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7354-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7354-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7354-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7354-medium.webp",
+        "width": 1440,
+        "height": 2559
       },
       {
         "id": "2026-04-05-img-7355",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7355.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7355-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7355-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7355-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7355-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7355-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7356",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7356.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7356-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7356-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7356-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7356-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7356-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7357",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7357.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7357-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7357-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7357-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7357-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7357-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7358",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7358.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7358-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7358-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7358-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7358-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7358-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7359",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7359.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7359-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7359-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7359-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7359-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7359-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7360",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7360.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7360-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7360-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7360-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7360-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7360-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7361",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7361.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7361-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7361-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7361-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7361-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7361-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7362",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7362.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7362-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7362-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7362-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7362-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7362-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7363",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7363.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7363-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7363-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7363-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7363-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7363-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7364",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7364.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7364-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7364-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7364-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7364-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7364-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7365",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7365.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7365-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7365-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7365-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7365-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7365-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7366",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7366.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7366-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7366-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7366-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7366-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7366-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7367",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7367.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7367-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7367-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7367-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7367-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7367-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-05-img-7368",
         "kind": "image",
-        "src": "images/memories/2026/04/05/IMG_7368.JPG",
+        "src": "images/generated/memories/2026/04/05/IMG_7368-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/05/IMG_7368-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7368-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/05/IMG_7368-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/05/IMG_7368-medium.webp",
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -1391,316 +2018,456 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-04-19",
     "date": "2026-04-19",
-    "cover": "images/memories/2026/04/19/IMG_5805.JPG",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-04-19-img-5805",
+      "kind": "image",
+      "src": "images/generated/memories/2026/04/19/IMG_5805-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5805-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/04/19/IMG_5805-display.webp",
+      "mediumSrc": "images/generated/memories/2026/04/19/IMG_5805-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-04-19-img-5805",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5805.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5805-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5805-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5805-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5805-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5805-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5806",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5806.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5806-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5806-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5806-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5806-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5806-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5807",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5807.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5807-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5807-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5807-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5807-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5807-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5808",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5808.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5808-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5808-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5808-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5808-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5808-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5809",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5809.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5809-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5809-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5809-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5809-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5809-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5810",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5810.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5810-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5810-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5810-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5810-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5810-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5811",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5811.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5811-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5811-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5811-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5811-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5811-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5812",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5812.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5812-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5812-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5812-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5812-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5812-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5813",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5813.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5813-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5813-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5813-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5813-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5813-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5814",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5814.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5814-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5814-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5814-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5814-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5814-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5815",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5815.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5815-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5815-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5815-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5815-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5815-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5816",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5816.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5816-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5816-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5816-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5816-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5816-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5817",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5817.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5817-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5817-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5817-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5817-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5817-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5818",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5818.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5818-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5818-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5818-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5818-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5818-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5819",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5819.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5819-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5819-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5819-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5819-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5819-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5820",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5820.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5820-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5820-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5820-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5820-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5820-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5821",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5821.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5821-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5821-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5821-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5821-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5821-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5822",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5822.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5822-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5822-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5822-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5822-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5822-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5823",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5823.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5823-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5823-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5823-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5823-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5823-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5824",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5824.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5824-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5824-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5824-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5824-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5824-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5825",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5825.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5825-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5825-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5825-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5825-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5825-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-5826",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_5826.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_5826-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_5826-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5826-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_5826-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_5826-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7155",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7155.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7155-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7155-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7155-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7155-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7155-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7375",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7375.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7375-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7375-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7375-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7375-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7375-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7377",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7377.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7377-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7377-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7377-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7377-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7377-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7378",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7378.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7378-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7378-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7378-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7378-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7378-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7379",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7379.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7379-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7379-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7379-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7379-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7379-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7380",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7380.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7380-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7380-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7380-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7380-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7380-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7381",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7381.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7381-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7381-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7381-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7381-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7381-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7382",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7382.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7382-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7382-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7382-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7382-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7382-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7383",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7383.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7383-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7383-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7383-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7383-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7383-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7384",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7384.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7384-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7384-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7384-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7384-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7384-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7385",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7385.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7385-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7385-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7385-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7385-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7385-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7386",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7386.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7386-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7386-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7386-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7386-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7386-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7387",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7387.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7387-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7387-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7387-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7387-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7387-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7388",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7388.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7388-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7388-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7388-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7388-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7388-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7389",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7389.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7389-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7389-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7389-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7389-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7389-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7390",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7390.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7390-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7390-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7390-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7390-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7390-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7391",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7391.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7391-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7391-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7391-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7391-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7391-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7392",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7392.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7392-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7392-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7392-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7392-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7392-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7393",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7393.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7393-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7393-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7393-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7393-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7393-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7394",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7394.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7394-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7394-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7394-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7394-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7394-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7395",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7395.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7395-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7395-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7395-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7395-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7395-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-19-img-7396",
         "kind": "image",
-        "src": "images/memories/2026/04/19/IMG_7396.JPG",
+        "src": "images/generated/memories/2026/04/19/IMG_7396-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/19/IMG_7396-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7396-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/19/IMG_7396-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/19/IMG_7396-medium.webp",
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -1710,596 +2477,856 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-04-26",
     "date": "2026-04-26",
-    "cover": "images/memories/2026/04/26/IMG_0038.JPG",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-04-26-img-0038",
+      "kind": "image",
+      "src": "images/generated/memories/2026/04/26/IMG_0038-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0038-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/04/26/IMG_0038-display.webp",
+      "mediumSrc": "images/generated/memories/2026/04/26/IMG_0038-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-04-26-img-0038",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0038.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0038-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0038-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0038-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0038-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0038-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0039",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0039.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0039-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0039-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0039-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0039-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0039-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0040",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0040.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0040-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0040-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0040-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0040-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0040-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0041",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0041.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0041-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0041-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0041-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0041-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0041-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0042",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0042.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0042-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0042-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0042-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0042-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0042-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0043",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0043.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0043-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0043-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0043-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0043-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0043-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0044",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0044.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0044-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0044-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0044-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0044-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0044-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0045",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0045.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0045-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0045-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0045-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0045-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0045-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0050",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0050.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0050-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0050-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0050-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0050-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0050-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0051",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0051.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0051-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0051-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0051-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0051-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0051-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0052",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0052.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0052-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0052-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0052-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0052-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0052-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0053",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0053.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0053-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0053-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0053-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0053-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0053-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0054",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0054.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0054-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0054-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0054-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0054-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0054-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0056",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0056.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0056-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0056-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0056-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0056-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0056-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0057",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0057.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0057-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0057-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0057-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0057-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0057-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0058",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0058.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0058-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0058-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0058-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0058-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0058-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0059",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0059.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0059-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0059-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0059-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0059-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0059-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0060",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0060.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0060-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0060-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0060-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0060-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0060-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0061",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0061.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0061-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0061-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0061-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0061-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0061-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0062",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0062.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0062-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0062-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0062-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0062-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0062-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0063",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0063.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0063-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0063-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0063-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0063-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0063-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0064",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0064.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0064-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0064-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0064-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0064-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0064-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0065",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0065.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0065-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0065-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0065-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0065-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0065-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0066",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0066.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0066-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0066-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0066-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0066-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0066-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0067",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0067.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0067-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0067-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0067-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0067-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0067-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0068",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0068.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0068-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0068-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0068-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0068-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0068-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0071",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0071.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0071-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0071-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0071-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0071-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0071-medium.webp",
+        "width": 1170,
+        "height": 2532
       },
       {
         "id": "2026-04-26-img-0075",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0075.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0075-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0075-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0075-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0075-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0075-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-0076",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_0076.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_0076-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_0076-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0076-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_0076-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_0076-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7153",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7153.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7153-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7153-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7153-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7153-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7153-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7397",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7397.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7397-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7397-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7397-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7397-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7397-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7398",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7398.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7398-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7398-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7398-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7398-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7398-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7400",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7400.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7400-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7400-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7400-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7400-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7400-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7401",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7401.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7401-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7401-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7401-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7401-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7401-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7402",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7402.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7402-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7402-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7402-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7402-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7402-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7403",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7403.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7403-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7403-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7403-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7403-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7403-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7404",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7404.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7404-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7404-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7404-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7404-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7404-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7405",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7405.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7405-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7405-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7405-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7405-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7405-medium.webp",
+        "width": 1440,
+        "height": 2559
       },
       {
         "id": "2026-04-26-img-7406",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7406.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7406-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7406-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7406-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7406-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7406-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7407",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7407.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7407-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7407-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7407-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7407-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7407-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7408",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7408.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7408-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7408-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7408-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7408-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7408-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7409",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7409.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7409-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7409-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7409-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7409-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7409-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7410",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7410.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7410-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7410-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7410-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7410-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7410-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7411",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7411.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7411-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7411-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7411-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7411-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7411-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7412",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7412.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7412-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7412-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7412-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7412-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7412-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7413",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7413.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7413-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7413-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7413-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7413-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7413-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7414",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7414.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7414-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7414-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7414-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7414-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7414-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7415",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7415.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7415-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7415-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7415-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7415-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7415-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7416",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7416.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7416-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7416-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7416-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7416-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7416-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7417",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7417.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7417-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7417-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7417-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7417-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7417-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7418",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7418.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7418-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7418-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7418-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7418-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7418-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7419",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7419.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7419-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7419-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7419-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7419-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7419-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7420",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7420.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7420-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7420-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7420-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7420-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7420-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7421",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7421.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7421-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7421-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7421-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7421-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7421-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7422",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7422.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7422-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7422-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7422-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7422-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7422-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7423",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7423.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7423-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7423-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7423-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7423-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7423-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7424",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7424.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7424-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7424-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7424-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7424-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7424-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7425",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7425.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7425-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7425-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7425-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7425-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7425-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7426",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7426.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7426-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7426-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7426-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7426-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7426-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7427",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7427.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7427-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7427-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7427-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7427-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7427-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7428",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7428.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7428-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7428-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7428-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7428-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7428-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7429",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7429.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7429-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7429-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7429-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7429-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7429-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7430",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7430.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7430-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7430-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7430-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7430-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7430-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7431",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7431.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7431-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7431-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7431-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7431-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7431-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7432",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7432.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7432-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7432-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7432-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7432-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7432-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7433",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7433.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7433-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7433-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7433-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7433-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7433-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7434",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7434.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7434-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7434-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7434-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7434-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7434-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7435",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7435.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7435-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7435-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7435-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7435-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7435-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7436",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7436.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7436-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7436-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7436-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7436-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7436-medium.webp",
+        "width": 1170,
+        "height": 2532
       },
       {
         "id": "2026-04-26-img-7437",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7437.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7437-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7437-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7437-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7437-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7437-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-7438",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_7438.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_7438-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_7438-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7438-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_7438-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_7438-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-9925",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_9925.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_9925-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_9925-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9925-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_9925-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9925-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-9926",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_9926.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_9926-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_9926-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9926-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_9926-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9926-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-9927",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_9927.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_9927-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_9927-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9927-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_9927-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9927-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-9928",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_9928.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_9928-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_9928-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9928-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_9928-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9928-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-9929",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_9929.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_9929-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_9929-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9929-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_9929-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9929-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-9935",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_9935.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_9935-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_9935-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9935-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_9935-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9935-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-9936",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_9936.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_9936-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_9936-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9936-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_9936-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9936-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-9937",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_9937.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_9937-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_9937-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9937-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_9937-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9937-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-9941",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_9941.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_9941-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_9941-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9941-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_9941-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9941-medium.webp",
+        "width": 1440,
+        "height": 2559
       },
       {
         "id": "2026-04-26-img-9943",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_9943.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_9943-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_9943-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9943-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_9943-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9943-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-9944",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_9944.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_9944-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_9944-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9944-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_9944-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9944-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-9945",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_9945.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_9945-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_9945-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9945-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_9945-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9945-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-04-26-img-9946",
         "kind": "image",
-        "src": "images/memories/2026/04/26/IMG_9946.JPG",
+        "src": "images/generated/memories/2026/04/26/IMG_9946-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/04/26/IMG_9946-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9946-medium.webp"
+        "displaySrc": "images/generated/memories/2026/04/26/IMG_9946-display.webp",
+        "mediumSrc": "images/generated/memories/2026/04/26/IMG_9946-medium.webp",
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -2309,32 +3336,46 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-05-03",
     "date": "2026-05-03",
-    "cover": "images/generated/memories/2026/05/03/IMG_6183.webp",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-05-03-img-6183",
+      "kind": "image",
+      "src": "images/generated/memories/2026/05/03/IMG_6183-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/05/03/IMG_6183-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/05/03/IMG_6183-display.webp",
+      "mediumSrc": "images/generated/memories/2026/05/03/IMG_6183-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-05-03-img-6183",
         "kind": "image",
-        "src": "images/generated/memories/2026/05/03/IMG_6183.webp",
+        "src": "images/generated/memories/2026/05/03/IMG_6183-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/05/03/IMG_6183-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/05/03/IMG_6183-display.webp",
         "mediumSrc": "images/generated/memories/2026/05/03/IMG_6183-medium.webp",
-        "originalSrc": "images/memories/2026/05/03/IMG_6183.HEIC"
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-05-03-img-6186",
         "kind": "image",
-        "src": "images/generated/memories/2026/05/03/IMG_6186.webp",
+        "src": "images/generated/memories/2026/05/03/IMG_6186-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/05/03/IMG_6186-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/05/03/IMG_6186-display.webp",
         "mediumSrc": "images/generated/memories/2026/05/03/IMG_6186-medium.webp",
-        "originalSrc": "images/memories/2026/05/03/IMG_6186.HEIC"
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-05-03-img-6187",
         "kind": "image",
-        "src": "images/generated/memories/2026/05/03/IMG_6187.webp",
+        "src": "images/generated/memories/2026/05/03/IMG_6187-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/05/03/IMG_6187-thumb.webp",
+        "displaySrc": "images/generated/memories/2026/05/03/IMG_6187-display.webp",
         "mediumSrc": "images/generated/memories/2026/05/03/IMG_6187-medium.webp",
-        "originalSrc": "images/memories/2026/05/03/IMG_6187.HEIC"
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -2344,15 +3385,26 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-07-11",
     "date": "2026-07-11",
-    "cover": "images/memories/2026/07/11/IMG_6766.JPG",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-07-11-img-6766",
+      "kind": "image",
+      "src": "images/generated/memories/2026/07/11/IMG_6766-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/07/11/IMG_6766-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/07/11/IMG_6766-display.webp",
+      "mediumSrc": "images/generated/memories/2026/07/11/IMG_6766-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-07-11-img-6766",
         "kind": "image",
-        "src": "images/memories/2026/07/11/IMG_6766.JPG",
+        "src": "images/generated/memories/2026/07/11/IMG_6766-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/07/11/IMG_6766-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/07/11/IMG_6766-medium.webp"
+        "displaySrc": "images/generated/memories/2026/07/11/IMG_6766-display.webp",
+        "mediumSrc": "images/generated/memories/2026/07/11/IMG_6766-medium.webp",
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -2362,50 +3414,76 @@ export const MEMORIES: readonly Memory[] = [
   {
     "id": "2026-07-12",
     "date": "2026-07-12",
-    "cover": "images/memories/2026/07/12/IMG_6775.JPG",
-    "coverKind": "image",
+    "cover": {
+      "id": "2026-07-12-img-6775",
+      "kind": "image",
+      "src": "images/generated/memories/2026/07/12/IMG_6775-medium.webp",
+      "thumbnailSrc": "images/generated/memories/2026/07/12/IMG_6775-thumb.webp",
+      "displaySrc": "images/generated/memories/2026/07/12/IMG_6775-display.webp",
+      "mediumSrc": "images/generated/memories/2026/07/12/IMG_6775-medium.webp",
+      "width": 1440,
+      "height": 1920
+    },
     "images": [
       {
         "id": "2026-07-12-img-6775",
         "kind": "image",
-        "src": "images/memories/2026/07/12/IMG_6775.JPG",
+        "src": "images/generated/memories/2026/07/12/IMG_6775-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/07/12/IMG_6775-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/07/12/IMG_6775-medium.webp"
+        "displaySrc": "images/generated/memories/2026/07/12/IMG_6775-display.webp",
+        "mediumSrc": "images/generated/memories/2026/07/12/IMG_6775-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-07-12-img-6776",
         "kind": "image",
-        "src": "images/memories/2026/07/12/IMG_6776.JPG",
+        "src": "images/generated/memories/2026/07/12/IMG_6776-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/07/12/IMG_6776-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/07/12/IMG_6776-medium.webp"
+        "displaySrc": "images/generated/memories/2026/07/12/IMG_6776-display.webp",
+        "mediumSrc": "images/generated/memories/2026/07/12/IMG_6776-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-07-12-img-6777",
         "kind": "image",
-        "src": "images/memories/2026/07/12/IMG_6777.JPG",
+        "src": "images/generated/memories/2026/07/12/IMG_6777-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/07/12/IMG_6777-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/07/12/IMG_6777-medium.webp"
+        "displaySrc": "images/generated/memories/2026/07/12/IMG_6777-display.webp",
+        "mediumSrc": "images/generated/memories/2026/07/12/IMG_6777-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-07-12-img-6778",
         "kind": "image",
-        "src": "images/memories/2026/07/12/IMG_6778.JPG",
+        "src": "images/generated/memories/2026/07/12/IMG_6778-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/07/12/IMG_6778-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/07/12/IMG_6778-medium.webp"
+        "displaySrc": "images/generated/memories/2026/07/12/IMG_6778-display.webp",
+        "mediumSrc": "images/generated/memories/2026/07/12/IMG_6778-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-07-12-img-6779",
         "kind": "image",
-        "src": "images/memories/2026/07/12/IMG_6779.JPG",
+        "src": "images/generated/memories/2026/07/12/IMG_6779-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/07/12/IMG_6779-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/07/12/IMG_6779-medium.webp"
+        "displaySrc": "images/generated/memories/2026/07/12/IMG_6779-display.webp",
+        "mediumSrc": "images/generated/memories/2026/07/12/IMG_6779-medium.webp",
+        "width": 1440,
+        "height": 1920
       },
       {
         "id": "2026-07-12-img-6780",
         "kind": "image",
-        "src": "images/memories/2026/07/12/IMG_6780.JPG",
+        "src": "images/generated/memories/2026/07/12/IMG_6780-medium.webp",
         "thumbnailSrc": "images/generated/memories/2026/07/12/IMG_6780-thumb.webp",
-        "mediumSrc": "images/generated/memories/2026/07/12/IMG_6780-medium.webp"
+        "displaySrc": "images/generated/memories/2026/07/12/IMG_6780-display.webp",
+        "mediumSrc": "images/generated/memories/2026/07/12/IMG_6780-medium.webp",
+        "width": 1440,
+        "height": 1920
       }
     ],
     "year": 2026,
@@ -2421,18 +3499,24 @@ export const UNRESOLVED_MEDIA: readonly UnresolvedMediaGroup[] = [
       {
         "id": "unresolved-2025-11-img-2819",
         "kind": "image",
-        "src": "images/memories/_unresolved/2025-11/IMG_2819.PNG",
+        "src": "images/generated/memories/_unresolved/2025-11/IMG_2819-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2025-11/IMG_2819-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2025-11/IMG_2819-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2025-11/IMG_2819-medium.webp",
+        "width": 1020,
+        "height": 1020,
         "sourceMonth": "2025-11",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2025-11-img-2838",
         "kind": "image",
-        "src": "images/memories/_unresolved/2025-11/IMG_2838.PNG",
+        "src": "images/generated/memories/_unresolved/2025-11/IMG_2838-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2025-11/IMG_2838-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2025-11/IMG_2838-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2025-11/IMG_2838-medium.webp",
+        "width": 1020,
+        "height": 1020,
         "sourceMonth": "2025-11",
         "reason": "NO_EXIF_DATE"
       }
@@ -2445,54 +3529,72 @@ export const UNRESOLVED_MEDIA: readonly UnresolvedMediaGroup[] = [
       {
         "id": "unresolved-2025-12-asnx8703",
         "kind": "image",
-        "src": "images/memories/_unresolved/2025-12/ASNX8703.JPG",
+        "src": "images/generated/memories/_unresolved/2025-12/ASNX8703-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2025-12/ASNX8703-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2025-12/ASNX8703-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2025-12/ASNX8703-medium.webp",
+        "width": 1361,
+        "height": 2048,
         "sourceMonth": "2025-12",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2025-12-auss4413",
         "kind": "image",
-        "src": "images/memories/_unresolved/2025-12/AUSS4413.JPG",
+        "src": "images/generated/memories/_unresolved/2025-12/AUSS4413-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2025-12/AUSS4413-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2025-12/AUSS4413-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2025-12/AUSS4413-medium.webp",
+        "width": 1440,
+        "height": 810,
         "sourceMonth": "2025-12",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2025-12-img-3062",
         "kind": "image",
-        "src": "images/memories/_unresolved/2025-12/IMG_3062.PNG",
+        "src": "images/generated/memories/_unresolved/2025-12/IMG_3062-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2025-12/IMG_3062-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2025-12/IMG_3062-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2025-12/IMG_3062-medium.webp",
+        "width": 1020,
+        "height": 1020,
         "sourceMonth": "2025-12",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2025-12-img-3660",
         "kind": "image",
-        "src": "images/memories/_unresolved/2025-12/IMG_3660.PNG",
+        "src": "images/generated/memories/_unresolved/2025-12/IMG_3660-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2025-12/IMG_3660-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2025-12/IMG_3660-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2025-12/IMG_3660-medium.webp",
+        "width": 1020,
+        "height": 1020,
         "sourceMonth": "2025-12",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2025-12-img-e3262",
         "kind": "image",
-        "src": "images/memories/_unresolved/2025-12/IMG_E3262.JPG",
+        "src": "images/generated/memories/_unresolved/2025-12/IMG_E3262-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2025-12/IMG_E3262-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2025-12/IMG_E3262-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2025-12/IMG_E3262-medium.webp",
+        "width": 511,
+        "height": 1020,
         "sourceMonth": "2025-12",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2025-12-qczy9639",
         "kind": "image",
-        "src": "images/memories/_unresolved/2025-12/QCZY9639.JPG",
+        "src": "images/generated/memories/_unresolved/2025-12/QCZY9639-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2025-12/QCZY9639-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2025-12/QCZY9639-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2025-12/QCZY9639-medium.webp",
+        "width": 1440,
+        "height": 810,
         "sourceMonth": "2025-12",
         "reason": "NO_EXIF_DATE"
       }
@@ -2505,63 +3607,84 @@ export const UNRESOLVED_MEDIA: readonly UnresolvedMediaGroup[] = [
       {
         "id": "unresolved-2026-01-flfo1627",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-01/FLFO1627.JPG",
+        "src": "images/generated/memories/_unresolved/2026-01/FLFO1627-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-01/FLFO1627-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-01/FLFO1627-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-01/FLFO1627-medium.webp",
+        "width": 1440,
+        "height": 1080,
         "sourceMonth": "2026-01",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-01-img-3948",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-01/IMG_3948.PNG",
+        "src": "images/generated/memories/_unresolved/2026-01/IMG_3948-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-01/IMG_3948-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-01/IMG_3948-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-01/IMG_3948-medium.webp",
+        "width": 1200,
+        "height": 1800,
         "sourceMonth": "2026-01",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-01-img-3952",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-01/IMG_3952.WEBP",
+        "src": "images/generated/memories/_unresolved/2026-01/IMG_3952-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-01/IMG_3952-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-01/IMG_3952-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-01/IMG_3952-medium.webp",
+        "width": 1440,
+        "height": 960,
         "sourceMonth": "2026-01",
         "reason": "EXIF_READ_ERROR: Unknown file format"
       },
       {
         "id": "unresolved-2026-01-img-3953",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-01/IMG_3953.WEBP",
+        "src": "images/generated/memories/_unresolved/2026-01/IMG_3953-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-01/IMG_3953-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-01/IMG_3953-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-01/IMG_3953-medium.webp",
+        "width": 1440,
+        "height": 960,
         "sourceMonth": "2026-01",
         "reason": "EXIF_READ_ERROR: Unknown file format"
       },
       {
         "id": "unresolved-2026-01-img-3954",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-01/IMG_3954.WEBP",
+        "src": "images/generated/memories/_unresolved/2026-01/IMG_3954-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-01/IMG_3954-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-01/IMG_3954-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-01/IMG_3954-medium.webp",
+        "width": 1440,
+        "height": 960,
         "sourceMonth": "2026-01",
         "reason": "EXIF_READ_ERROR: Unknown file format"
       },
       {
         "id": "unresolved-2026-01-img-3955",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-01/IMG_3955.WEBP",
+        "src": "images/generated/memories/_unresolved/2026-01/IMG_3955-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-01/IMG_3955-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-01/IMG_3955-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-01/IMG_3955-medium.webp",
+        "width": 1440,
+        "height": 960,
         "sourceMonth": "2026-01",
         "reason": "EXIF_READ_ERROR: Unknown file format"
       },
       {
         "id": "unresolved-2026-01-mhwi9845",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-01/MHWI9845.JPG",
+        "src": "images/generated/memories/_unresolved/2026-01/MHWI9845-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-01/MHWI9845-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-01/MHWI9845-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-01/MHWI9845-medium.webp",
+        "width": 1080,
+        "height": 1920,
         "sourceMonth": "2026-01",
         "reason": "NO_EXIF_DATE"
       },
@@ -2582,9 +3705,12 @@ export const UNRESOLVED_MEDIA: readonly UnresolvedMediaGroup[] = [
       {
         "id": "unresolved-2026-02-img-4288",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-02/IMG_4288.JPG",
+        "src": "images/generated/memories/_unresolved/2026-02/IMG_4288-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-02/IMG_4288-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-02/IMG_4288-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-02/IMG_4288-medium.webp",
+        "width": 1080,
+        "height": 1920,
         "sourceMonth": "2026-02",
         "reason": "NO_EXIF_DATE"
       },
@@ -2631,9 +3757,12 @@ export const UNRESOLVED_MEDIA: readonly UnresolvedMediaGroup[] = [
       {
         "id": "unresolved-2026-02-sqnt7414",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-02/SQNT7414.JPG",
+        "src": "images/generated/memories/_unresolved/2026-02/SQNT7414-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-02/SQNT7414-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-02/SQNT7414-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-02/SQNT7414-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-02",
         "reason": "NO_EXIF_DATE"
       }
@@ -2646,54 +3775,72 @@ export const UNRESOLVED_MEDIA: readonly UnresolvedMediaGroup[] = [
       {
         "id": "unresolved-2026-03-img-4801",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-03/IMG_4801.PNG",
+        "src": "images/generated/memories/_unresolved/2026-03/IMG_4801-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-03/IMG_4801-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-03/IMG_4801-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-03/IMG_4801-medium.webp",
+        "width": 1020,
+        "height": 1020,
         "sourceMonth": "2026-03",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-03-img-4906",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-03/IMG_4906.PNG",
+        "src": "images/generated/memories/_unresolved/2026-03/IMG_4906-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-03/IMG_4906-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-03/IMG_4906-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-03/IMG_4906-medium.webp",
+        "width": 1020,
+        "height": 1020,
         "sourceMonth": "2026-03",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-03-img-4944",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-03/IMG_4944.PNG",
+        "src": "images/generated/memories/_unresolved/2026-03/IMG_4944-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-03/IMG_4944-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-03/IMG_4944-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-03/IMG_4944-medium.webp",
+        "width": 1020,
+        "height": 1020,
         "sourceMonth": "2026-03",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-03-img-4988",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-03/IMG_4988.PNG",
+        "src": "images/generated/memories/_unresolved/2026-03/IMG_4988-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-03/IMG_4988-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-03/IMG_4988-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-03/IMG_4988-medium.webp",
+        "width": 1020,
+        "height": 1020,
         "sourceMonth": "2026-03",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-03-img-5111",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-03/IMG_5111.JPG",
+        "src": "images/generated/memories/_unresolved/2026-03/IMG_5111-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-03/IMG_5111-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-03/IMG_5111-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-03/IMG_5111-medium.webp",
+        "width": 920,
+        "height": 1152,
         "sourceMonth": "2026-03",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-03-img-7542",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-03/IMG_7542.JPG",
+        "src": "images/generated/memories/_unresolved/2026-03/IMG_7542-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-03/IMG_7542-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-03/IMG_7542-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-03/IMG_7542-medium.webp",
+        "width": 1440,
+        "height": 1799,
         "sourceMonth": "2026-03",
         "reason": "NO_EXIF_DATE"
       },
@@ -2738,9 +3885,12 @@ export const UNRESOLVED_MEDIA: readonly UnresolvedMediaGroup[] = [
       {
         "id": "unresolved-2026-04-img-5778",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_5778.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_5778-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_5778-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_5778-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_5778-medium.webp",
+        "width": 1024,
+        "height": 1536,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
@@ -2779,171 +3929,228 @@ export const UNRESOLVED_MEDIA: readonly UnresolvedMediaGroup[] = [
       {
         "id": "unresolved-2026-04-img-5846",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_5846.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_5846-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_5846-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_5846-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_5846-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-5850",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_5850.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_5850-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_5850-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_5850-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_5850-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-5851",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_5851.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_5851-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_5851-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_5851-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_5851-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-5859",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_5859.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_5859-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_5859-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_5859-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_5859-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-5866",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_5866.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_5866-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_5866-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_5866-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_5866-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-5869",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_5869.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_5869-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_5869-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_5869-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_5869-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-5944",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_5944.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_5944-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_5944-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_5944-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_5944-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-5945",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_5945.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_5945-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_5945-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_5945-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_5945-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-6028",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_6028.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_6028-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_6028-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_6028-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_6028-medium.webp",
+        "width": 1440,
+        "height": 2560,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-6045",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_6045.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_6045-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_6045-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_6045-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_6045-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-6050",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_6050.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_6050-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_6050-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_6050-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_6050-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-6121",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_6121.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_6121-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_6121-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_6121-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_6121-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-6123",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_6123.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_6123-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_6123-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_6123-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_6123-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-6127",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_6127.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_6127-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_6127-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_6127-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_6127-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-6131",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_6131.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_6131-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_6131-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_6131-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_6131-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-6137",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_6137.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_6137-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_6137-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_6137-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_6137-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-6140",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_6140.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_6140-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_6140-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_6140-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_6140-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-6149",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_6149.JPG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_6149-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_6149-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_6149-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_6149-medium.webp",
+        "width": 1440,
+        "height": 1920,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-04-img-6151",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-04/IMG_6151.PNG",
+        "src": "images/generated/memories/_unresolved/2026-04/IMG_6151-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-04/IMG_6151-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-04/IMG_6151-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-04/IMG_6151-medium.webp",
+        "width": 896,
+        "height": 1195,
         "sourceMonth": "2026-04",
         "reason": "NO_EXIF_DATE"
       }
@@ -2956,27 +4163,36 @@ export const UNRESOLVED_MEDIA: readonly UnresolvedMediaGroup[] = [
       {
         "id": "unresolved-2026-05-duhk0158",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-05/DUHK0158.JPG",
+        "src": "images/generated/memories/_unresolved/2026-05/DUHK0158-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-05/DUHK0158-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-05/DUHK0158-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-05/DUHK0158-medium.webp",
+        "width": 768,
+        "height": 1024,
         "sourceMonth": "2026-05",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-05-img-6182",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-05/IMG_6182.JPG",
+        "src": "images/generated/memories/_unresolved/2026-05/IMG_6182-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-05/IMG_6182-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-05/IMG_6182-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-05/IMG_6182-medium.webp",
+        "width": 720,
+        "height": 1280,
         "sourceMonth": "2026-05",
         "reason": "NO_EXIF_DATE"
       },
       {
         "id": "unresolved-2026-05-img-6199",
         "kind": "image",
-        "src": "images/memories/_unresolved/2026-05/IMG_6199.PNG",
+        "src": "images/generated/memories/_unresolved/2026-05/IMG_6199-medium.webp",
         "thumbnailSrc": "images/generated/memories/_unresolved/2026-05/IMG_6199-thumb.webp",
+        "displaySrc": "images/generated/memories/_unresolved/2026-05/IMG_6199-display.webp",
         "mediumSrc": "images/generated/memories/_unresolved/2026-05/IMG_6199-medium.webp",
+        "width": 1195,
+        "height": 896,
         "sourceMonth": "2026-05",
         "reason": "NO_EXIF_DATE"
       }
