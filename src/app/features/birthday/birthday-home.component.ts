@@ -29,7 +29,7 @@ import { BirthdayCakeComponent } from './components/birthday-cake/birthday-cake.
           <div class="hero-photos" aria-hidden="true">
             @for (photo of heroPhotos; track photo.id; let index = $index) {
               <figure [class]="'photo photo-' + index">
-                <img [src]="photo.src" alt="" decoding="async" [attr.fetchpriority]="index === 0 ? 'high' : null">
+                <img [src]="photo.src" alt="" decoding="async" [attr.loading]="index === 0 ? 'eager' : 'lazy'" [attr.fetchpriority]="index === 0 ? 'high' : null">
                 <figcaption>H ♡ Q</figcaption>
               </figure>
             }
@@ -100,7 +100,7 @@ import { BirthdayCakeComponent } from './components/birthday-cake/birthday-cake.
       <section class="finale" aria-labelledby="finale-title">
         <div class="finale-stars" aria-hidden="true">✦ · ♡ · ✦ · ♡ · ✦</div>
         @if (finalPhoto; as photo) {
-          <figure appRevealOnScroll><img [src]="photo.src" alt="" decoding="async"><figcaption>05 · 09 · 2026</figcaption></figure>
+          <figure appRevealOnScroll><img [src]="photo.src" alt="" loading="lazy" decoding="async"><figcaption>05 · 09 · 2026</figcaption></figure>
         }
         <div class="finale-copy" appRevealOnScroll>
           <p>05.09.2004 · Một cô gái đã xuất hiện trên thế giới.</p>
@@ -120,7 +120,7 @@ import { BirthdayCakeComponent } from './components/birthday-cake/birthday-cake.
     .birthday-home { overflow:hidden; }
     .eyebrow { margin:0 0 .85rem; color:var(--wine); font-size:.66rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase; }
     h1,h2 { margin:0; font-family:var(--font-display); font-weight:400; letter-spacing:-.06em; }
-    .hero { position:relative; isolation:isolate; display:grid; min-height:calc(100dvh - 73px); align-items:center; overflow:hidden; padding:clamp(4rem,8vw,8rem) max(1.2rem,calc((100vw - 1240px)/2)); background:#25171b; color:#fffdf9; }
+    .hero { position:relative; isolation:isolate; display:grid; min-height:calc(100dvh - 73px); align-items:center; overflow:hidden; padding-block:clamp(4rem,8vw,8rem); padding-inline:max(1.2rem,calc((100vw - 1240px)/2),env(safe-area-inset-left)) max(1.2rem,calc((100vw - 1240px)/2),env(safe-area-inset-right)); background:#25171b; color:#fffdf9; }
     .hero-glow { position:absolute; inset:0; z-index:-2; background:radial-gradient(circle at 67% 42%,rgba(166,84,98,.33),transparent 30rem),radial-gradient(circle at 10% 92%,rgba(216,181,122,.15),transparent 28rem); }
     .hero-copy { position:relative; z-index:8; width:min(720px,62vw); }
     .hero .eyebrow { color:var(--champagne); }
@@ -129,7 +129,7 @@ import { BirthdayCakeComponent } from './components/birthday-cake/birthday-cake.
     .hero h1 strong { margin-top:.16em; color:#f1c5ce; font-weight:400; font-style:italic; }
     .hero-copy > p:not(.eyebrow) { max-width:510px; margin:1.7rem 0 2.2rem; color:rgba(255,253,249,.73); font-family:var(--font-display); font-size:clamp(1.08rem,2vw,1.35rem); line-height:1.65; }
     .hero-actions { display:flex; flex-wrap:wrap; gap:.7rem 1rem; align-items:center; }
-    .hero-actions a { display:inline-flex; min-height:48px; align-items:center; gap:.75rem; padding:.75rem 1rem; border:1px solid rgba(255,253,249,.7); color:#fffdf9; font-size:.71rem; font-weight:600; letter-spacing:.08em; text-decoration:none; text-transform:uppercase; }
+    .hero-actions a { display:inline-flex; min-height:48px; align-items:center; justify-content:center; gap:.75rem; padding:.75rem 1rem; border:1px solid rgba(255,253,249,.7); color:#fffdf9; font-size:.71rem; font-weight:600; letter-spacing:.08em; text-decoration:none; text-transform:uppercase; }
     .hero-actions .quiet { border-color:transparent; color:rgba(255,253,249,.65); text-decoration:underline; text-underline-offset:.28rem; }
     .hero-photos { position:absolute; inset:0; z-index:1; pointer-events:none; }
     .photo { position:absolute; margin:0; padding:.4rem .4rem 1.35rem; background:#fffaf1; box-shadow:0 26px 65px rgba(0,0,0,.32); }
@@ -138,7 +138,7 @@ import { BirthdayCakeComponent } from './components/birthday-cake/birthday-cake.
     .photo-0 { right:6%; top:13%; width:clamp(11rem,21vw,19rem); transform:rotate(6deg); }
     .photo-1 { right:25%; bottom:7%; width:clamp(7rem,13vw,11rem); opacity:.66; transform:rotate(-8deg); }
     .photo-2 { right:1%; bottom:6%; width:clamp(6rem,11vw,10rem); opacity:.55; transform:rotate(-2deg); }
-    .made-with-love { position:absolute; right:1.5rem; bottom:1.25rem; z-index:9; margin:0; color:rgba(255,253,249,.45); font-size:.65rem; letter-spacing:.08em; }
+    .made-with-love { position:absolute; right:max(1.5rem,env(safe-area-inset-right)); bottom:max(1.25rem,env(safe-area-inset-bottom)); z-index:9; margin:0; color:rgba(255,253,249,.45); font-size:.65rem; letter-spacing:.08em; }
     .story-date { display:grid; justify-items:center; padding:clamp(6rem,12vw,11rem) 1.2rem; background:var(--paper); text-align:center; }
     .counter { display:grid; margin:.4rem 0 1.6rem; }
     .counter strong { color:var(--wine); font-family:var(--font-display); font-size:clamp(5rem,15vw,12rem); font-weight:400; letter-spacing:-.08em; line-height:.75; }
@@ -191,21 +191,40 @@ import { BirthdayCakeComponent } from './components/birthday-cake/birthday-cake.
     .finale nav a { min-height:44px; padding:.7rem .9rem; border:1px solid rgba(255,249,240,.25); color:#fff9f0; font-size:.68rem; letter-spacing:.08em; text-decoration:none; text-transform:uppercase; }
     @media (max-width:800px) { .reason-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .reasons header { grid-template-columns:1fr; } .reasons header .eyebrow { grid-column:1; } .gift-index header { display:block; } .gift-index h2 { margin-top:.6rem; } }
     @media (max-width:620px) {
-      .hero { min-height:calc(100dvh - 105px); align-items:end; padding:5rem 1rem 4.2rem; }
-      .hero-copy { width:100%; }
-      .hero-copy > p:not(.eyebrow) { max-width:82%; }
+      .hero { min-height:calc(100svh - 105px); min-height:calc(100dvh - 105px); align-items:end; padding-block:4rem max(3.3rem,env(safe-area-inset-bottom)); padding-inline:max(1rem,env(safe-area-inset-left)) max(1rem,env(safe-area-inset-right)); }
+      .hero-copy { width:100%; max-width:24rem; margin-inline:auto; }
+      .hero h1 { font-size:clamp(3rem,13.5vw,4.25rem); }
+      .hero-copy > p:not(.eyebrow) { max-width:100%; margin:1.35rem 0 1.7rem; font-size:1rem; }
       .hero-photos { opacity:.5; }
       .photo-0 { right:-8%; top:7%; width:48vw; }
       .photo-1 { right:36%; top:18%; bottom:auto; width:28vw; }
       .photo-2 { display:none; }
-      .gift-index { width:calc(100% - 2rem); }
+      .hero-actions { display:grid; grid-template-columns:1fr; width:min(100%,22rem); gap:.55rem; }
+      .hero-actions a { width:100%; }
+      .gift-index { width:calc(100% - 2rem); padding-block:4.5rem; }
       .gift-links a { grid-template-columns:44px 1fr; min-height:88px; }
+      .gift-links strong { font-size:clamp(1.15rem,5.6vw,1.5rem); line-height:1.15; }
       .gift-links i { display:none; }
+      .reasons { padding-block:4.5rem; }
+      .reasons header { margin-bottom:2.5rem; }
+      .reasons h2 { font-size:clamp(2.7rem,12vw,4.2rem); }
       .reason-grid { grid-template-columns:1fr; }
-      .reason-grid article { min-height:210px; }
-      .reason-grid p { margin-top:2rem; }
-      .future li { grid-template-columns:52px 1fr; }
+      .reason-grid article { min-height:180px; padding:1.25rem; }
+      .reason-grid p { margin-top:1.7rem; }
+      .story-date { padding-block:4.5rem; }
+      .counter strong { font-size:clamp(4.5rem,24vw,6.8rem); }
+      .wish { min-height:auto; padding-block:5rem; }
+      .wish h2 { margin-bottom:1.7rem; font-size:clamp(2.9rem,13vw,5.2rem); }
+      .future { padding-block:4.5rem; }
+      .future header { margin-bottom:2.5rem; }
+      .future h2 { font-size:clamp(2.8rem,12vw,5rem); }
+      .future li { grid-template-columns:44px 1fr; min-height:88px; }
+      .future li p { font-size:clamp(1.1rem,5.2vw,1.45rem); }
+      .finale { min-height:auto; gap:2rem; padding-block:5rem max(5rem,env(safe-area-inset-bottom)); }
       .finale figure { width:min(68vw,260px); }
+      .finale h2 { font-size:clamp(2.8rem,13vw,5.2rem); }
+      .finale nav { display:grid; width:min(100%,22rem); }
+      .finale nav a { width:100%; }
     }
   `]
 })

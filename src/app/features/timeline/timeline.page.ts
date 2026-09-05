@@ -22,7 +22,7 @@ import { TimelineComponent } from './timeline.component';
     <app-timeline />
   `,
   styles: [`
-    .page-intro { display: flex; align-items: end; justify-content: space-between; gap: 2rem; width: min(1240px, calc(100% - 3rem)); margin: 0 auto; padding: clamp(4rem, 10vw, 9rem) 0 1rem; }
+    .page-intro { display: flex; align-items: end; justify-content: space-between; gap: 2rem; width: min(1240px, calc(100% - 3rem)); margin: 0 auto; padding: clamp(4rem, 10vw, 9rem) max(0px,env(safe-area-inset-right)) 1rem max(0px,env(safe-area-inset-left)); }
     .intro-copy { max-width: 780px; }
     .eyebrow { margin: 0 0 .8rem; color: var(--wine); font-size: .68rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
     h1 { max-width: 850px; margin: 0; font-family: var(--font-display); font-size: clamp(3rem, 8vw, 7rem); font-weight: 400; line-height: .91; letter-spacing: -.055em; }
@@ -31,8 +31,10 @@ import { TimelineComponent } from './timeline.component';
     .intro-stats strong { color: var(--wine); font-family: var(--font-display); font-size: 1.8rem; font-weight: 400; }
     .intro-stats span { display: flex; align-items: baseline; gap: .35rem; }
     @media (max-width: 680px) {
-      .page-intro { display: block; width: calc(100% - 2rem); padding-top: 3.8rem; }
-      .intro-stats { display: flex; gap: 1rem; margin-top: 2rem; padding: 1rem 0 0; border-top: 1px solid var(--border); border-left: 0; }
+      .page-intro { display: block; width: min(calc(100% - 2rem),560px); padding-top:3rem; }
+      h1 { font-size:clamp(2.5rem,12vw,4.6rem); line-height:.9; }
+      .page-intro span { line-height:1.65; }
+      .intro-stats { display:flex; flex-wrap:wrap; gap:.65rem 1rem; margin-top:1.7rem; padding:1rem 0 0; border-top:1px solid var(--border); border-left:0; }
       .intro-stats strong { font-size: 1.45rem; }
     }
   `]

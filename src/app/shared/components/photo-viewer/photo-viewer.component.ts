@@ -27,20 +27,20 @@ import type { MemoryMedia } from '../../../core/models/memory.model';
     </dialog>
   `,
   styles: [`
-    .viewer { width: 100%; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: clamp(1rem, 4vw, 3.5rem) clamp(1rem, 6vw, 6rem); border: 0; background: #171013; color: #fffdf9; }
+    .viewer { width: 100%; max-width: none; height: 100svh; height: 100dvh; max-height: none; margin: 0; padding: max(1rem,calc(env(safe-area-inset-top) + 1rem)) max(1rem,env(safe-area-inset-right)) max(1rem,env(safe-area-inset-bottom)) max(1rem,env(safe-area-inset-left)); border: 0; background: #171013; color: #fffdf9; overscroll-behavior:contain; }
     .viewer::backdrop { background: rgba(23,16,19,.96); }
     .viewer-figure { display: grid; place-items: center; gap: .9rem; width: 100%; height: 100%; margin: 0; }
-    img, video { max-width: min(100%, 1500px); max-height: min(78dvh, 100%); border: 1px solid rgba(255,253,249,.13); object-fit: contain; box-shadow: 0 18px 70px rgba(0,0,0,.3); }
+    img, video { max-width: min(100%, 1500px); max-height: min(78dvh, 100%); border: 1px solid rgba(255,253,249,.13); object-fit: contain; box-shadow: 0 18px 70px rgba(0,0,0,.3); touch-action:pan-y; }
     figcaption { max-width: min(90vw, 720px); color: rgba(255,253,249,.82); font-family: var(--font-display); font-size: 1rem; line-height: 1.6; text-align: center; }
     button { position: fixed; display: grid; width: 46px; height: 46px; place-items: center; border: 1px solid rgba(255,253,249,.23); background: rgba(255,253,249,.08); color: #fffdf9; cursor: pointer; transition: transform 180ms var(--ease-out), background 180ms var(--ease-out); }
     button:hover { background: rgba(255,253,249,.16); transform: translateY(-2px); }
-    .close { top: 1rem; right: 1rem; font-size: 1.65rem; }
+    .close { top: max(1rem,env(safe-area-inset-top)); right: max(1rem,env(safe-area-inset-right)); font-size: 1.65rem; }
     .nav { top: 50%; font-size: 1.2rem; transform: translateY(-50%); }
     .nav:hover { transform: translateY(calc(-50% - 2px)); }
     .prev { left: 1rem; }
     .next { right: 1rem; }
-    .counter { position: fixed; bottom: 1rem; left: 50%; margin: 0; color: rgba(255,253,249,.68); font-size: .68rem; letter-spacing: .16em; transform: translateX(-50%); }
-    @media (max-width: 680px) { .viewer { padding: 4rem 1rem 3.5rem; } .nav { display: none; } img, video { max-height: 72dvh; } }
+    .counter { position: fixed; bottom: max(1rem,env(safe-area-inset-bottom)); left: 50%; margin: 0; color: rgba(255,253,249,.68); font-size: .68rem; letter-spacing: .16em; transform: translateX(-50%); }
+    @media (max-width: 680px) { .viewer { padding: max(3.5rem,calc(env(safe-area-inset-top) + 2.5rem)) max(1rem,env(safe-area-inset-right)) max(3.5rem,calc(env(safe-area-inset-bottom) + 2rem)) max(1rem,env(safe-area-inset-left)); } .viewer-figure { gap:.6rem; min-height:0; } .nav { display: none; } img, video { max-height:min(68dvh,calc(100dvh - 11rem)); } figcaption { max-width:100%; max-height:18dvh; overflow:auto; padding-inline:.5rem; font-size:.95rem; } }
   `]
 })
 export class PhotoViewerComponent implements AfterViewInit, OnChanges, OnDestroy {

@@ -57,7 +57,7 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
     }
   `,
   styles: [`
-    .memory-page { width:min(1280px,calc(100% - 3rem)); margin:0 auto; padding:clamp(2.5rem,6vw,5rem) 0 6rem; }
+    .memory-page { width:min(1280px,calc(100% - 3rem)); margin:0 auto; padding:clamp(2.5rem,6vw,5rem) max(0px,env(safe-area-inset-left)) 6rem max(0px,env(safe-area-inset-right)); }
     .back { display:inline-flex; min-height:44px; align-items:center; margin-bottom:clamp(3rem,8vw,7rem); color:var(--wine); font-size:.69rem; font-weight:600; letter-spacing:.08em; text-decoration:none; text-transform:uppercase; }
     .essay-header { max-width:860px; margin:0 auto clamp(3rem,9vw,8rem); text-align:center; }
     .eyebrow { margin:0 0 1rem; color:var(--wine); font-size:.66rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase; }
@@ -88,7 +88,7 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
     .missing span { color:var(--wine); font-size:.7rem; font-weight:600; letter-spacing:.16em; }
     .missing h1 { max-width:600px; font-size:clamp(2.2rem,6vw,4.8rem); }
     .missing a { min-height:44px; color:var(--wine); }
-    @media (max-width:720px) { .memory-page { width:calc(100% - 2rem); padding-bottom:4rem; } .essay-header { text-align:left; } .caption { margin-left:0; } .essay-frame,.essay-frame.cover,.essay-frame.wide { width:100%; } .essay-frame:nth-child(3n),.essay-frame:nth-child(4n) { margin-left:auto; margin-right:auto; } .memory-ending nav { gap:1rem; } }
+    @media (max-width:720px) { .memory-page { width:calc(100% - 2rem); padding-top:2rem; padding-bottom:4rem; } .back { max-width:100%; margin-bottom:clamp(2rem,10vw,4rem); line-height:1.4; } .essay-header { text-align:left; } time { font-size:clamp(2rem,11vw,4rem); } h1 { font-size:clamp(1.7rem,8vw,2.8rem); } .caption { margin-left:0; font-size:1.05rem; } .essay { gap:2.5rem; } .essay-frame,.essay-frame.cover,.essay-frame.wide { width:100%; } .essay-frame:nth-child(3n),.essay-frame:nth-child(4n) { margin-left:auto; margin-right:auto; } .essay-frame button { min-height:44px; } .memory-ending { margin-top:5rem; } .memory-ending > p { margin-bottom:2.5rem; } .memory-ending nav { grid-template-columns:1fr; gap:.6rem; } .memory-ending nav > span { display:none; } .memory-ending nav a,.memory-ending nav .next { justify-items:start; min-height:72px; padding:.7rem 0; text-align:left; } }
   `]
 })
 export class MemoryDetailPage {

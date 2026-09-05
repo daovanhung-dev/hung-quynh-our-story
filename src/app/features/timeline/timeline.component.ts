@@ -112,7 +112,7 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
     .chapter-index a { flex:0 0 auto; min-height:44px; padding:.65rem 0; color:var(--text-muted); font-size:.71rem; font-weight:600; letter-spacing:.05em; text-decoration:none; }
     .chapter-index a:hover { color:var(--wine); }
     .chapter-list { display:grid; gap:clamp(5rem,10vw,9rem); }
-    .chapter { scroll-margin-top:100px; }
+    .chapter { scroll-margin-top:120px; }
     .chapter-heading { display:grid; grid-template-columns:1fr auto; gap:.45rem 1rem; align-items:end; margin-bottom:1.8rem; padding-bottom:1rem; border-bottom:1px solid var(--border); }
     .chapter-heading p { grid-column:1/-1; margin:0; color:var(--wine); font-size:.64rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase; }
     .chapter-heading h3 { font-size:clamp(2.5rem,4.6vw,4.5rem); letter-spacing:-.055em; line-height:.88; }
@@ -147,17 +147,21 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
     .continue-gift i { font-size:1rem; font-style:normal; }
     @media (max-width:900px) { .memory-grid app-memory-card { grid-column:span 6; } .memory-grid app-memory-card:first-child { grid-column:span 12; } .memory-grid app-memory-card:nth-child(2),.memory-grid app-memory-card:nth-child(5n),.memory-grid app-memory-card:nth-child(6n) { grid-column:span 6; margin-top:0; } .bonus-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }
     @media (max-width:620px) {
-      .timeline-wrap { width:min(100% - 2rem,560px); padding-top:3rem; }
+      .timeline-wrap { width:min(calc(100% - 2rem),560px); padding-top:3rem; }
       .section-heading { display:block; margin-bottom:3rem; }
+      h2 { font-size:clamp(2.45rem,12vw,4.6rem); line-height:.9; }
       .section-note { max-width:380px; margin-top:1.2rem; }
-      .chapter-index { margin-bottom:3.5rem; }
+      .chapter-index { margin-bottom:3.5rem; padding-inline:.2rem; scroll-padding-inline:.2rem; }
       .chapter-heading { grid-template-columns:1fr; }
       .chapter-heading span { text-align:left; }
-      .memory-grid { grid-template-columns:1fr; gap:3rem; }
+      .memory-grid { grid-template-columns:1fr; gap:2.5rem; }
       .memory-grid app-memory-card,.memory-grid app-memory-card:first-child,.memory-grid app-memory-card:nth-child(2),.memory-grid app-memory-card:nth-child(5n),.memory-grid app-memory-card:nth-child(6n) { grid-column:1; margin-top:0; }
       .bonus { grid-template-columns:1fr; }
-      .bonus-toggle { justify-self:start; }
+      .bonus-toggle { justify-self:start; width:min(100%,22rem); min-height:52px; }
       .bonus-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .continue-gift { margin-top:5rem; padding-block:4.5rem; }
+      .continue-gift h3 { font-size:clamp(2.35rem,11vw,4.6rem); }
+      .continue-gift a { width:min(100%,22rem); justify-content:center; min-height:52px; }
     }
   `]
 })

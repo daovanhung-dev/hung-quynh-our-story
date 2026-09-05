@@ -77,16 +77,16 @@ import { GiftRevealComponent } from './components/gift-reveal/gift-reveal.compon
   `,
   styles: [`
     :host { display:block; }
-    .birthday-experience,.stage-shell { min-height:100dvh; }
+    .birthday-experience,.stage-shell { min-height:100svh; min-height:100dvh; }
     .stage-shell { position:relative; isolation:isolate; display:grid; overflow:hidden; }
     .kicker { margin:0; color:var(--wine); font-size:.68rem; font-weight:600; letter-spacing:.17em; text-transform:uppercase; }
     h1 { margin:0; font-family:var(--font-display); font-size:clamp(3.1rem,8vw,7.5rem); font-weight:400; letter-spacing:-.07em; line-height:.85; }
     .primary-action { display:inline-flex; align-items:center; justify-content:center; gap:.75rem; min-height:50px; padding:.82rem 1.1rem; border:1px solid transparent; background:#fffdf9; color:var(--button); cursor:pointer; font-size:.72rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; transition:transform 180ms var(--ease-out),background 180ms var(--ease-out); }
     .primary-action:hover { transform:translateY(-2px); background:#fff; }
     .quiet-action { min-height:44px; border:0; background:transparent; color:inherit; cursor:pointer; font-size:.74rem; text-decoration:underline; text-underline-offset:.3rem; }
-    .stage-index { position:absolute; right:clamp(1.25rem,4vw,3rem); bottom:2rem; display:flex; align-items:center; gap:.7rem; font-size:.66rem; letter-spacing:.15em; }
+    .stage-index { position:absolute; right:max(clamp(1.25rem,4vw,3rem),env(safe-area-inset-right)); bottom:max(2rem,env(safe-area-inset-bottom)); display:flex; align-items:center; gap:.7rem; font-size:.66rem; letter-spacing:.15em; }
     .stage-index i { width:2rem; height:1px; background:currentColor; opacity:.5; }
-    .envelope-stage { align-content:center; justify-items:center; gap:2rem; padding:3rem 1.2rem; background:linear-gradient(145deg,#f6e9df,#ead5c8); color:var(--ink); text-align:center; }
+    .envelope-stage { align-content:center; justify-items:center; gap:clamp(1.4rem,5vw,2rem); padding:max(3rem,env(safe-area-inset-top)) max(1.2rem,env(safe-area-inset-right)) max(3rem,env(safe-area-inset-bottom)) max(1.2rem,env(safe-area-inset-left)); background:linear-gradient(145deg,#f6e9df,#ead5c8); color:var(--ink); text-align:center; }
     .envelope-stage::before { position:absolute; inset:1rem; z-index:-1; border:1px solid rgba(127,59,75,.14); content:''; }
     .envelope-copy { display:grid; justify-items:center; gap:1rem; max-width:720px; }
     .envelope-copy p:last-child { max-width:440px; margin:0; color:var(--text-secondary); font-family:var(--font-display); line-height:1.7; }
@@ -101,7 +101,7 @@ import { GiftRevealComponent } from './components/gift-reveal/gift-reveal.compon
     .wax-seal { position:absolute; top:45%; left:50%; z-index:4; display:grid; place-items:center; width:4.2rem; height:4.2rem; border:2px solid rgba(255,255,255,.38); border-radius:50%; background:var(--button); color:#fffaf2; font-family:var(--font-display); transform:translate(-50%,-50%) rotate(-7deg); box-shadow:inset 0 0 0 3px rgba(255,255,255,.08); }
     .wax-seal span { font-size:.65rem; }
     .dark-action,.dark-index { color:var(--text-muted); }
-    .letter-stage { padding:clamp(2rem,5vw,5rem) 1rem; background:linear-gradient(135deg,#f1e4d7,#f8f4ee); color:var(--ink); }
+    .letter-stage { overflow:visible; padding:clamp(2rem,5vw,5rem) max(1rem,env(safe-area-inset-left)) max(2rem,env(safe-area-inset-bottom)) max(1rem,env(safe-area-inset-right)); background:linear-gradient(135deg,#f1e4d7,#f8f4ee); color:var(--ink); }
     .letter-layout { display:grid; grid-template-columns:72px minmax(0,800px); gap:clamp(1rem,3vw,2.5rem); width:min(100%,980px); margin:auto; }
     aside { display:grid; align-content:start; justify-items:center; gap:.65rem; padding-top:1rem; color:var(--wine); font-family:var(--font-display); font-size:1.35rem; }
     aside i { width:1px; height:4rem; background:var(--champagne); }
@@ -124,7 +124,7 @@ import { GiftRevealComponent } from './components/gift-reveal/gift-reveal.compon
     .story-prelude p { margin:.65rem 0 0; color:var(--text-secondary); font-family:var(--font-display); font-size:1.05rem; line-height:1.65; }
     .paper-action { border-color:var(--button); background:var(--button); color:#fffdf9; }
     .paper-action:hover { background:var(--wine); }
-    @media (max-width:640px) { .letter-layout { display:block; } aside { display:flex; justify-content:center; margin-bottom:1rem; padding:0; } aside i { width:3rem; height:1px; } aside small { display:none; } .love-letter { padding:2rem 1.3rem 2.7rem; } .letter-body { font-size:1.04rem; line-height:1.8; } .letter-signature { text-align:left; } }
+    @media (max-width:640px) { .letter-layout { display:block; } aside { display:flex; justify-content:center; margin-bottom:1rem; padding:0; } aside i { width:3rem; height:1px; } aside small { display:none; } .envelope-copy { width:min(100%,25rem); } .envelope-stage h1 { font-size:clamp(2.8rem,12vw,4.5rem); } .envelope-copy p:last-child { font-size:.98rem; } .envelope-button { width:min(86vw,340px); } .quiet-action { max-width:22rem; line-height:1.4; } .love-letter { padding:1.6rem 1.1rem 2.2rem; } .love-letter::before { inset:.45rem; } .love-letter h1 { font-size:clamp(2.4rem,11vw,3.8rem); } .letter-rule { margin:1.3rem auto 2rem; } .letter-body { font-size:1rem; line-height:1.75; } .letter-signature { text-align:left; } .love-letter footer { margin-top:2.2rem; padding-top:1.5rem; } .paper-action { width:100%; min-height:52px; } }
   `]
 })
 export class BirthdayExperienceComponent implements AfterViewInit, OnDestroy, OnInit {

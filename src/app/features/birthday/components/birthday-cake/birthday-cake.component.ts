@@ -34,7 +34,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
   `,
   styles: [`
     :host { display:block; }
-    .cake-section { display:grid; justify-items:center; min-height:82dvh; align-content:center; padding:5rem 1.2rem; background:linear-gradient(155deg,#171013,#2a171e 64%,#130c0f); color:#fff9f0; text-align:center; }
+    .cake-section { display:grid; justify-items:center; min-height:82dvh; align-content:center; padding:max(5rem,env(safe-area-inset-top)) max(1.2rem,env(safe-area-inset-right)) max(5rem,env(safe-area-inset-bottom)) max(1.2rem,env(safe-area-inset-left)); background:linear-gradient(155deg,#171013,#2a171e 64%,#130c0f); color:#fff9f0; text-align:center; }
     .eyebrow { margin:0 0 .8rem; color:var(--champagne); font-size:.66rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase; }
     h2 { margin:0; font-family:var(--font-display); font-size:clamp(3rem,7vw,6.8rem); font-weight:400; letter-spacing:-.06em; line-height:.9; }
     .hint { margin:1rem 0 3rem; color:rgba(255,249,240,.62); font-family:var(--font-display); font-size:1rem; }
@@ -57,6 +57,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
     @keyframes flicker { from { transform:translateX(-50%) rotate(-4deg) scale(.94); } to { transform:translateX(-50%) rotate(5deg) scale(1.06); } }
     @keyframes smoke { 0% { opacity:0; transform:translateY(0) scale(.7); } 20% { opacity:.58; } 100% { opacity:0; transform:translate(8px,-70px) scale(1.3); } }
     @keyframes reveal { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+    @media (max-width:620px) { h2 { font-size:clamp(2.6rem,12vw,4.2rem); } .hint { margin-bottom:2rem; font-size:.98rem; } .cake { width:min(82vw,320px); height:230px; } .candles { gap:34px; } button { width:min(100%,20rem); min-height:52px; } }
     @media (prefers-reduced-motion:reduce) { .flame,.smoke,.secret { animation:none; } }
   `]
 })

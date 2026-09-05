@@ -34,7 +34,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output, signal } from
   `,
   styles: [`
     :host { display: block; }
-    .gift-scene { position: relative; isolation: isolate; display: grid; min-height: 100dvh; place-items: center; align-content: center; gap: clamp(2.2rem, 6vw, 4.5rem); overflow: hidden; padding: 4rem 1.2rem; background: linear-gradient(145deg,#f7eee6,#ead7c9); color: var(--ink); text-align: center; }
+    .gift-scene { position: relative; isolation: isolate; display: grid; min-height: 100svh; min-height: 100dvh; place-items: center; align-content: center; gap: clamp(2.2rem, 6vw, 4.5rem); overflow: hidden; padding: max(4rem,env(safe-area-inset-top)) max(1.2rem,env(safe-area-inset-right)) max(4rem,env(safe-area-inset-bottom)) max(1.2rem,env(safe-area-inset-left)); background: linear-gradient(145deg,#f7eee6,#ead7c9); color: var(--ink); text-align: center; }
     .gift-scene::before { position: absolute; inset: 1rem; z-index: -1; border: 1px solid rgba(127,59,75,.15); content: ''; }
     .glow { position: absolute; inset: 0; z-index: -2; background: radial-gradient(circle at 50% 58%,rgba(216,181,122,.34),transparent 24rem),radial-gradient(circle at 12% 18%,rgba(166,84,98,.09),transparent 20rem); }
     .copy { display: grid; justify-items: center; max-width: 760px; }
@@ -63,7 +63,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output, signal } from
     .after-open p { margin: 0; color: var(--text-secondary); font-family: var(--font-display); font-size: 1.05rem; }
     .after-open button { display: inline-flex; align-items: center; gap: .7rem; min-height: 48px; padding: .78rem 1rem; border: 1px solid var(--wine); background: var(--wine); color: #fffdf9; cursor: pointer; font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
     @keyframes reveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-    @media (max-width:620px) { .gift { width: min(68vw,250px); } .gift-scene { gap: 2rem; padding-inline: 1rem; } }
+    @media (max-width:620px) { .gift { width: min(72vw,230px); } .gift-scene { gap:2rem; padding-inline:1rem; } .copy { width:min(100%,25rem); } h1 { font-size:clamp(2.5rem,12.5vw,4.4rem); } .copy > p:last-child { font-size:1rem; } .after-open { width:min(100%,22rem); } .after-open p { line-height:1.5; } .after-open button { width:100%; justify-content:center; min-height:52px; } }
     @media (prefers-reduced-motion:reduce) { .box,.lid,.bow,.light,.heart,.after-open { transition: none; animation: none; } }
   `]
 })

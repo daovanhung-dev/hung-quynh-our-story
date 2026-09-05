@@ -71,7 +71,7 @@ interface Rocket {
             [style.--blur]="memory.blurPx + 'px'"
             [style.z-index]="memory.zIndex"
           >
-            <img [src]="memory.photo.src" alt="" decoding="async" [attr.loading]="index < 4 ? 'eager' : 'lazy'" [attr.fetchpriority]="index < 2 ? 'high' : null" (error)="hideBrokenPhoto($event)">
+            <img [src]="memory.photo.src" alt="" decoding="async" [attr.loading]="index === 0 ? 'eager' : 'lazy'" [attr.fetchpriority]="index === 0 ? 'high' : null" sizes="(max-width: 640px) 31vw, 14vw" (error)="hideBrokenPhoto($event)">
             <figcaption>H ♡ Q</figcaption>
           </figure>
         }
@@ -127,7 +127,7 @@ interface Rocket {
     .floating-hearts span { position: absolute; left: var(--x); bottom: -8vh; color: rgba(245,193,205,.72); font-family: Georgia, serif; font-size: clamp(.75rem, 1.6vw, 1.35rem); text-shadow: 0 0 12px rgba(240,153,178,.45); animation: heart-drift var(--duration) linear var(--delay) infinite; }
     .confetti { z-index: 46; }
     .confetti i { position: absolute; top: -8vh; left: var(--x); width: 5px; height: 12px; border-radius: 1px; opacity: .85; transform: rotate(var(--rotation)); animation: confetti-fall 3.8s cubic-bezier(.12,.65,.25,1) var(--delay) both; }
-    .message { position: relative; z-index: 55; display: grid; align-content: center; justify-items: center; min-height: 100dvh; padding: 5rem 1.25rem 8rem; text-align: center; pointer-events: none; }
+    .message { position: relative; z-index: 55; display: grid; align-content: center; justify-items: center; min-height: 100svh; min-height: 100dvh; padding: max(5rem,env(safe-area-inset-top)) 1.25rem max(8rem,env(safe-area-inset-bottom)); text-align: center; pointer-events: none; }
     .eyebrow { margin: 0 0 1.25rem; color: rgba(255,248,238,.54); font-size: .64rem; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; opacity: 0; transform: translateY(12px); transition: opacity 800ms ease, transform 800ms ease; }
     h1 { display: grid; margin: 0; font-family: var(--font-display); font-weight: 400; line-height: .82; letter-spacing: -.055em; }
     .happy, .my-love, .names, .heart-mark { opacity: 0; filter: blur(12px); transform: translateY(22px) scale(.97); transition: opacity 950ms cubic-bezier(.2,.7,.2,1), filter 950ms ease, transform 950ms cubic-bezier(.2,.7,.2,1); }
@@ -140,8 +140,8 @@ interface Rocket {
     .subtitle-visible .my-love, .subtitle-visible .heart-mark { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
     .subtitle-visible .heart-mark { animation: heart-pulse 1.8s ease-in-out 900ms infinite; }
     .names-visible .names { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
-    .skip { position: absolute; top: max(1rem, env(safe-area-inset-top)); right: 1rem; z-index: 70; min-height: 42px; padding: .4rem .7rem; border: 0; background: transparent; color: rgba(255,250,241,.58); cursor: pointer; font-size: .7rem; text-decoration: underline; text-underline-offset: .28rem; }
-    .actions { position: absolute; right: 0; bottom: max(1.4rem, env(safe-area-inset-bottom)); left: 0; z-index: 70; display: grid; justify-items: center; padding: 0 1rem; opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity 700ms ease, transform 700ms ease; }
+    .skip { position: absolute; top: max(1rem, env(safe-area-inset-top)); right: max(1rem,env(safe-area-inset-right)); z-index: 70; min-height: 44px; padding: .4rem .7rem; border: 0; background: transparent; color: rgba(255,250,241,.58); cursor: pointer; font-size: .7rem; text-decoration: underline; text-underline-offset: .28rem; }
+    .actions { position: absolute; right: 0; bottom: max(1.4rem, env(safe-area-inset-bottom)); left: 0; z-index: 70; display: grid; justify-items: center; padding: 0 max(1rem,env(safe-area-inset-right)) 0 max(1rem,env(safe-area-inset-left)); opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity 700ms ease, transform 700ms ease; }
     .actions.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
     .gift-button { display: inline-flex; align-items: center; gap: .9rem; min-height: 52px; padding: .9rem 1.2rem; border: 1px solid rgba(244,215,165,.55); background: rgba(14,8,11,.58); color: #fffaf1; backdrop-filter: blur(12px); cursor: pointer; font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; transition: transform 180ms ease, background 180ms ease; }
     .gift-button:hover { transform: translateY(-2px); background: rgba(111,52,68,.5); }
@@ -159,12 +159,15 @@ interface Rocket {
     @keyframes heart-pulse { 0%,100% { transform: scale(1); } 45% { transform: scale(1.14); } }
     @keyframes glow-breathe { from { opacity: .72; transform: scale(1); } to { opacity: 1; transform: scale(1.04); } }
     @media (max-width: 640px) {
+      .stars i:nth-child(n + 35), .floating-hearts span:nth-child(n + 8) { display:none; }
+      .fireworks { display:none; }
       .flying-memory { width: clamp(6.4rem, 31vw, 9rem); padding: .3rem .3rem 1.05rem; }
       .flying-memory figcaption { font-size: .58rem; }
       .message { padding-inline: .85rem; }
       .happy { font-size: clamp(2.65rem, 15vw, 4.7rem); line-height: .88; }
       .my-love { font-size: clamp(3.1rem, 17vw, 5.3rem); }
       .eyebrow { letter-spacing: .2em; }
+      .gift-button { width:min(100%,22rem); justify-content:center; padding-inline:1rem; }
     }
     @media (prefers-reduced-motion: reduce) {
       .ambient-glow, .stars i, .flying-memory, .floating-hearts span, .confetti i, .heart-mark { animation: none !important; }
@@ -239,7 +242,7 @@ export class BirthdayCelebrationComponent implements AfterViewInit, OnDestroy {
     this.schedule(this.showNames, BIRTHDAY_CELEBRATION_CONFIG.namesDelayMs);
     this.schedule(this.showConfetti, BIRTHDAY_CELEBRATION_CONFIG.namesDelayMs + 150);
     this.schedule(this.showCta, BIRTHDAY_CELEBRATION_CONFIG.ctaDelayMs);
-    this.startCanvas();
+    if (!this.lowPower) this.startCanvas();
   }
 
   ngOnDestroy(): void {
@@ -253,7 +256,7 @@ export class BirthdayCelebrationComponent implements AfterViewInit, OnDestroy {
 
   @HostListener('document:visibilitychange')
   protected onVisibilityChange(): void {
-    if (this.reducedMotion || this.destroyed) return;
+    if (this.reducedMotion || this.lowPower || this.destroyed) return;
     if (document.hidden) {
       cancelAnimationFrame(this.animationFrame);
       return;
@@ -263,7 +266,7 @@ export class BirthdayCelebrationComponent implements AfterViewInit, OnDestroy {
 
   @HostListener('window:resize')
   protected onResize(): void {
-    if (!this.reducedMotion) this.resizeCanvas();
+    if (!this.reducedMotion && !this.lowPower) this.resizeCanvas();
   }
 
   protected hideBrokenPhoto(event: Event): void {
