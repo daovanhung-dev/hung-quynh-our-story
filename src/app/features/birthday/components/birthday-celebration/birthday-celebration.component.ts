@@ -71,7 +71,7 @@ interface Rocket {
             [style.--blur]="memory.blurPx + 'px'"
             [style.z-index]="memory.zIndex"
           >
-            <img [src]="memory.photo.src" alt="" decoding="async" [attr.loading]="index === 0 ? 'eager' : 'lazy'" [attr.fetchpriority]="index === 0 ? 'high' : null" sizes="(max-width: 640px) 31vw, 14vw" (error)="hideBrokenPhoto($event)">
+            <img [src]="memory.photo.src" alt="" decoding="async" [attr.loading]="index < eagerPhotoCount ? 'eager' : 'lazy'" [attr.fetchpriority]="index === 0 ? 'high' : null" sizes="(max-width: 640px) 31vw, 14vw" (error)="hideBrokenPhoto($event)">
             <figcaption>H ♡ Q</figcaption>
           </figure>
         }
@@ -205,6 +205,8 @@ export class BirthdayCelebrationComponent implements AfterViewInit, OnDestroy {
     glyph: index % 3 === 0 ? '♥' : '♡'
   }));
   protected readonly confetti = signal<readonly { x: number; delay: number; rotation: number; fall: number; color: string }[]>([]);
+  /** Animated photos start off-screen; keep the mobile set out of native lazy-loading. */
+  protected readonly eagerPhotoCount = BIRTHDAY_CELEBRATION_CONFIG.mobilePhotoCount;
 
   private readonly particles: FireworkParticle[] = [];
   private readonly rockets: Rocket[] = [];

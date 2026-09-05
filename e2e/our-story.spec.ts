@@ -90,6 +90,9 @@ test('mobile birthday home and timeline do not overflow', async ({ page }) => {
 
     await page.goto('/timeline');
     await expectNoHorizontalOverflow(page);
+    const mobileCardSource = page.locator('app-memory-card .media-frame source').first();
+    await expect(mobileCardSource).toHaveAttribute('media', '(max-width: 700px)');
+    await expect(mobileCardSource).toHaveAttribute('srcset', /480w, .*960w/);
     await expectTouchTarget(page.locator('.site-header nav a').nth(0));
     await expectTouchTarget(page.locator('.site-header nav a').nth(1));
     await expectTouchTarget(page.locator('.site-header nav a').nth(2));
@@ -106,8 +109,9 @@ test('mobile birthday journey remains usable on a narrow viewport', async ({ pag
   await page.goto('/birthday');
   await expect(page.getByRole('heading', { name: 'Happy 22nd Birthday My Love', exact: true })).toBeVisible({ timeout: 10_000 });
   await expect(page.locator('.flying-memory')).toHaveCount(6);
-  await expect(page.locator('.flying-memory img').nth(0)).toHaveAttribute('loading', 'eager');
-  await expect(page.locator('.flying-memory img').nth(1)).toHaveAttribute('loading', 'lazy');
+  for (const image of await page.locator('.flying-memory img').all()) {
+    await expect(image).toHaveAttribute('loading', 'eager');
+  }
   await expectTouchTarget(page.getByRole('button', { name: /Bỏ qua/i }));
   await expectTouchTarget(page.getByRole('button', { name: /Mở món quà của em/i }));
   await expectNoHorizontalOverflow(page);

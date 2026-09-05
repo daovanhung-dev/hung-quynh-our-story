@@ -16,7 +16,12 @@ import type { MemoryMedia } from '../../../core/models/memory.model';
         @if (currentMedia.kind === 'video') {
           <video [src]="currentMedia.src" [poster]="currentMedia.posterSrc" controls playsinline preload="metadata" [attr.aria-label]="currentMedia.alt || 'Video kỷ niệm'" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)"></video>
         } @else {
-          <img [src]="imageSource" [attr.srcset]="srcSet" [attr.width]="currentMedia.width || null" [attr.height]="currentMedia.height || null" [alt]="currentMedia.alt || 'Ảnh kỷ niệm'" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+          <picture>
+            @if (mobileSrcSet) {
+              <source media="(max-width: 700px)" type="image/webp" [attr.srcset]="mobileSrcSet" sizes="100vw">
+            }
+            <img [src]="imageSource" [attr.srcset]="srcSet" [attr.width]="currentMedia.width || null" [attr.height]="currentMedia.height || null" [alt]="currentMedia.alt || 'Ảnh kỷ niệm'" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+          </picture>
         }
         @if (currentMedia.caption) { <figcaption>{{ currentMedia.caption }}</figcaption> }
       </figure>
@@ -30,6 +35,7 @@ import type { MemoryMedia } from '../../../core/models/memory.model';
     .viewer { width: 100%; max-width: none; height: 100svh; height: 100dvh; max-height: none; margin: 0; padding: max(1rem,calc(env(safe-area-inset-top) + 1rem)) max(1rem,env(safe-area-inset-right)) max(1rem,env(safe-area-inset-bottom)) max(1rem,env(safe-area-inset-left)); border: 0; background: #171013; color: #fffdf9; overscroll-behavior:contain; }
     .viewer::backdrop { background: rgba(23,16,19,.96); }
     .viewer-figure { display: grid; place-items: center; gap: .9rem; width: 100%; height: 100%; margin: 0; }
+    picture { display: contents; }
     img, video { max-width: min(100%, 1500px); max-height: min(78dvh, 100%); border: 1px solid rgba(255,253,249,.13); object-fit: contain; box-shadow: 0 18px 70px rgba(0,0,0,.3); touch-action:pan-y; }
     figcaption { max-width: min(90vw, 720px); color: rgba(255,253,249,.82); font-family: var(--font-display); font-size: 1rem; line-height: 1.6; text-align: center; }
     button { position: fixed; display: grid; width: 46px; height: 46px; place-items: center; border: 1px solid rgba(255,253,249,.23); background: rgba(255,253,249,.08); color: #fffdf9; cursor: pointer; transition: transform 180ms var(--ease-out), background 180ms var(--ease-out); }
@@ -68,6 +74,13 @@ export class PhotoViewerComponent implements AfterViewInit, OnChanges, OnDestroy
     const media = this.currentMedia;
     return media.thumbnailSrc && media.displaySrc && media.mediumSrc
       ? `${media.thumbnailSrc} 480w, ${media.displaySrc} 960w, ${media.mediumSrc} 1440w`
+      : undefined;
+  }
+
+  protected get mobileSrcSet(): string | undefined {
+    const media = this.currentMedia;
+    return media.thumbnailSrc && media.displaySrc
+      ? `${media.thumbnailSrc} 480w, ${media.displaySrc} 960w`
       : undefined;
   }
 

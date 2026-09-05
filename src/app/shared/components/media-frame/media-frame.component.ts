@@ -14,25 +14,30 @@ import type { MemoryMedia } from '../../../core/models/memory.model';
           <div class="video-placeholder" aria-hidden="true"><span>▶</span><small>Video</small></div>
         }
       } @else if (!failed) {
-        <img
-          [src]="media.thumbnailSrc || media.displaySrc || media.src"
-          [attr.srcset]="srcSet"
-          [attr.sizes]="sizes"
-          [attr.width]="media.width || null"
-          [attr.height]="media.height || null"
-          [attr.fetchpriority]="priority ? 'high' : null"
-          [attr.loading]="priority ? 'eager' : 'lazy'"
-          [alt]="alt"
-          decoding="async"
-          (error)="failed = true"
-        >
+        <picture>
+          @if (mobileSrcSet) {
+            <source media="(max-width: 700px)" type="image/webp" [attr.srcset]="mobileSrcSet" [attr.sizes]="sizes">
+          }
+          <img
+            [src]="media.thumbnailSrc || media.displaySrc || media.src"
+            [attr.srcset]="srcSet"
+            [attr.sizes]="sizes"
+            [attr.width]="media.width || null"
+            [attr.height]="media.height || null"
+            [attr.fetchpriority]="priority ? 'high' : null"
+            [attr.loading]="priority ? 'eager' : 'lazy'"
+            [alt]="alt"
+            decoding="async"
+            (error)="failed = true"
+          >
+        </picture>
       } @else {
         <div class="image-placeholder" role="img" [attr.aria-label]="'Không thể tải ' + alt"><span>H ♡ Q</span></div>
       }
     </div>
   `,
   styles: [`
-    :host, .media-frame { display: block; width: 100%; height: 100%; }
+    :host, .media-frame, picture { display: block; width: 100%; height: 100%; }
     .media-frame { position: relative; overflow: hidden; background: var(--surface-soft); }
     img { width: 100%; height: 100%; object-fit: cover; }
     .video-placeholder, .image-placeholder { display: grid; width: 100%; height: 100%; place-items: center; background: linear-gradient(145deg, #3c242a, #6c3341); color: #fffdf9; }
@@ -53,6 +58,12 @@ export class MediaFrameComponent {
   protected get srcSet(): string | undefined {
     if (!this.media.thumbnailSrc || !this.media.displaySrc || !this.media.mediumSrc) return undefined;
     return `${this.media.thumbnailSrc} 480w, ${this.media.displaySrc} 960w, ${this.media.mediumSrc} 1440w`;
+  }
+
+  /** Keep high-density phones on the 960px rendition for in-page cards. */
+  protected get mobileSrcSet(): string | undefined {
+    if (!this.media.thumbnailSrc || !this.media.displaySrc) return undefined;
+    return `${this.media.thumbnailSrc} 480w, ${this.media.displaySrc} 960w`;
   }
 
   protected get aspectRatio(): string {
