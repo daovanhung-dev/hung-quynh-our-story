@@ -5,14 +5,20 @@ import { BIRTHDAY_LETTER } from '../../core/constants/birthday.config';
 import type { BirthdayStage, IntroPhoto } from '../../core/models/birthday.model';
 import { BirthdayJourneyService } from '../../core/services/birthday-journey.service';
 import { MemoryService } from '../../core/services/memory.service';
+import { BirthdayCelebrationComponent } from './components/birthday-celebration/birthday-celebration.component';
 
 @Component({
   selector: 'app-birthday-experience',
   standalone: true,
+  imports: [BirthdayCelebrationComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section class="birthday-experience" [attr.data-stage]="stage()" aria-labelledby="birthday-title">
+    <section class="birthday-experience" [attr.data-stage]="stage()" [attr.aria-labelledby]="stage() === 'celebration' ? 'celebration-title' : 'birthday-title'">
       @switch (stage()) {
+        @case ('celebration') {
+          <app-birthday-celebration [photos]="celebrationPhotos" (proceed)="enterPrologue()" />
+        }
+
         @case ('prologue') {
           <div class="prologue stage-shell">
             <div class="prologue-glow" aria-hidden="true"></div>
@@ -172,16 +178,17 @@ export class BirthdayExperienceComponent implements AfterViewInit, OnDestroy, On
   private readonly router = inject(Router);
   private readonly memoryService = inject(MemoryService);
 
-  protected readonly stage = signal<BirthdayStage>('prologue');
+  protected readonly stage = signal<BirthdayStage>('celebration');
   protected readonly letter = BIRTHDAY_LETTER;
-  protected readonly introPhotos = this.pickIntroPhotos(this.memoryService.getIntroPhotos());
+  protected readonly celebrationPhotos = this.memoryService.getIntroPhotos();
+  protected readonly introPhotos = this.pickIntroPhotos(this.celebrationPhotos);
 
   ngOnInit(): void {
     this.journey.start();
   }
 
   ngAfterViewInit(): void {
-    this.focus('.primary-action');
+    if (this.stage() !== 'celebration') this.focus('.primary-action');
   }
 
   ngOnDestroy(): void {
@@ -190,7 +197,16 @@ export class BirthdayExperienceComponent implements AfterViewInit, OnDestroy, On
 
   @HostListener('document:keydown.escape')
   protected skip(): void {
+    if (this.stage() === 'celebration') {
+      this.enterPrologue();
+      return;
+    }
     this.goToTimeline();
+  }
+
+  protected enterPrologue(): void {
+    this.stage.set('prologue');
+    queueMicrotask(() => this.focus('.primary-action'));
   }
 
   protected next(): void {
