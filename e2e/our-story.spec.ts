@@ -81,6 +81,10 @@ test('mobile birthday home and timeline do not overflow', async ({ page }) => {
     await page.evaluate(() => sessionStorage.setItem('hung-quynh-birthday-journey-seen', 'true'));
     await page.reload();
     await expectNoHorizontalOverflow(page);
+    await expect(page.locator('.hero-photos img')).toHaveCount(3);
+    await expect(page.locator('.hero-photos img').nth(0)).toHaveAttribute('loading', 'eager');
+    await expect(page.locator('.hero-photos img').nth(1)).toHaveAttribute('loading', 'lazy');
+    await expect(page.locator('.finale img')).toHaveAttribute('loading', 'lazy');
     await expectTouchTarget(page.getByRole('link', { name: /Đi lại những ngày/i }));
     await expectTouchTarget(page.getByRole('link', { name: /Xem lại món quà/i }));
 
@@ -102,6 +106,8 @@ test('mobile birthday journey remains usable on a narrow viewport', async ({ pag
   await page.goto('/birthday');
   await expect(page.getByRole('heading', { name: 'Happy 22nd Birthday My Love', exact: true })).toBeVisible({ timeout: 10_000 });
   await expect(page.locator('.flying-memory')).toHaveCount(6);
+  await expect(page.locator('.flying-memory img').nth(0)).toHaveAttribute('loading', 'eager');
+  await expect(page.locator('.flying-memory img').nth(1)).toHaveAttribute('loading', 'lazy');
   await expectTouchTarget(page.getByRole('button', { name: /Bỏ qua/i }));
   await expectTouchTarget(page.getByRole('button', { name: /Mở món quà của em/i }));
   await expectNoHorizontalOverflow(page);

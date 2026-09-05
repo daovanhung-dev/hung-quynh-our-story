@@ -44,7 +44,7 @@ import { BirthdayJourneyService } from './core/services/birthday-journey.service
     nav a { display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:0 .75rem; border-bottom:1px solid transparent; color:var(--text-secondary); font-size:.7rem; font-weight:600; letter-spacing:.06em; text-decoration:none; text-transform:uppercase; transition:color 180ms var(--ease-out),border-color 180ms var(--ease-out); }
     nav a:hover,nav a.is-active { border-color:var(--wine); color:var(--wine); }
     main:focus { outline:none; }
-    .site-footer { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:.65rem 1rem; padding:5rem max(1.5rem,env(safe-area-inset-left)) max(2.8rem,env(safe-area-inset-bottom)) max(1.5rem,env(safe-area-inset-right)); background:var(--paper); color:var(--text-muted); font-size:.72rem; letter-spacing:.03em; text-align:center; transition:opacity 180ms var(--ease-out),visibility 180ms var(--ease-out); }
+    .site-footer { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:.65rem 1rem; padding:5rem max(1.5rem,env(safe-area-inset-right)) max(2.8rem,env(safe-area-inset-bottom)) max(1.5rem,env(safe-area-inset-left)); background:var(--paper); color:var(--text-muted); font-size:.72rem; letter-spacing:.03em; text-align:center; transition:opacity 180ms var(--ease-out),visibility 180ms var(--ease-out); }
     .footer-mark { color:var(--wine); font-weight:600; letter-spacing:.12em; }
     .footer-note { color:var(--text-secondary); }
     @media (max-width:680px) {
