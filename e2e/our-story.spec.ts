@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test('first session opens the birthday journey and can continue into memories', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: /Happy 22nd Birthday/i })).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByRole('heading', { name: 'Happy 22nd Birthday My Love', exact: true })).toBeVisible({ timeout: 10_000 });
   await page.getByRole('button', { name: /Mở món quà của em/i }).click();
   await expect(page.getByRole('heading', { name: /Có một món quà/i })).toBeVisible();
 
@@ -14,7 +14,7 @@ test('first session opens the birthday journey and can continue into memories', 
 
   await page.getByRole('button', { name: /Đi cùng anh nhé/i }).click();
   await expect(page).toHaveURL(/\/timeline$/);
-  await expect(page.getByRole('heading', { name: /Những ngày/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Những ngày đã đưa anh đến gần em hơn.', exact: true })).toBeVisible();
 });
 
 test('after the journey the root becomes birthday home instead of redirecting to timeline', async ({ page }) => {
@@ -22,14 +22,14 @@ test('after the journey the root becomes birthday home instead of redirecting to
   await page.evaluate(() => sessionStorage.setItem('hung-quynh-birthday-journey-seen', 'true'));
   await page.reload();
   await expect(page).toHaveURL(/\/$/);
-  await expect(page.getByRole('heading', { name: /Happy 22nd Birthday/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Happy 22nd Birthday, Quỳnh ♡', exact: true })).toBeVisible();
   await expect(page.getByText(/ngày có nhau/i)).toBeVisible();
   await expect(page.getByRole('heading', { name: /Mười hai điều/i })).toBeVisible();
 });
 
 test('birthday route always replays the full gift experience', async ({ page }) => {
   await page.goto('/birthday');
-  await expect(page.getByRole('heading', { name: /Happy 22nd Birthday/i })).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByRole('heading', { name: 'Happy 22nd Birthday My Love', exact: true })).toBeVisible({ timeout: 10_000 });
   await page.reload();
   await expect(page.getByRole('button', { name: /Mở món quà của em/i })).toBeVisible({ timeout: 10_000 });
 });
@@ -76,6 +76,6 @@ test('mobile birthday home and timeline do not overflow', async ({ page }) => {
 test('reduced motion keeps the birthday journey usable', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/birthday');
-  await expect(page.getByRole('heading', { name: /Happy 22nd Birthday/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Happy 22nd Birthday My Love', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: /Mở món quà của em/i })).toBeVisible();
 });
