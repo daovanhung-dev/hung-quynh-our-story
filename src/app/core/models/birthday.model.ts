@@ -1,4 +1,4 @@
-export type BirthdayStage = 'celebration' | 'prologue' | 'envelope' | 'letter';
+export type BirthdayStage = 'celebration' | 'gift' | 'envelope' | 'letter';
 
 export type BirthdayLetterBlockKind = 'salutation' | 'paragraph' | 'emphasis' | 'signature';
 

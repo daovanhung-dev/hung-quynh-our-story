@@ -92,9 +92,9 @@ interface Rocket {
       }
 
       <div class="message" [class.title-visible]="showTitle()" [class.subtitle-visible]="showSubtitle()" [class.names-visible]="showNames()">
-        <p class="eyebrow">For the girl I love</p>
+        <p class="eyebrow">05 · 09 · 2026 · For the girl I love</p>
         <h1 id="celebration-title">
-          <span class="happy">Happy Birthday</span>
+          <span class="happy">Happy 22nd Birthday</span>
           <span class="my-love">My Love</span>
         </h1>
         <div class="heart-mark" aria-hidden="true">♡</div>
