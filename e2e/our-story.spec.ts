@@ -140,7 +140,7 @@ test('Enter can hold Mở lá thư open for the hidden treasure', async ({ page 
   const navigation = page.waitForURL(/\/love-treasure$/);
   await page.keyboard.down('Enter');
   try {
-    await expect(trigger.locator('[role="progressbar"]')).toHaveAttribute('aria-valuenow', /[1-9]/);
+    await expect(trigger.locator('[role="progressbar"]')).toHaveAttribute('aria-valuenow', /[1-9]/, { timeout: 5_000 });
     await navigation;
   } finally {
     if (!page.isClosed()) await page.keyboard.up('Enter');
