@@ -143,7 +143,7 @@ test('Enter can hold Mở lá thư open for the hidden treasure', async ({ page 
     await expect(trigger.locator('[role="progressbar"]')).toHaveAttribute('aria-valuenow', /[1-9]/);
     await navigation;
   } finally {
-    await page.keyboard.up('Enter');
+    if (!page.isClosed()) await page.keyboard.up('Enter');
   }
 });
 

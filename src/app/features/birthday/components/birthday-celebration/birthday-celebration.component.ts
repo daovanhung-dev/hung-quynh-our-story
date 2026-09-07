@@ -115,7 +115,7 @@ interface Rocket {
         (pointerleave)="endHold()"
         (keydown)="startKeyboardHold($event)"
         (keyup)="endKeyboardHold($event)"
-        (blur)="endHold()"
+        (blur)="endPointerHold()"
       >
         <span class="skip-label">Bỏ qua</span>
         <span
@@ -354,6 +354,10 @@ export class BirthdayCelebrationComponent implements AfterViewInit, OnDestroy {
     this.clearHoldTimers();
     this.holdInput = undefined;
     if (!this.hiddenUnlockComplete()) this.holdProgress.set(0);
+  }
+
+  protected endPointerHold(): void {
+    if (this.holdInput === 'pointer') this.endHold();
   }
 
   protected holdPercent(): number {

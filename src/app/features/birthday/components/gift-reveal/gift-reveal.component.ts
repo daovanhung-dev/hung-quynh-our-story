@@ -46,7 +46,7 @@ import { AmbientPhotoGalleryComponent } from '../../../../shared/components/ambi
             (pointerleave)="endHold()"
             (keydown)="startKeyboardHold($event)"
             (keyup)="endKeyboardHold($event)"
-            (blur)="endHold()"
+            (blur)="endPointerHold()"
           >
             <span class="letter-trigger-label">Mở lá thư</span>
             <span aria-hidden="true">↘</span>
@@ -174,6 +174,10 @@ export class GiftRevealComponent implements OnDestroy {
     this.clearHoldTimers();
     this.holdInput = undefined;
     if (!this.hiddenUnlockComplete()) this.holdProgress.set(0);
+  }
+
+  protected endPointerHold(): void {
+    if (this.holdInput === 'pointer') this.endHold();
   }
 
   protected holdPercent(): number {
