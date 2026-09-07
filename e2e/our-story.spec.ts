@@ -53,6 +53,213 @@ test('birthday route always replays the full gift experience', async ({ page }) 
   await expect(page.getByRole('button', { name: /Mở món quà của em/i })).toBeVisible({ timeout: 10_000 });
 });
 
+async function openLetterTrigger(page: Page): Promise<Locator> {
+  await page.goto('/birthday');
+  await page.getByRole('button', { name: /Mở món quà của em/i }).click();
+  await expect(page.getByRole('heading', { name: /Có một món quà/i })).toBeVisible();
+  await page.getByRole('button', { name: /Mở món quà$/i }).click();
+  const trigger = page.getByRole('button', { name: /Mở lá thư/i });
+  await expect(trigger).toBeVisible();
+  return trigger;
+}
+
+test('quick click on Mở lá thư keeps the normal envelope flow', async ({ page }) => {
+  const trigger = await openLetterTrigger(page);
+  await trigger.click();
+  await expect(page.getByRole('button', { name: /Mở phong thư/i })).toBeVisible();
+  await expect(page).not.toHaveURL(/\/love-treasure$/);
+});
+
+test('holding Mở lá thư for three seconds opens the love treasure with mouse and touch', async ({ page }) => {
+  let trigger = await openLetterTrigger(page);
+  const mouseNavigation = page.waitForURL(/\/love-treasure$/);
+  await trigger.dispatchEvent('pointerdown', { button: 0, pointerType: 'mouse', pointerId: 10, isPrimary: true });
+  await mouseNavigation;
+  await expect(page.getByRole('heading', { name: /Chúc mừng vợ yêu khám phá được thêm một kho báu/i })).toBeVisible();
+
+  trigger = await openLetterTrigger(page);
+  const touchNavigation = page.waitForURL(/\/love-treasure$/);
+  await trigger.dispatchEvent('pointerdown', { button: 0, pointerType: 'touch', pointerId: 11, isPrimary: true });
+  await touchNavigation;
+});
+
+test('early release and pointer cancel clear the hidden hold', async ({ page }) => {
+  const trigger = await openLetterTrigger(page);
+  await trigger.dispatchEvent('pointerdown', { button: 0, pointerType: 'mouse', pointerId: 12, isPrimary: true });
+  await page.waitForTimeout(220);
+  await trigger.dispatchEvent('pointercancel', { button: 0, pointerType: 'mouse', pointerId: 12, isPrimary: true });
+  await expect(trigger.locator('[role="progressbar"]')).toHaveAttribute('aria-valuenow', '0');
+  await trigger.click();
+  await expect(page.getByRole('button', { name: /Mở phong thư/i })).toBeVisible();
+  await expect(page).not.toHaveURL(/\/love-treasure$/);
+});
+
+test('Space can hold Mở lá thư open for the hidden treasure', async ({ page }) => {
+  const trigger = await openLetterTrigger(page);
+  await trigger.focus();
+  const navigation = page.waitForURL(/\/love-treasure$/);
+  await page.keyboard.down('Space');
+  await navigation;
+  await page.keyboard.up('Space');
+});
+
+test('Enter can hold Mở lá thư open for the hidden treasure', async ({ page }) => {
+  const trigger = await openLetterTrigger(page);
+  await trigger.focus();
+  const navigation = page.waitForURL(/\/love-treasure$/);
+  await page.keyboard.down('Enter');
+  await navigation;
+  await page.keyboard.up('Enter');
+});
+
+test('love treasure streams unique responsive photos and pauses cleanly', async ({ page }) => {
+  const originalRequests: string[] = [];
+  page.on('request', (request) => {
+    const url = request.url();
+    if (/\/images\/memories\/.*\.(?:jpe?g|png|heic|mp4)$/i.test(url)) originalRequests.push(url);
+  });
+
+  await page.goto('/love-treasure');
+  await expect(page.getByRole('heading', { name: /Chúc mừng vợ yêu khám phá được thêm một kho báu/i })).toBeVisible();
+  const stream = page.locator('.treasure-stream');
+  const totalPhotos = Number(await stream.getAttribute('data-total-photos'));
+  const activeLimit = Number(await stream.getAttribute('data-active-limit'));
+  expect(totalPhotos).toBeGreaterThan(0);
+  expect(activeLimit).toBe(page.viewportSize()?.width && page.viewportSize()!.width <= 680 ? 6 : 8);
+  await expect(page.locator('.treasure-photo')).toHaveCount(activeLimit);
+
+  const initialIds = await page.locator('.treasure-photo').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-photo-id')));
+  expect(new Set(initialIds).size).toBe(initialIds.length);
+  await page.waitForTimeout(1_100);
+  const progressedIds = await page.locator('.treasure-photo').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-photo-id')));
+  expect(progressedIds).not.toEqual(initialIds);
+
+  const firstPhoto = page.locator('.treasure-photo').first();
+  const secondPhoto = page.locator('.treasure-photo').nth(1);
+  await firstPhoto.click();
+  await expect(firstPhoto).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('.treasure-memory-panel')).toBeVisible();
+  await expect(page.locator('.treasure-note')).toContainText(/Đang giữ lại một vì sao/i);
+  await secondPhoto.click();
+  await expect(firstPhoto).toHaveAttribute('aria-pressed', 'false');
+  await expect(secondPhoto).toHaveAttribute('aria-pressed', 'true');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.treasure-memory-panel')).toHaveCount(0);
+
+  const pause = page.locator('.treasure-control--pause');
+  await pause.click();
+  await expect(pause).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('.treasure-photo').first()).toHaveCSS('animation-play-state', 'paused');
+  const pausedIds = await page.locator('.treasure-photo').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-photo-id')));
+  await page.waitForTimeout(1_100);
+  await expect(page.locator('.treasure-photo')).toHaveCount(activeLimit);
+  const stillPausedIds = await page.locator('.treasure-photo').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-photo-id')));
+  expect(stillPausedIds).toEqual(pausedIds);
+  await page.getByRole('button', { name: /Tiếp tục trình chiếu/i }).click();
+  await page.waitForTimeout(700);
+  expect(await page.locator('.treasure-photo').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-photo-id')))).not.toEqual(pausedIds);
+  expect(originalRequests).toEqual([]);
+});
+
+test('love treasure returns to the letter and respects reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/love-treasure');
+  await expect(page.locator('.treasure-page')).toHaveClass(/is-reduced-motion/);
+  await expect(page.locator('.treasure-photo').first()).toHaveCSS('animation-name', 'none');
+  await expect(page.locator('.vinyl-record')).toHaveCSS('animation-name', 'none');
+  await page.getByRole('button', { name: /Quay lại lá thư/i }).click();
+  await expect(page).toHaveURL(/\/birthday\?stage=letter$/);
+  await expect(page.getByRole('heading', { name: /Cho Quỳnh/i })).toBeVisible();
+});
+
+test('love treasure music lounge renders the five local tracks and changes the active song', async ({ page }) => {
+  const audioRequests: string[] = [];
+  page.on('request', (request) => {
+    if (/\/mp3\/.*\.mp3(?:\?|$)/i.test(request.url())) audioRequests.push(request.url());
+  });
+
+  await page.goto('/love-treasure');
+  await expect(page.locator('.music-track')).toHaveCount(5);
+  await expect(page.locator('.music-track').nth(0)).toContainText('Cà phê đắng như ly cafe');
+  await expect(page.locator('.music-track').nth(1)).toContainText('Mascara');
+  await expect(page.locator('.music-track').nth(2)).toContainText('Mơ');
+  await expect(page.locator('.music-track').nth(3)).toContainText('Thằng Điên');
+  await expect(page.locator('.music-track').nth(4)).toContainText('Vì anh đâu có biết');
+
+  const audio = page.locator('audio.love-audio-source');
+  await expect(audio).toHaveAttribute('preload', 'metadata');
+  await expect(audio).toHaveAttribute('src', /mp3\/C%C3%A0%20ph%C3%AA%20%C4%91%E1%BA%AFng%20nh%C6%B0%20ly%20cafe\.mp3/);
+  await page.locator('.music-track').nth(1).click();
+  await expect(page.locator('.music-track').nth(1)).toHaveAttribute('aria-current', 'true');
+  await expect(audio).toHaveAttribute('src', /mp3\/Mascara\.mp3/);
+  await expect.poll(() => audioRequests.some((url) => decodeURIComponent(url).includes('/mp3/Mascara.mp3'))).toBe(true);
+  expect(audioRequests.every((url) => !/\.(?:jpe?g|png|heic|mp4)(?:\?|$)/i.test(url))).toBe(true);
+});
+
+test('love treasure exposes an autoplay fallback and synchronizes player state', async ({ page }) => {
+  await page.addInitScript(() => {
+    HTMLMediaElement.prototype.play = () => Promise.reject(new DOMException('Autoplay blocked', 'NotAllowedError'));
+  });
+  await page.goto('/love-treasure');
+  await expect(page.locator('.autoplay-fallback')).toBeVisible();
+  await expect(page.locator('.autoplay-hint')).toHaveText('Chạm vào nút phát để mở nhạc cho kho báu này.');
+  await expect(page.locator('.now-playing')).toContainText('Chạm để mở nhạc');
+
+  const audio = page.locator('audio.love-audio-source');
+  const playButton = page.locator('.music-play-button');
+  await audio.dispatchEvent('play');
+  await expect(playButton).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('.now-playing')).toContainText('Đĩa đang quay');
+  await audio.dispatchEvent('pause');
+  await expect(playButton).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('.now-playing')).toContainText('Tạm dừng');
+
+  await audio.dispatchEvent('ended');
+  await expect(page.locator('.music-track').nth(1)).toHaveAttribute('aria-current', 'true');
+});
+
+test('love treasure music sliders seek and change volume', async ({ page }) => {
+  await page.goto('/love-treasure');
+  const audio = page.locator('audio.love-audio-source');
+  await audio.evaluate((element) => {
+    let currentTime = 0;
+    Object.defineProperty(element, 'duration', { configurable: true, value: 240 });
+    Object.defineProperty(element, 'currentTime', {
+      configurable: true,
+      get: () => currentTime,
+      set: (value: number) => { currentTime = value; }
+    });
+    element.dispatchEvent(new Event('loadedmetadata'));
+  });
+
+  const progress = page.locator('.music-progress-range');
+  await expect(progress).toHaveAttribute('max', '240');
+  await progress.evaluate((element) => {
+    const input = element as HTMLInputElement;
+    input.value = '42';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await expect(progress).toHaveValue('42');
+  await expect.poll(() => audio.evaluate((element) => element.currentTime)).toBe(42);
+
+  const volume = page.locator('.music-volume input');
+  await volume.fill('35');
+  await expect.poll(() => audio.evaluate((element) => element.volume)).toBeCloseTo(.35, 2);
+});
+
+test('love treasure does not overflow on the narrow mobile viewport', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'This scenario is covered by the mobile Playwright project.');
+  for (const width of [320, 390, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto('/love-treasure');
+    await expectNoHorizontalOverflow(page);
+    await expect(page.locator('.treasure-photo')).toHaveCount(Number(await page.locator('.treasure-stream').getAttribute('data-active-limit')));
+    await expectTouchTarget(page.getByRole('button', { name: /Tạm dừng trình chiếu/i }));
+    await expectTouchTarget(page.locator('.music-play-button'));
+    await expectTouchTarget(page.getByRole('button', { name: /Quay lại lá thư/i }));
+  }
+});
+
 test('quick skip enters the gift, while a three-second hold opens the hidden Japan notes', async ({ page }) => {
   await page.goto('/birthday');
   const skip = page.getByRole('button', { name: /Bỏ qua/i });

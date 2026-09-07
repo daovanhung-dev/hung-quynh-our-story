@@ -23,6 +23,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/japan-notes/japan-notes.page').then((m) => m.JapanNotesPage)
   },
   {
+    path: 'love-treasure',
+    loadComponent: () => import('./features/love-treasure/love-treasure.page').then((m) => m.LoveTreasurePage)
+  },
+  {
     path: '**',
     loadComponent: () => import('./features/not-found/not-found.page').then((m) => m.NotFoundPage)
   }

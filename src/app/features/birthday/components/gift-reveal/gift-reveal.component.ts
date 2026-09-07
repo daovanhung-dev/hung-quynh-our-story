@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output, signal } from '@angular/core';
 import type { MemoryMedia } from '../../../../core/models/memory.model';
 import { AmbientPhotoGalleryComponent } from '../../../../shared/components/ambient-photo-gallery/ambient-photo-gallery.component';
 
@@ -33,7 +33,36 @@ import { AmbientPhotoGalleryComponent } from '../../../../shared/components/ambi
       @if (opened()) {
         <div class="after-open">
           <p>Một lá thư nhỏ, dành cho cô gái của anh.</p>
-          <button type="button" (click)="proceed.emit()">Mở lá thư <span aria-hidden="true">↘</span></button>
+          <button
+            class="letter-trigger"
+            type="button"
+            [class.is-holding]="holdProgress() > 0 && !hiddenUnlockComplete()"
+            [class.is-unlocked]="hiddenUnlockComplete()"
+            [attr.aria-label]="hiddenUnlockComplete() ? 'Đã mở kho báu ảnh' : 'Mở lá thư. Giữ 3 giây để khám phá kho báu ảnh'"
+            (click)="letterClick($event)"
+            (pointerdown)="startPointerHold($event)"
+            (pointerup)="endHold()"
+            (pointercancel)="endHold()"
+            (pointerleave)="endHold()"
+            (keydown)="startKeyboardHold($event)"
+            (keyup)="endKeyboardHold($event)"
+            (blur)="endHold()"
+          >
+            <span class="letter-trigger-label">Mở lá thư</span>
+            <span aria-hidden="true">↘</span>
+            <svg class="hold-ring" viewBox="0 0 100 100" aria-hidden="true">
+              <rect class="hold-ring-track" x="1.5" y="1.5" width="97" height="97" rx="9" pathLength="100"></rect>
+              <rect class="hold-ring-progress" x="1.5" y="1.5" width="97" height="97" rx="9" pathLength="100" [style.stroke-dashoffset]="100 - holdPercent()"></rect>
+            </svg>
+            <span
+              class="sr-only"
+              role="progressbar"
+              aria-label="Tiến trình mở kho báu ảnh"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [attr.aria-valuenow]="holdPercent()"
+            >Giữ nút trong 3 giây để mở kho báu ảnh. Tiến trình {{ holdPercent() }} phần trăm.</span>
+          </button>
         </div>
       }
     </section>
@@ -69,19 +98,107 @@ import { AmbientPhotoGalleryComponent } from '../../../../shared/components/ambi
     .opened .heart-3 { transform: translate(-10px,-150px) scale(.75); }
     .after-open { display: grid; justify-items: center; gap: .85rem; animation: reveal 600ms var(--ease-out) both; }
     .after-open p { margin: 0; color: var(--text-secondary); font-family: var(--font-display); font-size: 1.05rem; }
-    .after-open button { display: inline-flex; align-items: center; gap: .7rem; min-height: 48px; padding: .78rem 1rem; border: 1px solid var(--wine); background: var(--wine); color: #fffdf9; cursor: pointer; font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+    .letter-trigger { position:relative; display:inline-flex; align-items:center; gap:.7rem; min-height:48px; overflow:visible; padding:.78rem 1rem; border:1px solid var(--wine); background:var(--wine); color:#fffdf9; cursor:pointer; font-size:.72rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; touch-action:none; transition:background 220ms ease,color 220ms ease,transform 220ms var(--ease-out); }
+    .letter-trigger:hover,.letter-trigger.is-holding { background:#8f4657; transform:translateY(-2px); }
+    .letter-trigger.is-unlocked { background:#4e2633; color:#f4d7a5; }
+    .letter-trigger-label { position:relative; z-index:1; }
+    .hold-ring { position:absolute; inset:-6px; z-index:0; width:calc(100% + 12px); height:calc(100% + 12px); overflow:visible; pointer-events:none; transform:rotate(-90deg); }
+    .hold-ring rect { fill:none; stroke-width:1.6; }
+    .hold-ring-track { stroke:rgba(255,255,255,.2); }
+    .hold-ring-progress { stroke:#f4d7a5; stroke-dasharray:100; transition:stroke-dashoffset 70ms linear; }
+    .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
     @keyframes reveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-    @media (max-width:620px) { .gift { width: min(72vw,230px); } .gift-scene { gap:2rem; padding-inline:1rem; } .copy { width:min(100%,25rem); } h1 { font-size:clamp(2.5rem,12.5vw,4.4rem); } .copy > p:last-child { font-size:1rem; } .after-open { width:min(100%,22rem); } .after-open p { line-height:1.5; } .after-open button { width:100%; justify-content:center; min-height:52px; } }
-    @media (prefers-reduced-motion:reduce) { .box,.lid,.bow,.light,.heart,.after-open { transition: none; animation: none; } }
+    @media (max-width:620px) { .gift { width: min(72vw,230px); } .gift-scene { gap:2rem; padding-inline:1rem; } .copy { width:min(100%,25rem); } h1 { font-size:clamp(2.5rem,12.5vw,4.4rem); } .copy > p:last-child { font-size:1rem; } .after-open { width:min(100%,22rem); } .after-open p { line-height:1.5; } .letter-trigger { width:100%; justify-content:center; min-height:52px; } }
+    @media (prefers-reduced-motion:reduce) { .box,.lid,.bow,.light,.heart,.after-open,.letter-trigger { transition: none; animation: none; } .letter-trigger:hover,.letter-trigger.is-holding { transform:none; } .hold-ring-progress { transition:none; } }
   `]
 })
-export class GiftRevealComponent {
+export class GiftRevealComponent implements OnDestroy {
   @Input() photos: readonly MemoryMedia[] = [];
   @Output() readonly proceed = new EventEmitter<void>();
+  @Output() readonly hiddenRequested = new EventEmitter<void>();
   protected readonly opened = signal(false);
+  protected readonly holdProgress = signal(0);
+  protected readonly hiddenUnlockComplete = signal(false);
+
+  private holdTimer?: ReturnType<typeof setTimeout>;
+  private holdProgressTimer?: ReturnType<typeof setInterval>;
+  private holdStartedAt = 0;
+  private holdInput: 'pointer' | 'keyboard' | undefined;
+  private suppressProceedClick = false;
 
   protected openGift(): void {
     if (this.opened()) return;
     this.opened.set(true);
+  }
+
+  ngOnDestroy(): void {
+    this.clearHoldTimers();
+  }
+
+  protected letterClick(event: MouseEvent): void {
+    if (this.suppressProceedClick) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.suppressProceedClick = false;
+      return;
+    }
+
+    this.proceed.emit();
+  }
+
+  protected startPointerHold(event: PointerEvent): void {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    this.beginHold('pointer');
+  }
+
+  protected startKeyboardHold(event: KeyboardEvent): void {
+    if ((event.key !== ' ' && event.key !== 'Enter') || event.repeat) return;
+    event.preventDefault();
+    this.beginHold('keyboard');
+  }
+
+  protected endKeyboardHold(event: KeyboardEvent): void {
+    if (event.key === ' ' || event.key === 'Enter') {
+      event.preventDefault();
+      this.endHold();
+    }
+  }
+
+  protected endHold(): void {
+    this.clearHoldTimers();
+    this.holdInput = undefined;
+    if (!this.hiddenUnlockComplete()) this.holdProgress.set(0);
+  }
+
+  protected holdPercent(): number {
+    return Math.round(this.holdProgress() * 100);
+  }
+
+  private beginHold(input: 'pointer' | 'keyboard'): void {
+    if (this.hiddenUnlockComplete() || this.holdInput) return;
+
+    this.holdInput = input;
+    this.holdStartedAt = performance.now();
+    this.holdProgress.set(0);
+    this.holdProgressTimer = window.setInterval(() => {
+      this.holdProgress.set(Math.min((performance.now() - this.holdStartedAt) / 3000, 1));
+    }, 50);
+    this.holdTimer = window.setTimeout(() => this.completeHiddenHold(), 3000);
+  }
+
+  private completeHiddenHold(): void {
+    this.clearHoldTimers();
+    this.holdInput = undefined;
+    this.holdProgress.set(1);
+    this.hiddenUnlockComplete.set(true);
+    this.suppressProceedClick = true;
+    this.hiddenRequested.emit();
+  }
+
+  private clearHoldTimers(): void {
+    if (this.holdTimer !== undefined) window.clearTimeout(this.holdTimer);
+    if (this.holdProgressTimer !== undefined) window.clearInterval(this.holdProgressTimer);
+    this.holdTimer = undefined;
+    this.holdProgressTimer = undefined;
   }
 }

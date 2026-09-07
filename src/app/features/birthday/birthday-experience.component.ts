@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, HostListener, OnDestroy, OnInit, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BIRTHDAY_LETTER } from '../../core/constants/birthday.config';
 import type { BirthdayStage } from '../../core/models/birthday.model';
 import type { MemoryMedia } from '../../core/models/memory.model';
@@ -23,7 +23,7 @@ import { GiftRevealComponent } from './components/gift-reveal/gift-reveal.compon
         }
 
         @case ('gift') {
-          <app-gift-reveal [photos]="giftPhotos" (proceed)="enterEnvelope()" />
+          <app-gift-reveal [photos]="giftPhotos" (proceed)="enterEnvelope()" (hiddenRequested)="openLoveTreasure()" />
         }
 
         @case ('envelope') {
@@ -140,6 +140,7 @@ import { GiftRevealComponent } from './components/gift-reveal/gift-reveal.compon
 })
 export class BirthdayExperienceComponent implements AfterViewInit, OnDestroy, OnInit {
   private readonly document = inject(DOCUMENT);
+  private readonly route = inject(ActivatedRoute);
   private readonly journey = inject(BirthdayJourneyService);
   private readonly router = inject(Router);
   private readonly memoryService = inject(MemoryService);
@@ -151,7 +152,10 @@ export class BirthdayExperienceComponent implements AfterViewInit, OnDestroy, On
   protected readonly envelopePhotos: readonly MemoryMedia[] = this.memoryService.getRandomImageMedia(2);
   protected readonly letterPhotos: readonly MemoryMedia[] = this.memoryService.getRandomImageMedia(2);
 
-  ngOnInit(): void { this.journey.start(); }
+  ngOnInit(): void {
+    this.journey.start();
+    if (this.route.snapshot.queryParamMap.get('stage') === 'letter') this.stage.set('letter');
+  }
   ngAfterViewInit(): void { queueMicrotask(() => this.focus('button')); }
   ngOnDestroy(): void { this.journey.stop(); }
 
@@ -174,6 +178,11 @@ export class BirthdayExperienceComponent implements AfterViewInit, OnDestroy, On
   protected openJapanNotes(): void {
     this.journey.complete();
     void this.router.navigateByUrl('/japan-notes');
+  }
+
+  protected openLoveTreasure(): void {
+    this.journey.complete();
+    void this.router.navigateByUrl('/love-treasure');
   }
 
   private focus(selector: string): void {

@@ -67,6 +67,10 @@ export class MemoryService {
     return shuffled.slice(0, target);
   }
 
+  getAllImageMedia(): readonly MemoryMedia[] {
+    return this.imageMedia;
+  }
+
   getIntroPhotos(): readonly IntroPhoto[] {
     const datedPhotos = this.memories.flatMap((memory) =>
       memory.images
