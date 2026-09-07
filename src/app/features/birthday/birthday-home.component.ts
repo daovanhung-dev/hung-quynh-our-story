@@ -2,15 +2,16 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SITE_CONFIG } from '../../core/constants/site.config';
 import { BIRTHDAY_WISHES, FUTURE_WISHES, LOVE_REASONS } from '../../core/content/birthday-copy.content';
-import type { IntroPhoto } from '../../core/models/birthday.model';
+import type { MemoryMedia } from '../../core/models/memory.model';
 import { MemoryService } from '../../core/services/memory.service';
+import { AmbientPhotoGalleryComponent } from '../../shared/components/ambient-photo-gallery/ambient-photo-gallery.component';
 import { RevealOnScrollDirective } from '../../shared/directives/reveal-on-scroll.directive';
 import { BirthdayCakeComponent } from './components/birthday-cake/birthday-cake.component';
 
 @Component({
   selector: 'app-birthday-home',
   standalone: true,
-  imports: [RouterLink, BirthdayCakeComponent, RevealOnScrollDirective],
+  imports: [RouterLink, AmbientPhotoGalleryComponent, BirthdayCakeComponent, RevealOnScrollDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <article class="birthday-home">
@@ -25,14 +26,9 @@ import { BirthdayCakeComponent } from './components/birthday-cake/birthday-cake.
             <a class="quiet" routerLink="/birthday">Xem lại món quà từ đầu</a>
           </div>
         </div>
-        @if (heroPhotos.length) {
-          <div class="hero-photos" aria-hidden="true">
-            @for (photo of heroPhotos; track photo.id; let index = $index) {
-              <figure [class]="'photo photo-' + index">
-                <img [src]="photo.src" alt="" decoding="async" [attr.loading]="index === 0 ? 'eager' : 'lazy'" [attr.fetchpriority]="index === 0 ? 'high' : null">
-                <figcaption>H ♡ Q</figcaption>
-              </figure>
-            }
+        @if (heroPhotos.length > 1) {
+          <div class="hero-photos">
+            <app-ambient-photo-gallery [photos]="heroPhotos.slice(0, 3)" layout="cluster" sizes="(max-width: 640px) 34vw, 20vw" />
           </div>
         }
         <p class="made-with-love">Made with love by Hùng</p>
@@ -100,7 +96,9 @@ import { BirthdayCakeComponent } from './components/birthday-cake/birthday-cake.
       <section class="finale" aria-labelledby="finale-title">
         <div class="finale-stars" aria-hidden="true">✦ · ♡ · ✦ · ♡ · ✦</div>
         @if (finalPhoto; as photo) {
-          <figure appRevealOnScroll><img [src]="photo.src" alt="" loading="lazy" decoding="async"><figcaption>05 · 09 · 2026</figcaption></figure>
+          <div class="finale-photo" appRevealOnScroll>
+            <app-ambient-photo-gallery [photos]="[photo]" layout="single" [priorityCount]="0" sizes="(max-width: 640px) 68vw, 300px" />
+          </div>
         }
         <div class="finale-copy" appRevealOnScroll>
           <p>05.09.2004 · Một cô gái đã xuất hiện trên thế giới.</p>
@@ -131,13 +129,9 @@ import { BirthdayCakeComponent } from './components/birthday-cake/birthday-cake.
     .hero-actions { display:flex; flex-wrap:wrap; gap:.7rem 1rem; align-items:center; }
     .hero-actions a { display:inline-flex; min-height:48px; align-items:center; justify-content:center; gap:.75rem; padding:.75rem 1rem; border:1px solid rgba(255,253,249,.7); color:#fffdf9; font-size:.71rem; font-weight:600; letter-spacing:.08em; text-decoration:none; text-transform:uppercase; }
     .hero-actions .quiet { border-color:transparent; color:rgba(255,253,249,.65); text-decoration:underline; text-underline-offset:.28rem; }
-    .hero-photos { position:absolute; inset:0; z-index:1; pointer-events:none; }
-    .photo { position:absolute; margin:0; padding:.4rem .4rem 1.35rem; background:#fffaf1; box-shadow:0 26px 65px rgba(0,0,0,.32); }
-    .photo img { width:100%; aspect-ratio:4/5; object-fit:cover; }
-    .photo figcaption { position:absolute; right:.55rem; bottom:.28rem; color:#713b49; font-family:var(--font-display); font-size:.68rem; }
-    .photo-0 { right:6%; top:13%; width:clamp(11rem,21vw,19rem); transform:rotate(6deg); }
-    .photo-1 { right:25%; bottom:7%; width:clamp(7rem,13vw,11rem); opacity:.66; transform:rotate(-8deg); }
-    .photo-2 { right:1%; bottom:6%; width:clamp(6rem,11vw,10rem); opacity:.55; transform:rotate(-2deg); }
+    .hero-photos { position:absolute; inset:5% 0 0 42%; z-index:1; pointer-events:none; opacity:.92; }
+    .hero-photos app-ambient-photo-gallery { width:100%; height:100%; }
+    .hero-photos .ambient-gallery--cluster { grid-template-rows:repeat(8,minmax(0,1fr)); }
     .made-with-love { position:absolute; right:max(1.5rem,env(safe-area-inset-right)); bottom:max(1.25rem,env(safe-area-inset-bottom)); z-index:9; margin:0; color:rgba(255,253,249,.45); font-size:.65rem; letter-spacing:.08em; }
     .story-date { display:grid; justify-items:center; padding:clamp(6rem,12vw,11rem) 1.2rem; background:var(--paper); text-align:center; }
     .counter { display:grid; margin:.4rem 0 1.6rem; }
@@ -179,9 +173,8 @@ import { BirthdayCakeComponent } from './components/birthday-cake/birthday-cake.
     .future li p { margin:0; font-family:var(--font-display); font-size:clamp(1.2rem,2.6vw,2.1rem); line-height:1.2; }
     .finale { position:relative; display:grid; min-height:100dvh; place-items:center; align-content:center; gap:3rem; overflow:hidden; padding:6rem 1.2rem; background:#080506; color:#fff9f0; text-align:center; }
     .finale-stars { position:absolute; inset:auto 0 8%; color:rgba(216,181,122,.3); font-size:1rem; letter-spacing:2rem; white-space:nowrap; }
-    .finale figure { position:relative; z-index:2; width:min(52vw,300px); margin:0; padding:.42rem .42rem 1.45rem; background:#fffaf1; transform:rotate(-2deg); box-shadow:0 28px 80px rgba(0,0,0,.5); }
-    .finale figure img { width:100%; aspect-ratio:4/5; object-fit:cover; }
-    .finale figcaption { position:absolute; right:.6rem; bottom:.3rem; color:#713b49; font-family:var(--font-display); font-size:.66rem; }
+    .finale-photo { position:relative; z-index:2; width:min(52vw,300px); }
+    .finale-photo app-ambient-photo-gallery { height:auto; }
     .finale-copy { position:relative; z-index:2; max-width:820px; }
     .finale-copy > p { margin:.35rem 0; color:rgba(255,249,240,.5); font-size:.72rem; letter-spacing:.05em; }
     .finale h2 { margin:1.6rem 0 1.2rem; font-size:clamp(3.3rem,8vw,7.5rem); line-height:.86; }
@@ -195,10 +188,7 @@ import { BirthdayCakeComponent } from './components/birthday-cake/birthday-cake.
       .hero-copy { width:100%; max-width:24rem; margin-inline:auto; }
       .hero h1 { font-size:clamp(3rem,13.5vw,4.25rem); }
       .hero-copy > p:not(.eyebrow) { max-width:100%; margin:1.35rem 0 1.7rem; font-size:1rem; }
-      .hero-photos { opacity:.5; }
-      .photo-0 { right:-8%; top:7%; width:48vw; }
-      .photo-1 { right:36%; top:18%; bottom:auto; width:28vw; }
-      .photo-2 { display:none; }
+      .hero-photos { inset:3% -18% 0 24%; opacity:.52; }
       .hero-actions { display:grid; grid-template-columns:1fr; width:min(100%,22rem); gap:.55rem; }
       .hero-actions a { width:100%; }
       .gift-index { width:calc(100% - 2rem); padding-block:4.5rem; }
@@ -234,16 +224,11 @@ export class BirthdayHomeComponent {
   protected readonly loveReasons = LOVE_REASONS;
   protected readonly birthdayWishes = BIRTHDAY_WISHES;
   protected readonly futureWishes = FUTURE_WISHES;
-  protected readonly heroPhotos: readonly IntroPhoto[] = this.pickHeroPhotos(this.memoryService.getIntroPhotos());
-  protected readonly finalPhoto = this.heroPhotos[0];
+  protected readonly heroPhotos: readonly MemoryMedia[] = this.memoryService.getRandomImageMedia(4);
+  protected readonly finalPhoto = this.heroPhotos[3] || this.heroPhotos[0];
   protected readonly daysTogether = this.calculateDaysTogether(SITE_CONFIG.relationship.startedAt);
 
   protected formatIndex(value: number): string { return String(value).padStart(2, '0'); }
-
-  private pickHeroPhotos(photos: readonly IntroPhoto[]): readonly IntroPhoto[] {
-    if (photos.length <= 3) return photos;
-    return [photos[0], photos[Math.floor(photos.length / 2)], photos[photos.length - 1]];
-  }
 
   private calculateDaysTogether(startDate: string): number {
     const [year, month, day] = startDate.split('-').map(Number);

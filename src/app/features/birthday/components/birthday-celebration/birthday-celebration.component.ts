@@ -56,6 +56,7 @@ interface Rocket {
         @for (memory of flyingMemories(); track memory.key; let index = $index) {
           <figure
             class="flying-memory"
+            [attr.data-photo-id]="memory.photo.id"
             [style.--start-x]="memory.startX + 'vw'"
             [style.--start-y]="memory.startY + 'vh'"
             [style.--end-x]="memory.endX + 'vw'"
@@ -101,7 +102,32 @@ interface Rocket {
         <p class="names">Hùng <span>♡</span> Quỳnh</p>
       </div>
 
-      <button class="skip" type="button" (click)="proceed.emit()">Bỏ qua</button>
+      <button
+        class="skip"
+        type="button"
+        [class.is-holding]="holdProgress() > 0 && !hiddenUnlockComplete()"
+        [class.is-unlocked]="hiddenUnlockComplete()"
+        [attr.aria-label]="hiddenUnlockComplete() ? 'Đã mở lời dặn bí mật' : 'Bỏ qua. Giữ 3 giây để mở lời dặn bí mật'"
+        (click)="skipClick($event)"
+        (pointerdown)="startPointerHold($event)"
+        (pointerup)="endHold()"
+        (pointercancel)="endHold()"
+        (pointerleave)="endHold()"
+        (keydown)="startKeyboardHold($event)"
+        (keyup)="endKeyboardHold($event)"
+        (blur)="endHold()"
+      >
+        <span class="skip-label">Bỏ qua</span>
+        <span
+          class="skip-progress"
+          role="progressbar"
+          aria-label="Tiến trình mở lời dặn bí mật"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          [attr.aria-valuenow]="holdPercent()"
+          [style.transform]="'scaleX(' + holdProgress() + ')'"
+        ></span>
+      </button>
 
       <div class="actions" [class.visible]="showCta()">
         <button class="gift-button" type="button" (click)="proceed.emit()">
@@ -140,7 +166,11 @@ interface Rocket {
     .subtitle-visible .my-love, .subtitle-visible .heart-mark { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
     .subtitle-visible .heart-mark { animation: heart-pulse 1.8s ease-in-out 900ms infinite; }
     .names-visible .names { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
-    .skip { position: absolute; top: max(1rem, env(safe-area-inset-top)); right: max(1rem,env(safe-area-inset-right)); z-index: 70; min-height: 44px; padding: .4rem .7rem; border: 0; background: transparent; color: rgba(255,250,241,.58); cursor: pointer; font-size: .7rem; text-decoration: underline; text-underline-offset: .28rem; }
+    .skip { position: absolute; top: max(1rem, env(safe-area-inset-top)); right: max(1rem,env(safe-area-inset-right)); z-index: 70; min-height: 44px; min-width: 76px; overflow: hidden; padding: .4rem .7rem; border: 1px solid transparent; background: transparent; color: rgba(255,250,241,.58); cursor: pointer; font-size: .7rem; text-decoration: underline; text-underline-offset: .28rem; touch-action: none; transition: border-color 220ms ease,color 220ms ease,background 220ms ease; }
+    .skip:hover,.skip.is-holding { border-color:rgba(244,215,165,.5); background:rgba(14,8,11,.32); color:#fffaf1; }
+    .skip.is-unlocked { border-color:rgba(244,215,165,.82); color:#f4d7a5; }
+    .skip-label { position:relative; z-index:1; }
+    .skip-progress { position:absolute; right:0; bottom:0; left:0; z-index:0; display:block; height:2px; background:#f4d7a5; transform:scaleX(0); transform-origin:left center; transition:transform 70ms linear; }
     .actions { position: absolute; right: 0; bottom: max(1.4rem, env(safe-area-inset-bottom)); left: 0; z-index: 70; display: grid; justify-items: center; padding: 0 max(1rem,env(safe-area-inset-right)) 0 max(1rem,env(safe-area-inset-left)); opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity 700ms ease, transform 700ms ease; }
     .actions.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
     .gift-button { display: inline-flex; align-items: center; gap: .9rem; min-height: 52px; padding: .9rem 1.2rem; border: 1px solid rgba(244,215,165,.55); background: rgba(14,8,11,.58); color: #fffaf1; backdrop-filter: blur(12px); cursor: pointer; font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; transition: transform 180ms ease, background 180ms ease; }
@@ -182,6 +212,7 @@ interface Rocket {
 export class BirthdayCelebrationComponent implements AfterViewInit, OnDestroy {
   @Input({ required: true }) photos: readonly IntroPhoto[] = [];
   @Output() readonly proceed = new EventEmitter<void>();
+  @Output() readonly hiddenRequested = new EventEmitter<void>();
   @ViewChild('fireworksCanvas') private canvasRef?: ElementRef<HTMLCanvasElement>;
 
   protected readonly showTitle = signal(false);
@@ -189,6 +220,8 @@ export class BirthdayCelebrationComponent implements AfterViewInit, OnDestroy {
   protected readonly showNames = signal(false);
   protected readonly showCta = signal(false);
   protected readonly showConfetti = signal(false);
+  protected readonly holdProgress = signal(0);
+  protected readonly hiddenUnlockComplete = signal(false);
 
   protected readonly flyingMemories = signal<readonly FlyingMemory[]>([]);
   protected readonly stars = Array.from({ length: 68 }, (_, index) => ({
@@ -218,6 +251,11 @@ export class BirthdayCelebrationComponent implements AfterViewInit, OnDestroy {
   private destroyed = false;
   private ctx?: CanvasRenderingContext2D;
   private dpr = 1;
+  private holdTimer?: ReturnType<typeof setTimeout>;
+  private holdProgressTimer?: ReturnType<typeof setInterval>;
+  private holdStartedAt = 0;
+  private holdInput: 'pointer' | 'keyboard' | undefined;
+  private suppressSkipClick = false;
 
   ngAfterViewInit(): void {
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -249,6 +287,7 @@ export class BirthdayCelebrationComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.destroyed = true;
+    this.clearHoldTimers();
     for (const timeout of this.timeouts) clearTimeout(timeout);
     window.clearTimeout(this.fireworkTimer);
     cancelAnimationFrame(this.animationFrame);
@@ -274,6 +313,74 @@ export class BirthdayCelebrationComponent implements AfterViewInit, OnDestroy {
   protected hideBrokenPhoto(event: Event): void {
     const image = event.currentTarget as HTMLImageElement | null;
     if (image?.parentElement) image.parentElement.style.display = 'none';
+  }
+
+  protected skipClick(event: MouseEvent): void {
+    if (this.suppressSkipClick) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.suppressSkipClick = false;
+      return;
+    }
+
+    this.proceed.emit();
+  }
+
+  protected startPointerHold(event: PointerEvent): void {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    this.beginHold('pointer');
+  }
+
+  protected startKeyboardHold(event: KeyboardEvent): void {
+    if ((event.key !== ' ' && event.key !== 'Enter') || event.repeat) return;
+    event.preventDefault();
+    this.beginHold('keyboard');
+  }
+
+  protected endKeyboardHold(event: KeyboardEvent): void {
+    if (event.key === ' ' || event.key === 'Enter') {
+      event.preventDefault();
+      this.endHold();
+    }
+  }
+
+  protected endHold(): void {
+    this.clearHoldTimers();
+    this.holdInput = undefined;
+    if (!this.hiddenUnlockComplete()) this.holdProgress.set(0);
+  }
+
+  protected holdPercent(): number {
+    return Math.round(this.holdProgress() * 100);
+  }
+
+  private beginHold(input: 'pointer' | 'keyboard'): void {
+    if (this.hiddenUnlockComplete() || this.holdInput) return;
+
+    this.holdInput = input;
+    this.holdStartedAt = performance.now();
+    this.holdProgress.set(0);
+    this.holdProgressTimer = window.setInterval(() => {
+      const progress = Math.min((performance.now() - this.holdStartedAt) / 3000, 1);
+      this.holdProgress.set(progress);
+    }, 50);
+    this.holdTimer = window.setTimeout(() => this.completeHiddenHold(), 3000);
+  }
+
+  private completeHiddenHold(): void {
+    this.clearHoldTimers();
+    this.holdInput = undefined;
+    this.holdProgress.set(1);
+    this.hiddenUnlockComplete.set(true);
+    this.suppressSkipClick = true;
+    this.hiddenRequested.emit();
+  }
+
+  private clearHoldTimers(): void {
+    if (this.holdTimer) window.clearTimeout(this.holdTimer);
+    if (this.holdProgressTimer) window.clearInterval(this.holdProgressTimer);
+    this.holdTimer = undefined;
+    this.holdProgressTimer = undefined;
   }
 
   private schedule(target: { set(value: boolean): void }, delay: number): void {

@@ -2,34 +2,39 @@ import { DOCUMENT } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, HostListener, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BIRTHDAY_LETTER } from '../../core/constants/birthday.config';
-import type { BirthdayStage, IntroPhoto } from '../../core/models/birthday.model';
+import type { BirthdayStage } from '../../core/models/birthday.model';
+import type { MemoryMedia } from '../../core/models/memory.model';
 import { BirthdayJourneyService } from '../../core/services/birthday-journey.service';
 import { MemoryService } from '../../core/services/memory.service';
+import { AmbientPhotoGalleryComponent } from '../../shared/components/ambient-photo-gallery/ambient-photo-gallery.component';
 import { BirthdayCelebrationComponent } from './components/birthday-celebration/birthday-celebration.component';
 import { GiftRevealComponent } from './components/gift-reveal/gift-reveal.component';
 
 @Component({
   selector: 'app-birthday-experience',
   standalone: true,
-  imports: [BirthdayCelebrationComponent, GiftRevealComponent],
+  imports: [AmbientPhotoGalleryComponent, BirthdayCelebrationComponent, GiftRevealComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="birthday-experience" [attr.data-stage]="stage()">
       @switch (stage()) {
         @case ('celebration') {
-          <app-birthday-celebration [photos]="celebrationPhotos" (proceed)="enterGift()" />
+          <app-birthday-celebration [photos]="celebrationPhotos" (proceed)="enterGift()" (hiddenRequested)="openJapanNotes()" />
         }
 
         @case ('gift') {
-          <app-gift-reveal (proceed)="enterEnvelope()" />
+          <app-gift-reveal [photos]="giftPhotos" (proceed)="enterEnvelope()" />
         }
 
         @case ('envelope') {
           <div class="envelope-stage stage-shell" aria-labelledby="birthday-title">
+            <div class="stage-ambient stage-ambient--envelope">
+              <app-ambient-photo-gallery [photos]="envelopePhotos" layout="side" sizes="(max-width: 640px) 27vw, 15vw" />
+            </div>
             <div class="envelope-copy">
-              <p class="kicker">Món quà 02 · Một phong thư nhỏ</p>
+              <p class="kicker">Món quà 02</p>
               <h1 id="birthday-title">Gửi người phụ nữ<br>của đời anh.</h1>
-              <p>Ngày 05.09.2026. Tuổi 22 của em. Và một vài điều anh muốn tự tay đặt vào đây.</p>
+              <p>Tuổi 22 của em. Và một vài điều anh muốn tự tay đặt vào đây.</p>
             </div>
             <button class="envelope-button" type="button" (click)="openLetter()" aria-label="Mở phong thư">
               <span class="envelope-paper"></span>
@@ -45,6 +50,9 @@ import { GiftRevealComponent } from './components/gift-reveal/gift-reveal.compon
 
         @case ('letter') {
           <div class="letter-stage stage-shell">
+            <div class="stage-ambient stage-ambient--letter">
+              <app-ambient-photo-gallery [photos]="letterPhotos" layout="side" sizes="(max-width: 640px) 26vw, 14vw" />
+            </div>
             <div class="letter-layout">
               <aside aria-hidden="true">
                 <span>H</span><i></i><span>Q</span>
@@ -52,7 +60,7 @@ import { GiftRevealComponent } from './components/gift-reveal/gift-reveal.compon
               </aside>
               <article class="love-letter" aria-labelledby="birthday-title" tabindex="-1">
                 <header>
-                  <p class="kicker">Happy 22nd Birthday, My Love</p>
+                  <p class="kicker">Happy 22nd Birthday</p>
                   <h1 id="birthday-title">Cho Quỳnh,<br>người anh thương.</h1>
                   <div class="letter-rule" aria-hidden="true"><i></i><span>♡</span><i></i></div>
                 </header>
@@ -79,6 +87,9 @@ import { GiftRevealComponent } from './components/gift-reveal/gift-reveal.compon
     :host { display:block; }
     .birthday-experience,.stage-shell { min-height:100svh; min-height:100dvh; }
     .stage-shell { position:relative; isolation:isolate; display:grid; overflow:hidden; }
+    .stage-ambient { position:absolute; inset:8% 5%; z-index:-1; opacity:.46; pointer-events:none; }
+    .stage-ambient app-ambient-photo-gallery { width:100%; height:100%; }
+    .stage-ambient--letter { inset:5% 3%; opacity:.3; }
     .kicker { margin:0; color:var(--wine); font-size:.68rem; font-weight:600; letter-spacing:.17em; text-transform:uppercase; }
     h1 { margin:0; font-family:var(--font-display); font-size:clamp(3.1rem,8vw,7.5rem); font-weight:400; letter-spacing:-.07em; line-height:.85; }
     .primary-action { display:inline-flex; align-items:center; justify-content:center; gap:.75rem; min-height:50px; padding:.82rem 1.1rem; border:1px solid transparent; background:#fffdf9; color:var(--button); cursor:pointer; font-size:.72rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; transition:transform 180ms var(--ease-out),background 180ms var(--ease-out); }
@@ -135,7 +146,10 @@ export class BirthdayExperienceComponent implements AfterViewInit, OnDestroy, On
 
   protected readonly stage = signal<BirthdayStage>('celebration');
   protected readonly letter = BIRTHDAY_LETTER;
-  protected readonly celebrationPhotos: readonly IntroPhoto[] = this.memoryService.getIntroPhotos();
+  protected readonly celebrationPhotos: readonly MemoryMedia[] = this.memoryService.getRandomImageMedia(5);
+  protected readonly giftPhotos: readonly MemoryMedia[] = this.memoryService.getRandomImageMedia(3);
+  protected readonly envelopePhotos: readonly MemoryMedia[] = this.memoryService.getRandomImageMedia(2);
+  protected readonly letterPhotos: readonly MemoryMedia[] = this.memoryService.getRandomImageMedia(2);
 
   ngOnInit(): void { this.journey.start(); }
   ngAfterViewInit(): void { queueMicrotask(() => this.focus('button')); }
@@ -155,6 +169,11 @@ export class BirthdayExperienceComponent implements AfterViewInit, OnDestroy, On
   protected goToTimeline(): void {
     this.journey.complete();
     void this.router.navigateByUrl('/timeline');
+  }
+
+  protected openJapanNotes(): void {
+    this.journey.complete();
+    void this.router.navigateByUrl('/japan-notes');
   }
 
   private focus(selector: string): void {

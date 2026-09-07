@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MemoryService } from '../../core/services/memory.service';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TimelineComponent } from './timeline.component';
 
 @Component({
@@ -9,14 +8,9 @@ import { TimelineComponent } from './timeline.component';
   template: `
     <div class="page-intro">
       <div class="intro-copy">
-        <p class="eyebrow">Hùng ♡ Quỳnh · photo diary</p>
+        <p class="eyebrow">Hùng ♡ Quỳnh</p>
         <h1>Những ngày mình có nhau.</h1>
-        <span>Một cuốn lưu ký nhỏ, được kể bằng những bức ảnh mình đã cùng đi qua.</span>
-      </div>
-      <div class="intro-stats" aria-label="Tổng quan kỷ niệm">
-        <span><strong>{{ memoryCount }}</strong> ngày</span>
-        <span><strong>{{ monthCount }}</strong> tháng</span>
-        <span>một câu chuyện</span>
+        <span>Một vài ngày mình muốn nhớ.</span>
       </div>
     </div>
     <app-timeline />
@@ -27,20 +21,12 @@ import { TimelineComponent } from './timeline.component';
     .eyebrow { margin: 0 0 .8rem; color: var(--wine); font-size: .68rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
     h1 { max-width: 850px; margin: 0; font-family: var(--font-display); font-size: clamp(3rem, 8vw, 7rem); font-weight: 400; line-height: .91; letter-spacing: -.055em; }
     .page-intro span { display: block; max-width: 650px; margin-top: 1.2rem; color: var(--text-secondary); line-height: 1.75; }
-    .intro-stats { display: grid; gap: .55rem; min-width: 150px; padding: 1rem 0 .2rem 1.2rem; border-left: 1px solid var(--border); color: var(--text-muted); font-size: .76rem; line-height: 1.4; }
-    .intro-stats strong { color: var(--wine); font-family: var(--font-display); font-size: 1.8rem; font-weight: 400; }
-    .intro-stats span { display: flex; align-items: baseline; gap: .35rem; }
     @media (max-width: 680px) {
       .page-intro { display: block; width: min(calc(100% - 2rem),560px); padding-top:3rem; }
       h1 { font-size:clamp(2.5rem,12vw,4.6rem); line-height:.9; }
       .page-intro span { line-height:1.65; }
-      .intro-stats { display:flex; flex-wrap:wrap; gap:.65rem 1rem; margin-top:1.7rem; padding:1rem 0 0; border-top:1px solid var(--border); border-left:0; }
-      .intro-stats strong { font-size: 1.45rem; }
     }
   `]
 })
 export class TimelinePage {
-  private readonly memoryService = inject(MemoryService);
-  protected readonly memoryCount = this.memoryService.getAllMemories().length;
-  protected readonly monthCount = this.memoryService.getMonthMemoryGroups().length;
 }

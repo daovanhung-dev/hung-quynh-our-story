@@ -1,7 +1,7 @@
 export const BIRTHDAY_CELEBRATION_CONFIG = {
-  desktopPhotoCount: 16,
-  mobilePhotoCount: 6,
-  lowPowerPhotoCount: 8,
+  desktopPhotoCount: 5,
+  mobilePhotoCount: 5,
+  lowPowerPhotoCount: 5,
   titleDelayMs: 2900,
   subtitleDelayMs: 3550,
   namesDelayMs: 4550,

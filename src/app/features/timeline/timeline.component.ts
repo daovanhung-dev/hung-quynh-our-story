@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { RouterLink } from '@angular/router';
 import type { MemoryMedia } from '../../core/models/memory.model';
 import { MemoryService } from '../../core/services/memory.service';
+import { AmbientPhotoGalleryComponent } from '../../shared/components/ambient-photo-gallery/ambient-photo-gallery.component';
 import { MemoryCardComponent } from '../../shared/components/memory-card/memory-card.component';
 import { MediaFrameComponent } from '../../shared/components/media-frame/media-frame.component';
 import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo-viewer.component';
@@ -9,7 +10,7 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
 @Component({
   selector: 'app-timeline',
   standalone: true,
-  imports: [RouterLink, MemoryCardComponent, MediaFrameComponent, PhotoViewerComponent],
+  imports: [RouterLink, AmbientPhotoGalleryComponent, MemoryCardComponent, MediaFrameComponent, PhotoViewerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="timeline-wrap" aria-labelledby="timeline-title">
@@ -18,8 +19,12 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
           <p class="eyebrow">04.01.2026 · Ngày chúng mình bắt đầu yêu nhau</p>
           <h2 id="timeline-title">Những ngày<br>đã đưa anh đến gần em hơn.</h2>
         </div>
-        <p class="section-note">Một chút trước tuổi mới của em, mình cùng đi lại con đường này nhé. Không cần nhớ hết — chỉ cần một tấm ảnh cũng đủ đưa mình trở về.</p>
+        <p class="section-note">Một tấm ảnh cũng đủ đưa mình trở về.</p>
       </header>
+
+      <div class="timeline-ambient">
+        <app-ambient-photo-gallery [photos]="ambientPhotos" layout="rail" sizes="(max-width: 640px) 24vw, 18vw" />
+      </div>
 
       @if (groups.length === 0 && unresolvedGroups.length === 0) {
         <div class="empty-state">
@@ -62,7 +67,7 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
             <div class="bonus-copy">
               <p class="eyebrow">Bonus memories ♡</p>
               <h3 id="bonus-title">Một vài khoảnh khắc nhỏ khác.</h3>
-              <p>Có những tấm ảnh mình chưa gọi tên được bằng một ngày chính xác, nhưng vẫn đáng để giữ lại.</p>
+              <p>Những tấm ảnh chưa gọi tên được bằng một ngày.</p>
             </div>
             <button class="bonus-toggle" type="button" [attr.aria-expanded]="archiveOpen()" aria-controls="bonus-memories" (click)="archiveOpen.set(!archiveOpen())">
               {{ archiveOpen() ? 'Thu lại' : 'Mở những khoảnh khắc khác' }} <span aria-hidden="true">{{ archiveOpen() ? '−' : '+' }}</span>
@@ -108,6 +113,7 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
     h2,h3,h4 { margin:0; font-family:var(--font-display); font-weight:400; }
     h2 { font-size:clamp(3rem,6.6vw,6.7rem); letter-spacing:-.067em; line-height:.86; }
     .section-note { margin:0 0 .45rem; color:var(--text-secondary); font-family:var(--font-display); font-size:.98rem; line-height:1.72; }
+    .timeline-ambient { width:min(100%,980px); height:clamp(8rem,18vw,15rem); margin:-1.5rem 0 4.5rem auto; opacity:.78; }
     .chapter-index { display:flex; gap:.25rem 1.2rem; overflow-x:auto; margin:0 0 5.5rem; padding-bottom:.75rem; border-bottom:1px solid var(--border); scrollbar-width:thin; }
     .chapter-index a { flex:0 0 auto; min-height:44px; padding:.65rem 0; color:var(--text-muted); font-size:.71rem; font-weight:600; letter-spacing:.05em; text-decoration:none; }
     .chapter-index a:hover { color:var(--wine); }
@@ -151,6 +157,7 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
       .section-heading { display:block; margin-bottom:3rem; }
       h2 { font-size:clamp(2.45rem,12vw,4.6rem); line-height:.9; }
       .section-note { max-width:380px; margin-top:1.2rem; }
+      .timeline-ambient { width:100%; height:7rem; margin:-1rem 0 3.5rem; }
       .chapter-index { margin-bottom:3.5rem; padding-inline:.2rem; scroll-padding-inline:.2rem; }
       .chapter-heading { grid-template-columns:1fr; }
       .chapter-heading span { text-align:left; }
@@ -169,6 +176,7 @@ export class TimelineComponent {
   private readonly memoryService = inject(MemoryService);
   protected readonly groups = this.memoryService.getMonthMemoryGroups();
   protected readonly unresolvedGroups = this.memoryService.getUnresolvedMediaGroups();
+  protected readonly ambientPhotos = this.memoryService.getRandomImageMedia(3);
   protected readonly archiveOpen = signal(false);
   protected readonly viewerOpen = signal(false);
   protected readonly viewerIndex = signal(0);

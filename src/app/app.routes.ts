@@ -19,6 +19,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/memory-detail/memory-detail.page').then((m) => m.MemoryDetailPage)
   },
   {
+    path: 'japan-notes',
+    loadComponent: () => import('./features/japan-notes/japan-notes.page').then((m) => m.JapanNotesPage)
+  },
+  {
     path: '**',
     loadComponent: () => import('./features/not-found/not-found.page').then((m) => m.NotFoundPage)
   }

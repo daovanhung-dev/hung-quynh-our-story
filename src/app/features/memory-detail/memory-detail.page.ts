@@ -2,12 +2,13 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import type { Memory } from '../../core/models/memory.model';
 import { MemoryService } from '../../core/services/memory.service';
+import { AmbientPhotoGalleryComponent } from '../../shared/components/ambient-photo-gallery/ambient-photo-gallery.component';
 import { MediaFrameComponent } from '../../shared/components/media-frame/media-frame.component';
 import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo-viewer.component';
 
 @Component({
   standalone: true,
-  imports: [RouterLink, MediaFrameComponent, PhotoViewerComponent],
+  imports: [RouterLink, AmbientPhotoGalleryComponent, MediaFrameComponent, PhotoViewerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (memory; as item) {
@@ -20,6 +21,10 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
           @if (item.caption) { <p class="caption">{{ item.caption }}</p> }
           @if (item.location) { <p class="location">{{ item.location }}</p> }
         </header>
+
+        <div class="detail-ambient">
+          <app-ambient-photo-gallery [photos]="ambientPhotos" layout="side" sizes="(max-width: 640px) 27vw, 15vw" />
+        </div>
 
         <section class="essay" aria-label="Những khoảnh khắc của ngày này">
           @for (media of item.images; track media.id; let index = $index) {
@@ -50,6 +55,9 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
       @if (viewerOpen) { <app-photo-viewer [images]="item.images" [initialIndex]="viewerIndex" (closed)="closeViewer()" /> }
     } @else {
       <section class="missing">
+        <div class="missing-photo">
+          <app-ambient-photo-gallery [photos]="ambientPhotos.slice(0, 1)" layout="single" sizes="min(70vw, 18rem)" />
+        </div>
         <span aria-hidden="true">H ♡ Q</span>
         <h1>Kỷ niệm này chưa ở trong món quà của chúng mình.</h1>
         <a routerLink="/timeline">Trở lại những ngày của chúng mình</a>
@@ -60,6 +68,7 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
     .memory-page { width:min(1280px,calc(100% - 3rem)); margin:0 auto; padding:clamp(2.5rem,6vw,5rem) max(0px,env(safe-area-inset-left)) 6rem max(0px,env(safe-area-inset-right)); }
     .back { display:inline-flex; min-height:44px; align-items:center; margin-bottom:clamp(3rem,8vw,7rem); color:var(--wine); font-size:.69rem; font-weight:600; letter-spacing:.08em; text-decoration:none; text-transform:uppercase; }
     .essay-header { max-width:860px; margin:0 auto clamp(3rem,9vw,8rem); text-align:center; }
+    .detail-ambient { width:min(100%,760px); height:clamp(7rem,16vw,12rem); margin:-3rem auto 4rem; opacity:.6; }
     .eyebrow { margin:0 0 1rem; color:var(--wine); font-size:.66rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase; }
     time { display:block; color:var(--text-secondary); font-family:var(--font-display); font-size:clamp(2.3rem,5.5vw,5.2rem); line-height:.94; }
     h1 { margin:.7rem 0 1.1rem; font-family:var(--font-display); font-size:clamp(1.8rem,3.4vw,3.2rem); font-weight:400; line-height:1.15; }
@@ -85,10 +94,11 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
     .memory-ending nav small { color:var(--wine); font-size:.64rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; }
     .memory-ending nav strong { font-family:var(--font-display); font-size:1.25rem; font-weight:400; }
     .missing { display:grid; min-height:70dvh; place-items:center; align-content:center; padding:2rem; text-align:center; }
+    .missing-photo { width:min(100%,18rem); height:14rem; margin-bottom:1rem; }
     .missing span { color:var(--wine); font-size:.7rem; font-weight:600; letter-spacing:.16em; }
     .missing h1 { max-width:600px; font-size:clamp(2.2rem,6vw,4.8rem); }
     .missing a { min-height:44px; color:var(--wine); }
-    @media (max-width:720px) { .memory-page { width:calc(100% - 2rem); padding-top:2rem; padding-bottom:4rem; } .back { max-width:100%; margin-bottom:clamp(2rem,10vw,4rem); line-height:1.4; } .essay-header { text-align:left; } time { font-size:clamp(2rem,11vw,4rem); } h1 { font-size:clamp(1.7rem,8vw,2.8rem); } .caption { margin-left:0; font-size:1.05rem; } .essay { gap:2.5rem; } .essay-frame,.essay-frame.cover,.essay-frame.wide { width:100%; } .essay-frame:nth-child(3n),.essay-frame:nth-child(4n) { margin-left:auto; margin-right:auto; } .essay-frame button { min-height:44px; } .memory-ending { margin-top:5rem; } .memory-ending > p { margin-bottom:2.5rem; } .memory-ending nav { grid-template-columns:1fr; gap:.6rem; } .memory-ending nav > span { display:none; } .memory-ending nav a,.memory-ending nav .next { justify-items:start; min-height:72px; padding:.7rem 0; text-align:left; } }
+    @media (max-width:720px) { .memory-page { width:calc(100% - 2rem); padding-top:2rem; padding-bottom:4rem; } .back { max-width:100%; margin-bottom:clamp(2rem,10vw,4rem); line-height:1.4; } .essay-header { text-align:left; } .detail-ambient { width:100%; height:6rem; margin:-1rem auto 3rem; } time { font-size:clamp(2rem,11vw,4rem); } h1 { font-size:clamp(1.7rem,8vw,2.8rem); } .caption { margin-left:0; font-size:1.05rem; } .essay { gap:2.5rem; } .essay-frame,.essay-frame.cover,.essay-frame.wide { width:100%; } .essay-frame:nth-child(3n),.essay-frame:nth-child(4n) { margin-left:auto; margin-right:auto; } .essay-frame button { min-height:44px; } .memory-ending { margin-top:5rem; } .memory-ending > p { margin-bottom:2.5rem; } .memory-ending nav { grid-template-columns:1fr; gap:.6rem; } .memory-ending nav > span { display:none; } .memory-ending nav a,.memory-ending nav .next { justify-items:start; min-height:72px; padding:.7rem 0; text-align:left; } }
   `]
 })
 export class MemoryDetailPage {
@@ -99,6 +109,7 @@ export class MemoryDetailPage {
   protected readonly memoryIndex = this.memory ? this.allMemories.findIndex((item) => item.id === this.memory?.id) : -1;
   protected readonly previousMemory: Memory | undefined = this.memoryIndex > 0 ? this.allMemories[this.memoryIndex - 1] : undefined;
   protected readonly nextMemory: Memory | undefined = this.memoryIndex >= 0 && this.memoryIndex < this.allMemories.length - 1 ? this.allMemories[this.memoryIndex + 1] : undefined;
+  protected readonly ambientPhotos = this.memoryService.getRandomImageMedia(2);
   protected viewerOpen=false;
   protected viewerIndex=0;
   protected formatDate(date:string):string { return this.memoryService.formatDate(date); }

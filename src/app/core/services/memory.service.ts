@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MEMORIES, UNRESOLVED_MEDIA } from '../../generated/memories.generated';
 import { SITE_CONFIG } from '../constants/site.config';
 import type { IntroPhoto } from '../models/birthday.model';
-import type { Memory } from '../models/memory.model';
+import type { Memory, MemoryMedia } from '../models/memory.model';
 import type { MemoryMonthGroup, UnresolvedMediaGroup } from '../models/timeline.model';
 
 export interface MemoryYearGroup {
@@ -16,6 +16,11 @@ export class MemoryService {
     const direction = SITE_CONFIG.timelineOrder === 'asc' ? 1 : -1;
     return a.date.localeCompare(b.date) * direction;
   });
+
+  private readonly imageMedia = [
+    ...this.memories.flatMap((memory) => memory.images),
+    ...UNRESOLVED_MEDIA.flatMap((group) => group.media)
+  ].filter((media): media is MemoryMedia => media.kind === 'image');
 
   private readonly monthGroups = this.buildMonthGroups();
 
@@ -50,6 +55,18 @@ export class MemoryService {
     return UNRESOLVED_MEDIA;
   }
 
+  getRandomImageMedia(count: number): readonly MemoryMedia[] {
+    const target = Math.max(0, Math.min(Math.floor(count), this.imageMedia.length));
+    const shuffled = [...this.imageMedia];
+
+    for (let index = shuffled.length - 1; index > 0; index -= 1) {
+      const swapIndex = Math.floor(Math.random() * (index + 1));
+      [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+    }
+
+    return shuffled.slice(0, target);
+  }
+
   getIntroPhotos(): readonly IntroPhoto[] {
     const datedPhotos = this.memories.flatMap((memory) =>
       memory.images
@@ -57,6 +74,11 @@ export class MemoryService {
         .map((image) => ({
           id: image.id,
           src: image.thumbnailSrc || image.src,
+          thumbnailSrc: image.thumbnailSrc,
+          displaySrc: image.displaySrc,
+          mediumSrc: image.mediumSrc,
+          width: image.width,
+          height: image.height,
           alt: image.alt || memory.title || 'Ảnh kỷ niệm'
         }))
     );
@@ -66,6 +88,11 @@ export class MemoryService {
         .map((media) => ({
           id: media.id,
           src: media.thumbnailSrc || media.src,
+          thumbnailSrc: media.thumbnailSrc,
+          displaySrc: media.displaySrc,
+          mediumSrc: media.mediumSrc,
+          width: media.width,
+          height: media.height,
           alt: media.alt || 'Ảnh kỷ niệm'
         }))
     );

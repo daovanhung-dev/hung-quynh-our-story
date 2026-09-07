@@ -1,16 +1,22 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import type { MemoryMedia } from '../../../../core/models/memory.model';
+import { AmbientPhotoGalleryComponent } from '../../../../shared/components/ambient-photo-gallery/ambient-photo-gallery.component';
 
 @Component({
   selector: 'app-gift-reveal',
   standalone: true,
+  imports: [AmbientPhotoGalleryComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="gift-scene" aria-labelledby="gift-title">
       <div class="glow" aria-hidden="true"></div>
+      <div class="gift-ambient">
+        <app-ambient-photo-gallery [photos]="photos" layout="cluster" sizes="(max-width: 640px) 28vw, 16vw" />
+      </div>
       <div class="copy">
-        <p class="eyebrow">Món quà 01 · 05.09.2026</p>
+        <p class="eyebrow">Món quà 01</p>
         <h1 id="gift-title">Có một món quà<br>anh đã giữ dành cho em.</h1>
-        <p>Không cần vội. Chạm vào hộp quà khi em sẵn sàng nhé.</p>
+        <p>Chạm vào hộp quà khi em sẵn sàng nhé.</p>
       </div>
 
       <button class="gift" type="button" [class.opened]="opened()" (click)="openGift()" aria-label="Mở món quà">
@@ -36,6 +42,8 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output, signal } from
     :host { display: block; }
     .gift-scene { position: relative; isolation: isolate; display: grid; min-height: 100svh; min-height: 100dvh; place-items: center; align-content: center; gap: clamp(2.2rem, 6vw, 4.5rem); overflow: hidden; padding: max(4rem,env(safe-area-inset-top)) max(1.2rem,env(safe-area-inset-right)) max(4rem,env(safe-area-inset-bottom)) max(1.2rem,env(safe-area-inset-left)); background: linear-gradient(145deg,#f7eee6,#ead7c9); color: var(--ink); text-align: center; }
     .gift-scene::before { position: absolute; inset: 1rem; z-index: -1; border: 1px solid rgba(127,59,75,.15); content: ''; }
+    .gift-ambient { position:absolute; inset:7% 6%; z-index:-1; opacity:.3; pointer-events:none; }
+    .gift-ambient app-ambient-photo-gallery { width:100%; height:100%; }
     .glow { position: absolute; inset: 0; z-index: -2; background: radial-gradient(circle at 50% 58%,rgba(216,181,122,.34),transparent 24rem),radial-gradient(circle at 12% 18%,rgba(166,84,98,.09),transparent 20rem); }
     .copy { display: grid; justify-items: center; max-width: 760px; }
     .eyebrow { margin: 0 0 1rem; color: var(--wine); font-size: .67rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; }
@@ -68,6 +76,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output, signal } from
   `]
 })
 export class GiftRevealComponent {
+  @Input() photos: readonly MemoryMedia[] = [];
   @Output() readonly proceed = new EventEmitter<void>();
   protected readonly opened = signal(false);
 
