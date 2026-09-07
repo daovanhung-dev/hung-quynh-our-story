@@ -26,6 +26,33 @@ interface TreasurePhotoFrame {
   durationMs: number;
 }
 
+interface PhotoPlacement {
+  left: number;
+  top: number;
+}
+
+interface PanelPosition {
+  left: number;
+  top: number;
+}
+
+interface DragSession {
+  pointerId: number;
+  originX: number;
+  originY: number;
+  startLeft: number;
+  startTop: number;
+}
+
+interface LayoutRect {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+  width: number;
+  height: number;
+}
+
 const TREASURE_LINES = [
   'Anh đã cất những ngày bình thường này thành một kho báu.',
   'Mỗi bức ảnh là một vì sao nhỏ trong câu chuyện H ♡ Q.',
@@ -35,24 +62,53 @@ const TREASURE_LINES = [
   'Kho báu này còn mở mãi, miễn là chúng mình vẫn chọn nhau mỗi ngày.'
 ] as const;
 
-const DESKTOP_ORBIT_SLOTS = [
-  { left: 16, top: 38 },
-  { left: 30, top: 22 },
-  { left: 50, top: 17 },
-  { left: 70, top: 23 },
-  { left: 84, top: 40 },
-  { left: 78, top: 70 },
-  { left: 57, top: 79 },
-  { left: 29, top: 72 }
+const DESKTOP_PHOTO_PLACEMENTS: readonly PhotoPlacement[] = [
+  { left: 8, top: 50 },
+  { left: 21, top: 50 },
+  { left: 8, top: 70 },
+  { left: 21, top: 70 },
+  { left: 93, top: 10 },
+  { left: 93, top: 90 },
+  { left: 34, top: 90 },
+  { left: 60, top: 90 },
+  { left: 8, top: 30 },
+  { left: 21, top: 30 },
+  { left: 93, top: 30 },
+  { left: 34, top: 72 },
+  { left: 60, top: 72 },
+  { left: 8, top: 90 },
+  { left: 21, top: 90 },
+  { left: 86, top: 10 },
+  { left: 86, top: 90 },
+  { left: 34, top: 50 }
 ] as const;
 
-const MOBILE_ORBIT_SLOTS = [
-  { left: 14, top: 38 },
-  { left: 37, top: 25 },
-  { left: 65, top: 27 },
-  { left: 86, top: 43 },
-  { left: 72, top: 68 },
-  { left: 25, top: 67 }
+const MOBILE_PHOTO_PLACEMENTS: readonly PhotoPlacement[] = [
+  { left: 20, top: 30 },
+  { left: 80, top: 30 },
+  { left: 20, top: 39 },
+  { left: 80, top: 39 },
+  { left: 20, top: 48 },
+  { left: 80, top: 48 },
+  { left: 20, top: 57 },
+  { left: 80, top: 57 },
+  { left: 20, top: 66 },
+  { left: 80, top: 66 }
+] as const;
+
+const TABLET_PHOTO_PLACEMENTS: readonly PhotoPlacement[] = [
+  { left: 7, top: 44 },
+  { left: 24, top: 44 },
+  { left: 76, top: 44 },
+  { left: 93, top: 44 },
+  { left: 7, top: 57 },
+  { left: 24, top: 57 },
+  { left: 76, top: 57 },
+  { left: 93, top: 57 },
+  { left: 7, top: 70 },
+  { left: 24, top: 70 },
+  { left: 76, top: 70 },
+  { left: 93, top: 70 }
 ] as const;
 
 interface LoveTrack {
@@ -76,7 +132,7 @@ const LOVE_TRACKS: readonly LoveTrack[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <main class="treasure-page" [class.is-paused]="paused()" [class.is-reduced-motion]="reducedMotion" [class.is-playing]="isPlaying()" [class.is-autoplay-blocked]="autoplayBlocked()">
-      <section class="treasure-stage" aria-labelledby="treasure-title">
+      <section #stage class="treasure-stage" aria-labelledby="treasure-title">
         <div class="treasure-vignette" aria-hidden="true"></div>
 
         <svg class="galaxy-orbits" viewBox="0 0 100 100" aria-hidden="true">
@@ -114,6 +170,7 @@ const LOVE_TRACKS: readonly LoveTrack[] = [
           [src]="activeTrack().src"
           aria-hidden="true"
           (loadedmetadata)="onLoadedMetadata($event)"
+          (canplay)="onCanPlay($event)"
           (timeupdate)="onTimeUpdate($event)"
           (play)="onPlay()"
           (pause)="onPause()"
@@ -122,22 +179,50 @@ const LOVE_TRACKS: readonly LoveTrack[] = [
         ></audio>
 
         <div class="music-console">
-          <div class="record-stage" aria-hidden="true">
+            <div #record class="record-stage" aria-hidden="true">
             <div class="record-halo"></div>
             <div class="vinyl-record">
-              <span class="vinyl-grooves"></span>
-              <span class="vinyl-sheen"></span>
-              <span class="vinyl-label">H<br><i>♡</i> Q</span>
-              <span class="vinyl-hole"></span>
+              <span class="vinyl-disc-face">
+                <span class="vinyl-grooves"></span>
+                <span class="vinyl-sheen"></span>
+                <span class="vinyl-label">H<br><i>♡</i> Q</span>
+                <span class="vinyl-hole"></span>
+              </span>
             </div>
             <div class="record-arm"><span class="record-needle"></span></div>
           </div>
 
-          <aside class="music-panel" aria-label="Trình phát nhạc">
+          <aside
+            #panel
+            class="music-panel"
+            [class.is-positioned]="panelPosition() !== null"
+            [style.left.px]="panelPosition()?.left ?? null"
+            [style.top.px]="panelPosition()?.top ?? null"
+            [attr.data-panel-position]="panelPosition() ? 'custom' : 'default'"
+            aria-label="Trình phát nhạc"
+          >
             <header class="music-panel-header">
-              <p>H ♡ Q <span>·</span> love archive</p>
+              <div class="music-panel-header-row">
+                <div
+                  class="music-panel-drag-handle"
+                  role="button"
+                  tabindex="0"
+                  [attr.aria-label]="panelDragging() ? 'Đang kéo menu phát nhạc' : 'Kéo để di chuyển menu phát nhạc'"
+                  [attr.aria-grabbed]="panelDragging()"
+                  (pointerdown)="startPanelDrag($event)"
+                  (pointermove)="movePanelDrag($event)"
+                  (pointerup)="endPanelDrag($event)"
+                  (pointercancel)="endPanelDrag($event)"
+                  (keydown)="onPanelKeydown($event)"
+                >
+                  <span>H ♡ Q <i>·</i> love archive</span>
+                  <b aria-hidden="true">⠿</b>
+                </div>
+                <button class="panel-reset" type="button" aria-label="Đặt lại vị trí menu phát nhạc" (click)="resetPanelPosition()">↺</button>
+              </div>
               <h2>Nhạc cho kho báu này</h2>
             </header>
+            <p class="panel-drag-status sr-only" aria-live="polite">{{ panelDragStatus() }}</p>
 
             <div class="now-playing" aria-live="polite" aria-atomic="true">
               <p>Đang phát cho riêng em</p>
@@ -335,12 +420,12 @@ const LOVE_TRACKS: readonly LoveTrack[] = [
     .treasure-subtitle { max-width:28rem; margin:1.35rem 0 0; color:rgba(255,247,240,.66); font-family:var(--font-display); font-size:.92rem; line-height:1.7; }
     .treasure-guidance { margin:1rem 0 0; color:rgba(244,211,160,.68); font-size:.59rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; }
     .treasure-stream { position:absolute; inset:0; z-index:5; overflow:hidden; pointer-events:none; }
-    .treasure-photo { position:absolute; left:var(--photo-left); top:var(--photo-top); display:block; width:clamp(8rem,13vw,11rem); aspect-ratio:4 / 5; margin:0; padding:0; border:0; background:transparent; cursor:pointer; opacity:1; filter:brightness(var(--photo-brightness)); transform:translate(-50%,-50%) rotate(var(--photo-rotation)) scale(var(--photo-scale)); pointer-events:auto; transition:filter 300ms var(--ease-out),transform 300ms var(--ease-out); }
+    .treasure-photo { position:absolute; left:var(--photo-left); top:var(--photo-top); display:block; width:clamp(6.5rem,10vw,8.5rem); aspect-ratio:4 / 5; margin:0; padding:0; border:0; background:transparent; cursor:pointer; opacity:1; filter:brightness(var(--photo-brightness)); transform:translate(-50%,-50%) rotate(var(--photo-rotation)) scale(var(--photo-scale)); pointer-events:auto; transition:filter 300ms var(--ease-out),transform 300ms var(--ease-out); }
     .photo-aura { position:absolute; inset:8%; border-radius:50%; background:rgba(238,162,179,.38); filter:blur(24px); opacity:.42; }
     .photo-paper { position:absolute; inset:0; padding:.36rem .36rem 1.15rem; background:#fff9f1; box-shadow:0 22px 42px rgba(0,0,0,.46),0 0 24px rgba(238,162,179,.12); will-change:transform,opacity,filter; transform:translateZ(0); animation:treasure-paper-in var(--photo-duration) var(--ease-cinematic) var(--photo-delay) both; }
     .photo-paper app-media-frame { display:block; width:100%; height:100%; }
     .treasure-photo:hover,.treasure-photo:focus-visible { opacity:1; filter:brightness(1.08); outline:0; }
-    .treasure-photo.is-selected { left:50%; top:53%; z-index:20!important; opacity:1; filter:none; transform:translate(-50%,-50%) scale(1.08) rotate(0deg); }
+    .treasure-photo.is-selected { z-index:20!important; opacity:1; filter:none; transform:translate(-50%,-50%) scale(1.06) rotate(0deg); }
     .treasure-photo.is-selected .photo-paper { animation:none; opacity:1; filter:none; transform:none; }
     .treasure-photo.is-selected .photo-aura { opacity:1; transform:scale(1.25); }
     .treasure-photo.is-selected .photo-paper { box-shadow:0 28px 68px rgba(0,0,0,.54),0 0 44px rgba(238,162,179,.35); }
@@ -419,6 +504,9 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
   private readonly memoryService = inject(MemoryService);
   private readonly router = inject(Router);
 
+  @ViewChild('stage') private stageRef?: ElementRef<HTMLElement>;
+  @ViewChild('record') private recordRef?: ElementRef<HTMLElement>;
+  @ViewChild('panel') private panelRef?: ElementRef<HTMLElement>;
   @ViewChild('audio') private audioRef?: ElementRef<HTMLAudioElement>;
   protected readonly tracks = LOVE_TRACKS;
   protected readonly photos: readonly MemoryMedia[] = this.memoryService.getAllImageMedia();
@@ -433,6 +521,9 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
   protected readonly autoplayBlocked = signal(false);
   protected readonly audioError = signal(false);
   protected readonly volume = signal(.72);
+  protected readonly panelPosition = signal<PanelPosition | null>(null);
+  protected readonly panelDragging = signal(false);
+  protected readonly panelDragStatus = signal('Menu đang ở vị trí mặc định.');
   protected readonly activeTrack = computed(() => {
     const track = LOVE_TRACKS[this.activeTrackIndex()];
     return { ...track, duration: this.trackDurations()[track.id] ?? track.duration };
@@ -457,6 +548,10 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
   );
   private readonly copyIndex = signal(0);
   private readonly trackDurations = signal<Record<string, number>>({});
+  private shouldResumeAudio = false;
+  private pendingAudioPlay = false;
+  private audioPlayWasAutoplay = false;
+  private dragSession?: DragSession;
   private order: readonly MemoryMedia[] = [];
   private cursor = 0;
   private slotCursor = 0;
@@ -478,15 +573,36 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
 
   ngAfterViewInit(): void {
     const audio = this.audioRef?.nativeElement;
-    if (!audio) return;
-    audio.volume = this.volume();
-    void this.playAudio(true);
+    if (audio) {
+      audio.volume = this.volume();
+      this.playAudio(true);
+    }
+    window.requestAnimationFrame(() => this.reflowPhotos());
   }
 
   ngOnDestroy(): void {
     this.stopStream();
+    this.shouldResumeAudio = false;
+    this.pendingAudioPlay = false;
+    this.endPanelDrag();
     this.audioRef?.nativeElement.pause();
     this.mediaQuery?.removeEventListener?.('change', this.mediaQueryListener);
+  }
+
+  @HostListener('window:resize')
+  protected handleWindowResize(): void {
+    const current = this.panelPosition();
+    if (current && !this.setPanelPosition(current, false)) {
+      const fallback = this.findSafePanelPosition(current);
+      if (fallback) this.setPanelPosition(fallback, false);
+      else this.resetPanelPosition();
+    }
+    this.reflowPhotos(this.panelPosition() || undefined);
+  }
+
+  @HostListener('window:blur')
+  protected handleWindowBlur(): void {
+    this.endPanelDrag();
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -513,17 +629,249 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
     this.selectedKey.set(null);
   }
 
+  protected startPanelDrag(event: PointerEvent): void {
+    const panel = this.panelRef?.nativeElement;
+    const stage = this.stageRef?.nativeElement;
+    if (!panel || !stage || (event.pointerType === 'mouse' && event.button !== 0)) return;
+
+    const stageRect = stage.getBoundingClientRect();
+    const panelRect = panel.getBoundingClientRect();
+    const startPosition = this.panelPosition() || {
+      left: panelRect.left - stageRect.left,
+      top: panelRect.top - stageRect.top
+    };
+    const clampedStart = this.clampPanelPosition(startPosition);
+    const safeStart = this.findSafePanelPosition(clampedStart) || clampedStart;
+    this.panelPosition.set(safeStart);
+    this.reflowPhotos(safeStart);
+    this.dragSession = {
+      pointerId: event.pointerId,
+      originX: event.clientX,
+      originY: event.clientY,
+      startLeft: safeStart.left,
+      startTop: safeStart.top
+    };
+    this.panelDragging.set(true);
+    this.panelDragStatus.set('Đang kéo menu phát nhạc.');
+    try { (event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId); } catch { /* Synthetic test events may not have an active pointer. */ }
+    event.preventDefault();
+  }
+
+  protected movePanelDrag(event: PointerEvent): void {
+    const drag = this.dragSession;
+    if (!drag || event.pointerId !== drag.pointerId) return;
+
+    const candidate = this.clampPanelPosition({
+      left: drag.startLeft + event.clientX - drag.originX,
+      top: drag.startTop + event.clientY - drag.originY
+    });
+    if (this.setPanelPosition(candidate, false)) this.panelDragStatus.set('Menu đang ở vị trí an toàn.');
+    event.preventDefault();
+  }
+
+  protected endPanelDrag(event?: PointerEvent): void {
+    if (event && this.dragSession && event.pointerId !== this.dragSession.pointerId) return;
+    if (event) {
+      const target = event.currentTarget as HTMLElement;
+      try {
+        if (target.hasPointerCapture?.(event.pointerId)) target.releasePointerCapture(event.pointerId);
+      } catch { /* Ignore a pointer that was cancelled by the browser. */ }
+      event.preventDefault();
+    }
+    if (!this.dragSession) return;
+    this.dragSession = undefined;
+    this.panelDragging.set(false);
+    this.panelDragStatus.set('Đã đặt menu ở vị trí an toàn.');
+  }
+
+  protected onPanelKeydown(event: KeyboardEvent): void {
+    const direction: Record<string, PanelPosition> = {
+      ArrowLeft: { left: -24, top: 0 },
+      ArrowRight: { left: 24, top: 0 },
+      ArrowUp: { left: 0, top: -24 },
+      ArrowDown: { left: 0, top: 24 }
+    };
+    if (event.key === 'Home') {
+      this.resetPanelPosition();
+      event.preventDefault();
+      return;
+    }
+    const delta = direction[event.key];
+    if (!delta) return;
+    const current = this.getCurrentPanelPosition();
+    if (!current) return;
+    if (this.setPanelPosition({ left: current.left + delta.left, top: current.top + delta.top }, true)) event.preventDefault();
+  }
+
+  protected resetPanelPosition(): void {
+    this.endPanelDrag();
+    this.panelPosition.set(null);
+    this.panelDragStatus.set('Menu đã về vị trí mặc định.');
+    window.requestAnimationFrame(() => this.reflowPhotos());
+  }
+
+  private setPanelPosition(position: PanelPosition, announce: boolean): boolean {
+    const safePosition = this.clampPanelPosition(position);
+    if (!this.canPlacePanel(safePosition)) {
+      if (announce) this.panelDragStatus.set('Vị trí này không đủ khoảng trống cho ảnh.');
+      return false;
+    }
+    this.panelPosition.set(safePosition);
+    this.reflowPhotos(safePosition);
+    if (announce) this.panelDragStatus.set('Đã di chuyển menu phát nhạc.');
+    return true;
+  }
+
+  private getCurrentPanelPosition(): PanelPosition | null {
+    const position = this.panelPosition();
+    if (position) return position;
+    const panel = this.panelRef?.nativeElement;
+    const stage = this.stageRef?.nativeElement;
+    if (!panel || !stage) return null;
+    const stageRect = stage.getBoundingClientRect();
+    const panelRect = panel.getBoundingClientRect();
+    return this.clampPanelPosition({ left: panelRect.left - stageRect.left, top: panelRect.top - stageRect.top });
+  }
+
+  private clampPanelPosition(position: PanelPosition): PanelPosition {
+    const stage = this.stageRef?.nativeElement;
+    const panel = this.panelRef?.nativeElement;
+    if (!stage || !panel) return position;
+    const stageRect = stage.getBoundingClientRect();
+    const inset = 16;
+    return {
+      left: Math.min(Math.max(inset, position.left), Math.max(inset, stageRect.width - panel.offsetWidth - inset)),
+      top: Math.min(Math.max(inset, position.top), Math.max(inset, stageRect.height - panel.offsetHeight - inset))
+    };
+  }
+
+  private canPlacePanel(position: PanelPosition): boolean {
+    const panelRect = this.getPanelRect(position);
+    const recordRect = this.getElementRect(this.recordRef?.nativeElement);
+    const headingRect = this.getElementRect(this.stageRef?.nativeElement.querySelector('.treasure-heading'));
+    if (!panelRect || !recordRect || !headingRect) return false;
+    if (this.rectsOverlap(panelRect, recordRect, 12) || this.rectsOverlap(panelRect, headingRect, 12)) return false;
+    return this.findPhotoPlacements(this.activePhotos().length, panelRect, recordRect, headingRect).length === this.activePhotos().length;
+  }
+
+  private findSafePanelPosition(preferred: PanelPosition): PanelPosition | null {
+    const stage = this.stageRef?.nativeElement;
+    const panel = this.panelRef?.nativeElement;
+    if (!stage || !panel) return null;
+    const stageRect = stage.getBoundingClientRect();
+    const inset = 16;
+    const maxLeft = Math.max(inset, stageRect.width - panel.offsetWidth - inset);
+    const maxTop = Math.max(inset, stageRect.height - panel.offsetHeight - inset);
+    const candidates = [
+      this.clampPanelPosition(preferred),
+      { left: inset, top: inset },
+      { left: maxLeft, top: inset },
+      { left: inset, top: maxTop },
+      { left: maxLeft, top: maxTop },
+      { left: Math.max(inset, (stageRect.width - panel.offsetWidth) / 2), top: Math.max(inset, (stageRect.height - panel.offsetHeight) / 2) }
+    ];
+    return candidates.find((candidate) => this.canPlacePanel(candidate)) || null;
+  }
+
+  private reflowPhotos(panelPosition?: PanelPosition | null): void {
+    if (!this.stageRef?.nativeElement || !this.panelRef?.nativeElement || !this.activePhotos().length) return;
+    const panelRect = this.getPanelRect(panelPosition === undefined ? undefined : panelPosition);
+    const recordRect = this.getElementRect(this.recordRef?.nativeElement);
+    const headingRect = this.getElementRect(this.stageRef.nativeElement.querySelector('.treasure-heading'));
+    if (!panelRect || !recordRect || !headingRect) return;
+    const placements = this.findPhotoPlacements(this.activePhotos().length, panelRect, recordRect, headingRect);
+    if (placements.length !== this.activePhotos().length) return;
+    this.activePhotos.update((frames) => frames.map((frame, index) => ({ ...frame, ...placements[index] })));
+  }
+
+  private findPhotoPlacements(count: number, panelRect: LayoutRect, recordRect: LayoutRect, headingRect: LayoutRect): readonly PhotoPlacement[] {
+    const stage = this.stageRef?.nativeElement;
+    if (!stage) return [];
+    const stageRect = stage.getBoundingClientRect();
+    const used: LayoutRect[] = [];
+    const placements: PhotoPlacement[] = [];
+    for (const placement of this.getPhotoPlacements()) {
+      const photoRect = this.getPhotoRect(placement, stageRect);
+      if (this.rectsOverlap(photoRect, panelRect, 10) || this.rectsOverlap(photoRect, recordRect, 10) || this.rectsOverlap(photoRect, headingRect, 10)) continue;
+      if (used.some((rect) => this.rectsOverlap(photoRect, rect, 7))) continue;
+      used.push(photoRect);
+      placements.push(placement);
+      if (placements.length === count) break;
+    }
+    return placements;
+  }
+
+  private getPhotoPlacements(): readonly PhotoPlacement[] {
+    if (this.activeLimit <= 6) return MOBILE_PHOTO_PLACEMENTS;
+    return window.innerWidth <= 900 ? TABLET_PHOTO_PLACEMENTS : DESKTOP_PHOTO_PLACEMENTS;
+  }
+
+  private getPanelRect(position?: PanelPosition | null): LayoutRect | null {
+    const panel = this.panelRef?.nativeElement;
+    const stage = this.stageRef?.nativeElement;
+    if (!panel || !stage) return null;
+    const stageRect = stage.getBoundingClientRect();
+    if (position) return this.makeRect(stageRect.left + position.left, stageRect.top + position.top, panel.offsetWidth, panel.offsetHeight);
+    return this.getElementRect(panel);
+  }
+
+  private getPhotoRect(placement: PhotoPlacement, stageRect: DOMRect): LayoutRect {
+    const mobile = this.mediaQuery?.matches ?? window.innerWidth <= 680;
+    const width = mobile
+      ? Math.min(120, Math.max(94, window.innerWidth * .24))
+      : Math.min(136, Math.max(104, window.innerWidth * .1));
+    const height = width * 1.25;
+    const centerX = stageRect.left + stageRect.width * placement.left / 100;
+    const centerY = stageRect.top + stageRect.height * placement.top / 100;
+    return this.makeRect(centerX - width / 2, centerY - height / 2, width, height);
+  }
+
+  private getElementRect(element: HTMLElement | null | undefined): LayoutRect | null {
+    if (!element) return null;
+    const rect = element.getBoundingClientRect();
+    return this.makeRect(rect.left, rect.top, rect.width, rect.height);
+  }
+
+  private makeRect(left: number, top: number, width: number, height: number): LayoutRect {
+    return { left, top, right: left + width, bottom: top + height, width, height };
+  }
+
+  private rectsOverlap(first: LayoutRect, second: LayoutRect, gap: number): boolean {
+    return first.left < second.right + gap && first.right > second.left - gap && first.top < second.bottom + gap && first.bottom > second.top - gap;
+  }
+
   protected playAudio(isAutoplay = false): void {
     const audio = this.audioRef?.nativeElement;
     if (!audio) return;
     if (!isAutoplay) this.autoplayBlocked.set(false);
     this.audioError.set(false);
+    this.shouldResumeAudio = true;
+    this.pendingAudioPlay = true;
+    this.audioPlayWasAutoplay = isAutoplay;
+    if (audio.readyState < HTMLMediaElement.HAVE_FUTURE_DATA) {
+      audio.load();
+      return;
+    }
+    this.attemptAudioPlay();
+  }
+
+  protected onCanPlay(event: Event): void {
+    if (event.currentTarget !== this.audioRef?.nativeElement || !this.pendingAudioPlay || !this.shouldResumeAudio) return;
+    this.attemptAudioPlay();
+  }
+
+  private attemptAudioPlay(): void {
+    const audio = this.audioRef?.nativeElement;
+    if (!audio || !this.shouldResumeAudio) return;
+    this.pendingAudioPlay = false;
     void audio.play().then(() => {
       this.autoplayBlocked.set(false);
       this.isPlaying.set(true);
     }).catch(() => {
       this.isPlaying.set(false);
-      this.autoplayBlocked.set(true);
+      this.shouldResumeAudio = false;
+      if (this.audioPlayWasAutoplay) this.autoplayBlocked.set(true);
+      else this.audioError.set(true);
     });
   }
 
@@ -531,6 +879,8 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
     const audio = this.audioRef?.nativeElement;
     if (!audio) return;
     if (this.isPlaying()) {
+      this.shouldResumeAudio = false;
+      this.pendingAudioPlay = false;
       audio.pause();
       return;
     }
@@ -544,6 +894,7 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
     this.currentTime.set(0);
     this.audioError.set(false);
     if (!audio) return;
+    audio.pause();
     audio.src = this.tracks[index].src;
     audio.load();
     this.playAudio();
@@ -564,7 +915,10 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
   }
 
   protected onLoadedMetadata(event: Event): void {
-    const duration = (event.currentTarget as HTMLAudioElement).duration;
+    const audio = event.currentTarget as HTMLAudioElement;
+    const expectedSource = new URL(this.activeTrack().src, document.baseURI).href;
+    if ((audio.currentSrc || audio.src) !== expectedSource) return;
+    const duration = audio.duration;
     if (!Number.isFinite(duration)) return;
     this.trackDurations.update((durations) => ({ ...durations, [this.activeTrack().id]: duration }));
   }
@@ -575,6 +929,7 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
 
   protected onPlay(): void {
     this.autoplayBlocked.set(false);
+    this.shouldResumeAudio = true;
     this.isPlaying.set(true);
   }
 
@@ -588,6 +943,8 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
 
   protected onAudioError(): void {
     this.isPlaying.set(false);
+    this.shouldResumeAudio = false;
+    this.pendingAudioPlay = false;
     this.audioError.set(true);
   }
 
@@ -684,8 +1041,8 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
       media: photo,
       context: this.mediaContext.get(photo.id) || {},
       slot,
-      left: placement.left + (-2 + Math.random() * 4),
-      top: placement.top + (-2 + Math.random() * 4),
+      left: placement.left,
+      top: placement.top,
       rotation: -8 + Math.random() * 16,
       scale: .84 + Math.random() * .17,
       brightness: .78 + Math.random() * .24,
@@ -698,11 +1055,20 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
     this.sequencePosition.set(((this.sequenceCount - 1) % this.totalPhotos) + 1);
     if (this.sequenceCount % 4 === 0) this.copyIndex.set((this.copyIndex() + 1) % TREASURE_LINES.length);
     this.activePhotos.update((frames) => [...frames.filter((item) => item.slot !== slot), frame].sort((a, b) => a.slot - b.slot));
+    window.requestAnimationFrame(() => this.reflowPhotos(this.panelPosition() || undefined));
   }
 
   private getPlacement(slot: number): { left: number; top: number } {
-    const slots = this.activeLimit <= 6 ? MOBILE_ORBIT_SLOTS : DESKTOP_ORBIT_SLOTS;
-    return slots[slot % slots.length];
+    const fallbackSlots = this.activeLimit <= 6 ? MOBILE_PHOTO_PLACEMENTS : DESKTOP_PHOTO_PLACEMENTS;
+    const stage = this.stageRef?.nativeElement;
+    const record = this.getElementRect(this.recordRef?.nativeElement);
+    const heading = this.getElementRect(stage?.querySelector('.treasure-heading'));
+    const panel = this.getPanelRect(this.panelPosition());
+    if (stage && record && heading && panel) {
+      const safeSlots = this.findPhotoPlacements(this.activeLimit, panel, record, heading);
+      if (safeSlots.length === this.activeLimit) return safeSlots[slot % safeSlots.length];
+    }
+    return fallbackSlots[slot % fallbackSlots.length];
   }
 
   private nextPhoto(activeIds: ReadonlySet<string>): MemoryMedia {

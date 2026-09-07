@@ -19,6 +19,37 @@ async function expectAmbientPhotos(page: Page, selector: string, count: number):
   return ids.filter((id): id is string => Boolean(id));
 }
 
+async function expectTreasureLayersSeparated(page: Page): Promise<void> {
+  const overlaps = await page.evaluate(() => {
+    const toRect = (element: Element | null): { left: number; top: number; right: number; bottom: number } | null => {
+      if (!element) return null;
+      const rect = element.getBoundingClientRect();
+      return { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom };
+    };
+    const overlapsWithGap = (first: ReturnType<typeof toRect>, second: ReturnType<typeof toRect>, gap = 8): boolean => {
+      if (!first || !second) return false;
+      return first.left < second.right + gap && first.right > second.left - gap && first.top < second.bottom + gap && first.bottom > second.top - gap;
+    };
+    const record = toRect(document.querySelector('.record-stage'));
+    const panel = toRect(document.querySelector('.music-panel'));
+    const heading = toRect(document.querySelector('.treasure-heading'));
+    const photos = [...document.querySelectorAll('.treasure-photo')].map((photo) => ({
+      id: photo.getAttribute('data-photo-id'),
+      rect: toRect(photo)
+    }));
+    return {
+      photoRecord: photos.filter((photo) => overlapsWithGap(photo.rect, record)).map((photo) => photo.id),
+      photoPanel: photos.filter((photo) => overlapsWithGap(photo.rect, panel)).map((photo) => photo.id),
+      photoHeading: photos.filter((photo) => overlapsWithGap(photo.rect, heading)).map((photo) => photo.id),
+      panelRecord: overlapsWithGap(panel, record)
+    };
+  });
+  expect(overlaps.photoRecord).toEqual([]);
+  expect(overlaps.photoPanel).toEqual([]);
+  expect(overlaps.photoHeading).toEqual([]);
+  expect(overlaps.panelRecord).toBe(false);
+}
+
 test('first session opens the birthday journey and can continue into memories', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Happy 22nd Birthday My Love', exact: true })).toBeVisible({ timeout: 10_000 });
@@ -167,6 +198,7 @@ test('love treasure returns to the letter and respects reduced motion', async ({
   await expect(page.locator('.treasure-page')).toHaveClass(/is-reduced-motion/);
   await expect(page.locator('.treasure-photo').first()).toHaveCSS('animation-name', 'none');
   await expect(page.locator('.vinyl-record')).toHaveCSS('animation-name', 'none');
+  await expect(page.locator('.vinyl-disc-face')).toHaveCSS('animation-name', 'none');
   await page.getByRole('button', { name: /Quay lại lá thư/i }).click();
   await expect(page).toHaveURL(/\/birthday\?stage=letter$/);
   await expect(page.getByRole('heading', { name: /Cho Quỳnh/i })).toBeVisible();
@@ -245,6 +277,76 @@ test('love treasure music sliders seek and change volume', async ({ page }) => {
   const volume = page.locator('.music-volume input');
   await volume.fill('35');
   await expect.poll(() => audio.evaluate((element) => element.volume)).toBeCloseTo(.35, 2);
+});
+
+test('love treasure keeps the vinyl fixed and lets the desktop music menu move safely', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop', 'The touch layout is covered by the mobile drag scenario.');
+  await page.goto('/love-treasure');
+  await page.waitForTimeout(850);
+  await expectTreasureLayersSeparated(page);
+
+  const recordStage = page.locator('.record-stage');
+  const vinyl = page.locator('.vinyl-disc-face');
+  const recordBefore = await recordStage.boundingBox();
+  expect(recordBefore).not.toBeNull();
+
+  await page.locator('audio.love-audio-source').dispatchEvent('play');
+  await expect(page.locator('.vinyl-disc-face')).toHaveCSS('animation-play-state', 'running');
+  await page.waitForTimeout(1_100);
+  expect(await recordStage.boundingBox()).toEqual(recordBefore);
+  await page.locator('audio.love-audio-source').dispatchEvent('pause');
+  await expect(page.locator('.vinyl-disc-face')).toHaveCSS('animation-play-state', 'paused');
+
+  const panel = page.locator('.music-panel');
+  const handle = page.locator('.music-panel-drag-handle');
+  const handleBox = await handle.boundingBox();
+  expect(handleBox).not.toBeNull();
+  await page.mouse.move((handleBox?.x ?? 0) + 24, (handleBox?.y ?? 0) + 20);
+  await page.mouse.down();
+  await page.mouse.move((handleBox?.x ?? 0) + 52, (handleBox?.y ?? 0) + 20);
+  await page.mouse.up();
+  await expect(panel).toHaveAttribute('data-panel-position', 'custom');
+  await expectTreasureLayersSeparated(page);
+  const stageBox = await page.locator('.treasure-stage').boundingBox();
+  const movedPanel = await panel.boundingBox();
+  expect(stageBox).not.toBeNull();
+  expect(movedPanel).not.toBeNull();
+  expect(movedPanel?.x ?? 0).toBeGreaterThanOrEqual((stageBox?.x ?? 0) + 16);
+  expect(movedPanel?.y ?? 0).toBeGreaterThanOrEqual((stageBox?.y ?? 0) + 16);
+  expect(movedPanel?.x ?? 0).toBeLessThanOrEqual((stageBox?.x ?? 0) + (stageBox?.width ?? 0) - (movedPanel?.width ?? 0) - 16);
+
+  const customPanel = await panel.boundingBox();
+  expect(customPanel).not.toBeNull();
+  await handle.focus();
+  await page.keyboard.press('ArrowLeft');
+  await expect(panel).toHaveAttribute('data-panel-position', 'custom');
+  const nudgedPanel = await panel.boundingBox();
+  expect(nudgedPanel?.x ?? 0).toBeLessThan(customPanel?.x ?? 0);
+  await expectTreasureLayersSeparated(page);
+
+  await page.getByRole('button', { name: /Đặt lại vị trí menu phát nhạc/i }).click();
+  await expect(panel).toHaveAttribute('data-panel-position', 'default');
+  await expectTreasureLayersSeparated(page);
+  await page.locator('.music-track').nth(1).click();
+  await expect(page.locator('.music-track').nth(1)).toHaveAttribute('aria-current', 'true');
+});
+
+test('love treasure music menu supports touch dragging without covering the vertical photo layout', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/love-treasure');
+  await page.waitForTimeout(850);
+  await expectTreasureLayersSeparated(page);
+
+  const handle = page.locator('.music-panel-drag-handle');
+  const initialTop = (await page.locator('.music-panel').boundingBox())?.y ?? 0;
+  await handle.dispatchEvent('pointerdown', { button: 0, pointerType: 'touch', pointerId: 91, isPrimary: true, clientX: 180, clientY: 1200 });
+  await handle.dispatchEvent('pointermove', { button: 0, pointerType: 'touch', pointerId: 91, isPrimary: true, clientX: 180, clientY: 1224 });
+  await handle.dispatchEvent('pointerup', { button: 0, pointerType: 'touch', pointerId: 91, isPrimary: true, clientX: 180, clientY: 1224 });
+  await expect(page.locator('.music-panel')).toHaveAttribute('data-panel-position', 'custom');
+  const movedTop = (await page.locator('.music-panel').boundingBox())?.y ?? 0;
+  expect(movedTop).toBeGreaterThan(initialTop);
+  await expectTreasureLayersSeparated(page);
+  await expectTouchTarget(page.getByRole('button', { name: /Đặt lại vị trí menu phát nhạc/i }));
 });
 
 test('love treasure does not overflow on the narrow mobile viewport', async ({ page }, testInfo) => {
