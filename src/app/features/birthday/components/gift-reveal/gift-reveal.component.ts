@@ -136,6 +136,12 @@ export class GiftRevealComponent implements OnDestroy {
   }
 
   protected letterClick(event: MouseEvent): void {
+    if (this.holdInput === 'keyboard') {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
     if (this.suppressProceedClick) {
       event.preventDefault();
       event.stopPropagation();

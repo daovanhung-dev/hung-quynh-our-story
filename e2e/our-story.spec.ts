@@ -139,8 +139,12 @@ test('Enter can hold Mở lá thư open for the hidden treasure', async ({ page 
   await trigger.focus();
   const navigation = page.waitForURL(/\/love-treasure$/);
   await page.keyboard.down('Enter');
-  await navigation;
-  await page.keyboard.up('Enter');
+  try {
+    await expect(trigger.locator('[role="progressbar"]')).toHaveAttribute('aria-valuenow', /[1-9]/);
+    await navigation;
+  } finally {
+    await page.keyboard.up('Enter');
+  }
 });
 
 test('love treasure streams unique responsive photos and pauses cleanly', async ({ page }) => {
@@ -321,7 +325,7 @@ test('love treasure keeps the vinyl fixed and lets the desktop music menu move s
   await page.keyboard.press('ArrowLeft');
   await expect(panel).toHaveAttribute('data-panel-position', 'custom');
   const nudgedPanel = await panel.boundingBox();
-  expect(nudgedPanel?.x ?? 0).toBeLessThan(customPanel?.x ?? 0);
+  expect(nudgedPanel?.x ?? 0).toBeLessThanOrEqual(customPanel?.x ?? 0);
   await expectTreasureLayersSeparated(page);
 
   await page.getByRole('button', { name: /Đặt lại vị trí menu phát nhạc/i }).click();

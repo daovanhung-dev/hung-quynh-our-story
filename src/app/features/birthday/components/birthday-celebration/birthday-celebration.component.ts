@@ -316,6 +316,12 @@ export class BirthdayCelebrationComponent implements AfterViewInit, OnDestroy {
   }
 
   protected skipClick(event: MouseEvent): void {
+    if (this.holdInput === 'keyboard') {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+
     if (this.suppressSkipClick) {
       event.preventDefault();
       event.stopPropagation();
