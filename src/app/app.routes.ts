@@ -27,6 +27,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/love-treasure/love-treasure.page').then((m) => m.LoveTreasurePage)
   },
   {
+    path: 'unsaid',
+    loadComponent: () => import('./features/unsaid/unsaid.page').then((m) => m.UnsaidPage)
+  },
+  {
     path: '**',
     loadComponent: () => import('./features/not-found/not-found.page').then((m) => m.NotFoundPage)
   }

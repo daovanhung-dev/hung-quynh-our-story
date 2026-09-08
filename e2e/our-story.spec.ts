@@ -94,11 +94,254 @@ async function openLetterTrigger(page: Page): Promise<Locator> {
   return trigger;
 }
 
+async function openBirthdayLetter(page: Page): Promise<void> {
+  const trigger = await openLetterTrigger(page);
+  await trigger.click();
+  await expect(page.getByRole('button', { name: /Mở phong thư/i })).toBeVisible();
+  await page.getByRole('button', { name: /Mở phong thư/i }).click();
+  await expect(page.getByRole('heading', { name: /Cho Quỳnh/i })).toBeVisible();
+}
+
+async function dragPointer(
+  page: Page,
+  locator: Locator,
+  dx: number,
+  dy: number,
+  pointerType: 'mouse' | 'touch',
+  pointerId: number
+): Promise<void> {
+  const box = await locator.boundingBox();
+  expect(box).not.toBeNull();
+  const startX = (box?.x ?? 0) + (box?.width ?? 0) / 2;
+  const startY = (box?.y ?? 0) + (box?.height ?? 0) / 2;
+  const endX = startX + dx;
+  const endY = startY + dy;
+
+  if (pointerType === 'mouse') {
+    await page.mouse.move(startX, startY);
+    await page.mouse.down();
+    await page.mouse.move(endX, endY);
+    await page.mouse.up();
+    return;
+  }
+
+  await locator.dispatchEvent('pointerdown', {
+    button: 0,
+    pointerType,
+    pointerId,
+    isPrimary: true,
+    clientX: startX,
+    clientY: startY
+  });
+  await locator.dispatchEvent('pointermove', {
+    button: 0,
+    pointerType,
+    pointerId,
+    isPrimary: true,
+    clientX: endX,
+    clientY: endY
+  });
+  await locator.dispatchEvent('pointerup', {
+    button: 0,
+    pointerType,
+    pointerId,
+    isPrimary: true,
+    clientX: endX,
+    clientY: endY
+  });
+}
+
 test('quick click on Mở lá thư keeps the normal envelope flow', async ({ page }) => {
   const trigger = await openLetterTrigger(page);
   await trigger.click();
   await expect(page.getByRole('button', { name: /Mở phong thư/i })).toBeVisible();
   await expect(page).not.toHaveURL(/\/love-treasure$/);
+});
+
+test('birthday letter keeps the normal flow when the origami hint is ignored', async ({ page }) => {
+  await openBirthdayLetter(page);
+  await page.getByRole('button', { name: /Đi cùng anh nhé/i }).click();
+  await expect(page).toHaveURL(/\/timeline$/);
+  await expect(page).not.toHaveURL(/\/unsaid$/);
+});
+
+test('origami hint arms only after the reader reaches the end of the letter', async ({ page }) => {
+  await openBirthdayLetter(page);
+  const hint = page.locator('.origami-hint');
+  const sentinel = hint.locator('.origami-sentinel');
+
+  await expect(hint).toHaveAttribute('data-origami-armed', 'false');
+  await expect(hint.locator('.origami-crease-handle')).toHaveCount(0);
+  await sentinel.scrollIntoViewIfNeeded();
+  await expect(hint).toHaveAttribute('data-origami-armed', 'true');
+  await expect(hint.locator('.origami-crease-handle')).toBeVisible();
+});
+
+test('origami hint rejects short, wrong-direction and cancelled drags', async ({ page }) => {
+  await openBirthdayLetter(page);
+  const hint = page.locator('.origami-hint');
+  await hint.locator('.origami-sentinel').scrollIntoViewIfNeeded();
+  const crease = hint.locator('.origami-crease-handle');
+
+  await dragPointer(page, crease, -15, -15, 'mouse', 201);
+  await expect(hint).toHaveAttribute('data-fold-step', '0');
+  await expect(hint).toHaveAttribute('data-origami-mode', 'false');
+
+  await dragPointer(page, crease, 80, 80, 'mouse', 202);
+  await expect(hint).toHaveAttribute('data-fold-step', '0');
+  await expect(hint).toHaveAttribute('data-origami-mode', 'false');
+
+  const box = await crease.boundingBox();
+  expect(box).not.toBeNull();
+  const startX = (box?.x ?? 0) + (box?.width ?? 0) / 2;
+  const startY = (box?.y ?? 0) + (box?.height ?? 0) / 2;
+  await crease.dispatchEvent('pointerdown', { button: 0, pointerType: 'touch', pointerId: 203, isPrimary: true, clientX: startX, clientY: startY });
+  await crease.dispatchEvent('pointermove', { button: 0, pointerType: 'touch', pointerId: 203, isPrimary: true, clientX: startX - 60, clientY: startY - 45 });
+  await crease.dispatchEvent('pointercancel', { button: 0, pointerType: 'touch', pointerId: 203, isPrimary: true, clientX: startX - 60, clientY: startY - 45 });
+  await expect(hint).toHaveAttribute('data-drag-progress', '0');
+  await expect(hint).toHaveAttribute('data-fold-step', '0');
+});
+
+test('origami hint unlocks with the four mouse folds', async ({ page }) => {
+  await openBirthdayLetter(page);
+  const hint = page.locator('.origami-hint');
+  await hint.locator('.origami-sentinel').scrollIntoViewIfNeeded();
+  const navigation = page.waitForURL(/\/unsaid$/);
+
+  await dragPointer(page, hint.locator('.origami-crease-handle'), -80, -80, 'mouse', 211);
+  await expect(hint).toHaveAttribute('data-fold-step', '1');
+  await dragPointer(page, hint.locator('.origami-fold-handle'), 80, -80, 'mouse', 212);
+  await expect(hint).toHaveAttribute('data-fold-step', '2');
+  await dragPointer(page, hint.locator('.origami-fold-handle'), 0, -80, 'mouse', 213);
+  await expect(hint).toHaveAttribute('data-fold-step', '3');
+  await dragPointer(page, hint.locator('.origami-fold-handle'), 0, 80, 'mouse', 214);
+  await navigation;
+});
+
+test('origami hint unlocks with the four touch folds', async ({ page }) => {
+  await openBirthdayLetter(page);
+  const hint = page.locator('.origami-hint');
+  await hint.locator('.origami-sentinel').scrollIntoViewIfNeeded();
+  const navigation = page.waitForURL(/\/unsaid$/);
+
+  await dragPointer(page, hint.locator('.origami-crease-handle'), -80, -80, 'touch', 221);
+  await dragPointer(page, hint.locator('.origami-fold-handle'), 80, -80, 'touch', 222);
+  await dragPointer(page, hint.locator('.origami-fold-handle'), 0, -80, 'touch', 223);
+  await dragPointer(page, hint.locator('.origami-fold-handle'), 0, 80, 'touch', 224);
+  await navigation;
+});
+
+test('origami hint cancels with Escape and restores body scrolling', async ({ page }) => {
+  await openBirthdayLetter(page);
+  const hint = page.locator('.origami-hint');
+  await hint.locator('.origami-sentinel').scrollIntoViewIfNeeded();
+  const initialOverflow = await page.evaluate(() => document.body.style.overflow);
+
+  await dragPointer(page, hint.locator('.origami-crease-handle'), -80, -80, 'mouse', 231);
+  await expect(hint).toHaveAttribute('data-origami-mode', 'true');
+  await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe('hidden');
+  await page.keyboard.press('Escape');
+  await expect(hint).toHaveAttribute('data-origami-mode', 'false');
+  await expect(hint).toHaveAttribute('data-fold-step', '0');
+  await expect(hint).toHaveAttribute('data-drag-progress', '0');
+  await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe(initialOverflow);
+  await expect(hint.locator('.origami-crease-handle')).toBeFocused();
+});
+
+test('origami hint advances one fold with Space and four folds with Enter', async ({ page }) => {
+  await openBirthdayLetter(page);
+  const hint = page.locator('.origami-hint');
+  await hint.locator('.origami-sentinel').scrollIntoViewIfNeeded();
+  const crease = hint.locator('.origami-crease-handle');
+  await crease.focus();
+  await page.keyboard.press('Space');
+  await expect(hint).toHaveAttribute('data-fold-step', '1');
+  await page.keyboard.press('Escape');
+
+  await crease.focus();
+  const navigation = page.waitForURL(/\/unsaid$/);
+  await page.keyboard.press('Enter');
+  await expect(hint).toHaveAttribute('data-fold-step', '1');
+  await page.keyboard.press('Enter');
+  await expect(hint).toHaveAttribute('data-fold-step', '2');
+  await page.keyboard.press('Enter');
+  await expect(hint).toHaveAttribute('data-fold-step', '3');
+  await page.keyboard.press('Enter');
+  await navigation;
+});
+
+test('origami hint still unlocks when reduced motion is requested', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await openBirthdayLetter(page);
+  const hint = page.locator('.origami-hint');
+  await hint.locator('.origami-sentinel').scrollIntoViewIfNeeded();
+  const navigation = page.waitForURL(/\/unsaid$/);
+  await hint.locator('.origami-crease-handle').focus();
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Enter');
+  await navigation;
+});
+
+test('origami hint and unsaid page remain usable on mobile', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'The mobile project covers the narrow viewport interaction checks.');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await openBirthdayLetter(page);
+  const hint = page.locator('.origami-hint');
+  await hint.locator('.origami-sentinel').scrollIntoViewIfNeeded();
+  await expectTouchTarget(hint.locator('.origami-crease-handle'));
+  await expectNoHorizontalOverflow(page);
+  await page.keyboard.press('Escape');
+
+  await page.goto('/unsaid');
+  await expectNoHorizontalOverflow(page);
+  await expectTouchTarget(page.locator('.unsaid-note').first());
+  await expectTouchTarget(page.getByRole('link', { name: /Quay lại lá thư/i }));
+  await expectTouchTarget(page.getByRole('link', { name: /Đi đến những kỷ niệm/i }));
+});
+
+test('unsaid opens notes by click and keyboard without exposing the route in navigation', async ({ page }) => {
+  await page.goto('/unsaid');
+  await expect(page.getByRole('heading', { name: /Những điều anh chưa nói/i })).toBeVisible();
+  await expect(page.locator('.unsaid-note')).toHaveCount(8);
+  await expect(page.locator('.site-header nav')).not.toContainText(/chưa nói/i);
+  const progress = page.locator('.unsaid-progress');
+  await expect(progress).toHaveAttribute('aria-label', '0 trên 8 lời nhắn đã được mở');
+
+  const first = page.locator('.unsaid-note').nth(0);
+  await first.click();
+  await expect(first).toHaveAttribute('data-opened', 'true');
+  await expect(first).toContainText(/Có những đêm em đã ngủ rồi/i);
+  await expect(progress).toHaveAttribute('aria-label', '1 trên 8 lời nhắn đã được mở');
+  await first.click();
+  await expect(first).toHaveAttribute('data-opened', 'true');
+
+  const second = page.locator('.unsaid-note').nth(1);
+  await second.focus();
+  await page.keyboard.press('Enter');
+  await expect(second).toHaveAttribute('data-opened', 'true');
+  await expect(progress).toHaveAttribute('aria-label', '2 trên 8 lời nhắn đã được mở');
+});
+
+test('unsaid reveals the finale after all eight notes are opened', async ({ page }) => {
+  await page.goto('/unsaid');
+  for (const note of await page.locator('.unsaid-note').all()) await note.click();
+  await expect(page.locator('.unsaid-finale')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Anh vẫn muốn chọn em.', exact: true })).toBeVisible();
+  await expect(page.getByText('04 · 01 · 2026 → ∞', { exact: true })).toBeVisible();
+  await expect(page.locator('.unsaid-progress')).toHaveAttribute('aria-label', '8 trên 8 lời nhắn đã được mở');
+});
+
+test('unsaid navigation returns to the letter or continues to the timeline', async ({ page }) => {
+  await page.goto('/unsaid');
+  await page.getByRole('link', { name: /Quay lại lá thư/i }).click();
+  await expect(page).toHaveURL(/\/birthday\?stage=letter$/);
+  await expect(page.getByRole('heading', { name: /Cho Quỳnh/i })).toBeVisible();
+
+  await page.goto('/unsaid');
+  await page.getByRole('link', { name: /Đi đến những kỷ niệm/i }).click();
+  await expect(page).toHaveURL(/\/timeline$/);
 });
 
 test('holding Mở lá thư for three seconds opens the love treasure with mouse and touch', async ({ page }) => {

@@ -9,11 +9,12 @@ import { MemoryService } from '../../core/services/memory.service';
 import { AmbientPhotoGalleryComponent } from '../../shared/components/ambient-photo-gallery/ambient-photo-gallery.component';
 import { BirthdayCelebrationComponent } from './components/birthday-celebration/birthday-celebration.component';
 import { GiftRevealComponent } from './components/gift-reveal/gift-reveal.component';
+import { LetterOrigamiHintComponent } from './components/letter-origami-hint/letter-origami-hint.component';
 
 @Component({
   selector: 'app-birthday-experience',
   standalone: true,
-  imports: [AmbientPhotoGalleryComponent, BirthdayCelebrationComponent, GiftRevealComponent],
+  imports: [AmbientPhotoGalleryComponent, BirthdayCelebrationComponent, GiftRevealComponent, LetterOrigamiHintComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="birthday-experience" [attr.data-stage]="stage()">
@@ -76,6 +77,10 @@ import { GiftRevealComponent } from './components/gift-reveal/gift-reveal.compon
                   </div>
                   <button class="primary-action paper-action" type="button" (click)="goToTimeline()">Đi cùng anh nhé <span aria-hidden="true">↘</span></button>
                 </footer>
+                <app-letter-origami-hint
+                  (activeChange)="origamiActive.set($event)"
+                  (completed)="openUnsaid()"
+                />
               </article>
             </div>
           </div>
@@ -146,6 +151,7 @@ export class BirthdayExperienceComponent implements AfterViewInit, OnDestroy, On
   private readonly memoryService = inject(MemoryService);
 
   protected readonly stage = signal<BirthdayStage>('celebration');
+  protected readonly origamiActive = signal(false);
   protected readonly letter = BIRTHDAY_LETTER;
   protected readonly celebrationPhotos: readonly MemoryMedia[] = this.memoryService.getRandomImageMedia(5);
   protected readonly giftPhotos: readonly MemoryMedia[] = this.memoryService.getRandomImageMedia(3);
@@ -161,6 +167,7 @@ export class BirthdayExperienceComponent implements AfterViewInit, OnDestroy, On
 
   @HostListener('document:keydown.escape')
   protected skip(): void {
+    if (this.origamiActive()) return;
     if (this.stage() === 'celebration') { this.enterGift(); return; }
     if (this.stage() === 'gift') { this.enterEnvelope(); return; }
     this.goToTimeline();
@@ -183,6 +190,11 @@ export class BirthdayExperienceComponent implements AfterViewInit, OnDestroy, On
   protected openLoveTreasure(): void {
     this.journey.complete();
     void this.router.navigateByUrl('/love-treasure');
+  }
+
+  protected openUnsaid(): void {
+    this.journey.complete();
+    void this.router.navigateByUrl('/unsaid');
   }
 
   private focus(selector: string): void {
