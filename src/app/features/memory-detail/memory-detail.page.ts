@@ -47,7 +47,7 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
             @if (nextMemory; as next) {
               <a class="next" [routerLink]="['/memory',next.id]"><small>Tiếp tục câu chuyện →</small><strong>{{ formatDate(next.date) }}</strong></a>
             } @else {
-              <a class="next" routerLink="/" fragment="reasons"><small>Tiếp tục món quà →</small><strong>12 điều anh muốn nói</strong></a>
+              <a class="next" routerLink="/birthday/home" fragment="reasons"><small>Tiếp tục món quà →</small><strong>12 điều anh muốn nói</strong></a>
             }
           </nav>
         </footer>

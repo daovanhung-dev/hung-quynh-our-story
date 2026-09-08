@@ -63,7 +63,7 @@ import { RevealOnScrollDirective } from '../../shared/directives/reveal-on-scrol
         <span class="footer-stamp" aria-hidden="true">気をつけて</span>
         <p>Anh ở đây, dù mình cách nhau bao xa.</p>
         <nav aria-label="Đi tiếp">
-          <a routerLink="/">Quay lại món quà <span aria-hidden="true">↗</span></a>
+          <a routerLink="/birthday/home">Quay lại món quà <span aria-hidden="true">↗</span></a>
           <a routerLink="/timeline">Đi đến những kỷ niệm <span aria-hidden="true">↘</span></a>
         </nav>
       </footer>

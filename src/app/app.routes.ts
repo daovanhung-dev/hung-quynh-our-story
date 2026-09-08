@@ -1,10 +1,27 @@
-import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router, Routes } from '@angular/router';
+import { SiteEntryService } from './core/services/site-entry.service';
+
+const welcomeGuard: CanActivateFn = () => {
+  const entry = inject(SiteEntryService);
+  const router = inject(Router);
+  return entry.hasSeenWelcome() ? router.createUrlTree(['/events']) : true;
+};
 
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    loadComponent: () => import('./features/home/home.page').then((m) => m.HomePage)
+    canActivate: [welcomeGuard],
+    loadComponent: () => import('./features/home/home.page').then((m) => m.WelcomePage)
+  },
+  {
+    path: 'events',
+    loadComponent: () => import('./features/events/events.page').then((m) => m.EventHubPage)
+  },
+  {
+    path: 'birthday/home',
+    loadComponent: () => import('./features/birthday/birthday-home.component').then((m) => m.BirthdayHomeComponent)
   },
   {
     path: 'birthday',

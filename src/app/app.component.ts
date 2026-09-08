@@ -13,12 +13,12 @@ import { BirthdayJourneyService } from './core/services/birthday-journey.service
 
     <header class="site-header" [class.journey-hidden]="journey.active()">
       <div class="masthead">
-        <a class="brand" routerLink="/" aria-label="Về món quà sinh nhật dành cho Quỳnh">
+        <a class="brand" routerLink="/events" aria-label="Về khu vực lựa chọn của Hùng và Quỳnh">
           <span class="brand-mark" aria-hidden="true">H ♡ Q</span>
           <span>Our story</span>
         </a>
         <nav aria-label="Điều hướng món quà">
-          <a routerLink="/" routerLinkActive="is-active" [routerLinkActiveOptions]="{ exact: true }">Quà</a>
+          <a routerLink="/events" routerLinkActive="is-active">Lựa chọn</a>
           <a routerLink="/timeline" routerLinkActive="is-active">Kỷ niệm</a>
           <a routerLink="/birthday" routerLinkActive="is-active">Xem lại</a>
         </nav>

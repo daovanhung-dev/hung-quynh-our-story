@@ -97,7 +97,7 @@ import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo
           <span aria-hidden="true">♡</span>
           <p>Vậy là mình vừa đi lại một đoạn câu chuyện.</p>
           <h3 id="continue-gift-title">Nhưng món quà vẫn còn một vài điều<br>anh muốn nói với em.</h3>
-          <a routerLink="/" fragment="reasons">Tiếp tục món quà <i aria-hidden="true">↘</i></a>
+          <a routerLink="/birthday/home" fragment="reasons">Tiếp tục món quà <i aria-hidden="true">↘</i></a>
         </section>
       }
     </section>

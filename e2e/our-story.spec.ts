@@ -66,31 +66,52 @@ async function expectTreasureLayersSeparated(page: Page): Promise<void> {
   expect(overlaps.visualZoneOverflow).toBe('hidden');
 }
 
-test('first session opens the birthday journey and can continue into memories', async ({ page }) => {
+test('first session opens the memory welcome and continues into the event hub', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Happy 22nd Birthday My Love', exact: true })).toBeVisible({ timeout: 10_000 });
-  await page.getByRole('button', { name: /Mở món quà của em/i }).click();
-  await expect(page.getByRole('heading', { name: /Có một món quà/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Góc kỷ niệm anh và em/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /Happy 22nd Birthday My Love/i })).toHaveCount(0);
+  const wallPhotos = page.locator('.memory-wall-photo');
+  const expectedWallPhotos = await page.evaluate(() => window.innerWidth <= 680 ? 10 : 18);
+  await expect(wallPhotos).toHaveCount(expectedWallPhotos);
+  const ids = await wallPhotos.evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-photo-id')));
+  expect(new Set(ids).size).toBe(ids.length);
 
-  await page.getByRole('button', { name: /Mở món quà$/i }).click();
-  await page.getByRole('button', { name: /Mở lá thư/i }).click();
-  await expect(page.getByRole('button', { name: /Mở phong thư/i })).toBeVisible();
-  await page.getByRole('button', { name: /Mở phong thư/i }).click();
-  await expect(page.getByRole('heading', { name: /Cho Quỳnh/i })).toBeVisible();
-
-  await page.getByRole('button', { name: /Đi cùng anh nhé/i }).click();
-  await expect(page).toHaveURL(/\/timeline$/);
-  await expect(page.getByRole('heading', { name: 'Những ngày đã đưa anh đến gần em hơn.', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: /Mở những lựa chọn cho em/i }).click();
+  await expect(page).toHaveURL(/\/events$/);
+  await expect(page.getByRole('heading', { name: /Chọn một điều/i })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Sự kiện', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Tiện ích cho em', exact: true })).toBeVisible();
 });
 
-test('after the journey the root becomes birthday home instead of redirecting to timeline', async ({ page }) => {
+test('after the welcome the root redirects to the event hub during the same session', async ({ page }) => {
   await page.goto('/');
-  await page.evaluate(() => sessionStorage.setItem('hung-quynh-birthday-journey-seen', 'true'));
+  await page.evaluate(() => sessionStorage.setItem('hung-quynh-site-entry-seen', 'true'));
   await page.reload();
-  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveURL(/\/events$/);
+  await expect(page.getByRole('heading', { name: /Chọn một điều/i })).toBeVisible();
+});
+
+test('the welcome wall is responsive, touch friendly and respects reduced motion', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await expectNoHorizontalOverflow(page);
+  await expect(page.locator('.memory-wall-photo')).toHaveCount(10);
+  await expect(page.locator('.memory-wall-photo').first()).toHaveCSS('animation-name', 'none');
+  await expectTouchTarget(page.getByRole('button', { name: /Mở những lựa chọn cho em/i }));
+});
+
+test('the birthday event opens the existing journey and the birthday home stays available', async ({ page }) => {
+  await page.goto('/events');
+  await expect(page.locator('[data-item-id="birthday-2026"]')).toHaveAttribute('href', '/birthday');
+  await page.locator('[data-item-id="birthday-2026"]').click();
+  await expect(page).toHaveURL(/\/birthday$/);
+  await expect(page.getByRole('heading', { name: 'Happy 22nd Birthday My Love', exact: true })).toBeVisible({ timeout: 10_000 });
+
+  await page.goto('/birthday/home');
   await expect(page.getByRole('heading', { name: 'Happy 22nd Birthday, Quỳnh ♡', exact: true })).toBeVisible();
-  await expect(page.getByText(/ngày có nhau/i)).toBeVisible();
-  await expect(page.getByRole('heading', { name: /Mười hai điều/i })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Đi lại những ngày/i })).toHaveAttribute('href', '/timeline');
+  await expect(page.getByRole('link', { name: /Xem lại món quà/i })).toHaveAttribute('href', '/birthday');
 });
 
 test('birthday route always replays the full gift experience', async ({ page }) => {
@@ -654,7 +675,7 @@ test('Japan notes render five unique responsive memory photos', async ({ page })
   expect(ids).toHaveLength(5);
   expect(new Set(ids).size).toBe(5);
   await expect(page.locator('.chapter-photo .media-frame source').first()).toHaveAttribute('srcset', /480w, .*960w/);
-  await expect(page.getByRole('link', { name: /Quay lại món quà/i })).toHaveAttribute('href', '/');
+  await expect(page.getByRole('link', { name: /Quay lại món quà/i })).toHaveAttribute('href', '/birthday/home');
   await expect(page.getByRole('link', { name: /Đi đến những kỷ niệm/i })).toHaveAttribute('href', '/timeline');
   expect(originalRequests).toEqual([]);
 });
@@ -691,10 +712,8 @@ test('timeline stays within the viewport and bonus media mounts on demand', asyn
 
 test('every view receives a small unique ambient photo composition', async ({ page }) => {
   await page.goto('/?seed=11');
-  await page.evaluate(() => sessionStorage.setItem('hung-quynh-birthday-journey-seen', 'true'));
-  await page.reload();
-  await expectAmbientPhotos(page, '.hero-photos', 3);
-  await expectAmbientPhotos(page, '.finale-photo', 1);
+  const expectedWallPhotos = await page.evaluate(() => window.innerWidth <= 680 ? 10 : 18);
+  await expect(page.locator('.memory-wall-photo')).toHaveCount(expectedWallPhotos);
 
   await page.goto('/birthday?seed=11');
   await expect(page.locator('.flying-memory')).toHaveCount(5);
@@ -707,6 +726,10 @@ test('every view receives a small unique ambient photo composition', async ({ pa
   await expectAmbientPhotos(page, '.stage-ambient--envelope', 2);
   await page.getByRole('button', { name: /Mở phong thư/i }).click();
   await expectAmbientPhotos(page, '.stage-ambient--letter', 2);
+
+  await page.goto('/birthday/home?seed=11');
+  await expectAmbientPhotos(page, '.hero-photos', 3);
+  await expectAmbientPhotos(page, '.finale-photo', 1);
 
   await page.goto('/timeline?seed=11');
   await expectAmbientPhotos(page, '.timeline-ambient', 3);
@@ -749,9 +772,7 @@ test('gallery dialog closes with Escape and returns focus to its thumbnail', asy
 test('mobile birthday home and timeline do not overflow', async ({ page }) => {
   for (const width of [320, 390, 430]) {
     await page.setViewportSize({ width, height: 844 });
-    await page.goto('/');
-    await page.evaluate(() => sessionStorage.setItem('hung-quynh-birthday-journey-seen', 'true'));
-    await page.reload();
+    await page.goto('/birthday/home');
     await expectNoHorizontalOverflow(page);
     await expect(page.locator('.hero-photos img')).toHaveCount(3);
     await expect(page.locator('.hero-photos img').nth(0)).toHaveAttribute('loading', 'eager');
@@ -768,6 +789,7 @@ test('mobile birthday home and timeline do not overflow', async ({ page }) => {
     await expectTouchTarget(page.locator('.site-header nav a').nth(0));
     await expectTouchTarget(page.locator('.site-header nav a').nth(1));
     await expectTouchTarget(page.locator('.site-header nav a').nth(2));
+    await expect(page.getByRole('link', { name: /Tiếp tục món quà/i })).toHaveAttribute('href', '/birthday/home#reasons');
 
     await page.locator('app-memory-card .cover-link').first().click();
     await expect(page).toHaveURL(/\/memory\//);
