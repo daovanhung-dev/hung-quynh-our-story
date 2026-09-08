@@ -5,7 +5,7 @@ export default defineConfig({
   fullyParallel: true,
   reporter: 'list',
   use: {
-    baseURL: 'http://127.0.0.1:4200',
+    baseURL: process.env.E2E_BASE_URL || 'http://127.0.0.1:4200',
     trace: 'retain-on-failure'
   },
   projects: [

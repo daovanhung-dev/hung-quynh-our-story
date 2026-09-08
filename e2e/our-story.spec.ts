@@ -114,6 +114,52 @@ test('the birthday event opens the existing journey and the birthday home stays 
   await expect(page.getByRole('link', { name: /Xem lại món quà/i })).toHaveAttribute('href', '/birthday');
 });
 
+test('the event hub opens the 3D memory museum with every image catalogued', async ({ page }) => {
+  await page.goto('/events');
+  const museumCard = page.locator('[data-item-id="memory-museum"]');
+  await expect(museumCard).toBeVisible();
+  await expect(museumCard).toHaveAttribute('href', '/museum');
+  await museumCard.click();
+
+  await expect(page).toHaveURL(/\/museum$/);
+  await expect(page.getByRole('heading', { name: /Bảo tàng/i })).toBeVisible();
+  await expect(page.locator('canvas.museum-canvas')).toHaveCount(1);
+  const museum = page.locator('.museum-page');
+  const totalPhotos = Number(await museum.getAttribute('data-total-photos'));
+  const roomCount = Number(await museum.getAttribute('data-room-count'));
+  expect(totalPhotos).toBeGreaterThan(0);
+  expect(roomCount).toBeGreaterThan(0);
+  await expect(page.locator('.catalog-room')).toHaveCount(roomCount);
+  await expect(page.locator('.catalog-item')).toHaveCount(totalPhotos);
+  await expectNoHorizontalOverflow(page);
+});
+
+test('museum catalog selects a dated photo and reuses the existing photo viewer', async ({ page }) => {
+  await page.goto('/museum');
+  await page.locator('.museum-catalog summary').click();
+  const firstPhoto = page.locator('.catalog-item').first();
+  await firstPhoto.click();
+
+  await expect(page.locator('[data-selection-panel]')).toBeVisible();
+  await expect(page.locator('[data-selection-panel] a')).toHaveAttribute('href', /\/memory\//);
+  await page.getByRole('button', { name: /Xem ảnh lớn/i }).click();
+  await expect(page.locator('dialog[open]')).toBeVisible();
+  await page.getByRole('button', { name: /Đóng trình xem ảnh/i }).click();
+  await expect(page.locator('dialog[open]')).toHaveCount(0);
+});
+
+test('museum mobile controls are visible, touch friendly and reduced motion is respected', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'This scenario is covered by the mobile Playwright project.');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/museum');
+  await expect(page.locator('.museum-joystick')).toBeVisible();
+  await expectTouchTarget(page.locator('.museum-joystick'));
+  await expectTouchTarget(page.getByRole('link', { name: /Thoát bảo tàng/i }));
+  await expectTouchTarget(page.getByRole('button', { name: /Ẩn hướng dẫn|Hướng dẫn/i }));
+  await expect(page.locator('.museum-scene-shell')).toHaveClass(/is-reduced-motion/);
+  await expectNoHorizontalOverflow(page);
+});
+
 test('birthday route always replays the full gift experience', async ({ page }) => {
   await page.goto('/birthday');
   await expect(page.getByRole('heading', { name: 'Happy 22nd Birthday My Love', exact: true })).toBeVisible({ timeout: 10_000 });

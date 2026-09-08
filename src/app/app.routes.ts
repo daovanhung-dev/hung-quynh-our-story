@@ -20,6 +20,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/events/events.page').then((m) => m.EventHubPage)
   },
   {
+    path: 'museum',
+    loadComponent: () => import('./features/museum/museum.page').then((m) => m.MuseumPage)
+  },
+  {
     path: 'birthday/home',
     loadComponent: () => import('./features/birthday/birthday-home.component').then((m) => m.BirthdayHomeComponent)
   },

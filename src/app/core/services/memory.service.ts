@@ -3,6 +3,7 @@ import { MEMORIES, UNRESOLVED_MEDIA } from '../../generated/memories.generated';
 import { SITE_CONFIG } from '../constants/site.config';
 import type { IntroPhoto } from '../models/birthday.model';
 import type { Memory, MemoryMedia } from '../models/memory.model';
+import type { MuseumDisplay, MuseumRoom } from '../models/museum.model';
 import type { MemoryMonthGroup, UnresolvedMediaGroup } from '../models/timeline.model';
 
 export interface MemoryYearGroup {
@@ -71,6 +72,79 @@ export class MemoryService {
     return this.imageMedia;
   }
 
+  getMuseumRooms(): readonly MuseumRoom[] {
+    const rooms = new Map<string, MuseumRoom>();
+    const displayIds = new Set<string>();
+
+    const datedMemories = [...this.memories].sort((a, b) => a.date.localeCompare(b.date));
+    for (const memory of datedMemories) {
+      const monthKey = `${memory.year}-${String(memory.month).padStart(2, '0')}`;
+      const displays = memory.images
+        .filter((media): media is MemoryMedia => media.kind === 'image')
+        .map((media) => this.toMuseumDisplay(
+          media,
+          this.uniqueDisplayId(`${memory.id}::${media.id}`, displayIds),
+          memory.id,
+          memory.date,
+          memory.title,
+          memory.caption,
+          memory.location
+        ));
+
+      if (!displays.length) {
+        continue;
+      }
+
+      const existing = rooms.get(monthKey);
+      rooms.set(monthKey, {
+        id: monthKey,
+        label: this.formatMonthLabel(memory.year, memory.month),
+        year: memory.year,
+        month: memory.month,
+        isArchive: false,
+        displays: [...(existing?.displays ?? []), ...displays]
+      });
+    }
+
+    for (const group of UNRESOLVED_MEDIA) {
+      const [yearPart, monthPart] = group.sourceMonth.split('-');
+      const year = Number(yearPart) || 0;
+      const month = Number(monthPart) || undefined;
+      const displays = group.media
+        .filter((media) => media.kind === 'image')
+        .map((media) => ({
+          id: this.uniqueDisplayId(`archive::${media.id}`, displayIds),
+          media,
+          caption: media.caption
+        }));
+
+      if (!displays.length) {
+        continue;
+      }
+
+      const archiveId = `archive-${group.sourceMonth}`;
+      const existing = rooms.get(archiveId);
+      rooms.set(archiveId, {
+        id: archiveId,
+        label: existing?.label ?? group.label,
+        year,
+        month,
+        isArchive: true,
+        displays: [...(existing?.displays ?? []), ...displays]
+      });
+    }
+
+    return [...rooms.values()].sort((a, b) => {
+      if (a.isArchive !== b.isArchive) {
+        return a.isArchive ? 1 : -1;
+      }
+
+      const aKey = `${a.year}-${String(a.month ?? 0).padStart(2, '0')}`;
+      const bKey = `${b.year}-${String(b.month ?? 0).padStart(2, '0')}`;
+      return aKey.localeCompare(bKey);
+    });
+  }
+
   getIntroPhotos(): readonly IntroPhoto[] {
     const datedPhotos = this.memories.flatMap((memory) =>
       memory.images
@@ -129,6 +203,37 @@ export class MemoryService {
     }).format(value);
 
     return `${monthLabel.charAt(0).toUpperCase()}${monthLabel.slice(1)} ${year}`;
+  }
+
+  private toMuseumDisplay(
+    media: MemoryMedia,
+    id: string,
+    memoryId: string,
+    date: string,
+    title?: string,
+    memoryCaption?: string,
+    location?: string
+  ): MuseumDisplay {
+    return {
+      id,
+      media,
+      memoryId,
+      date,
+      title,
+      caption: media.caption || memoryCaption,
+      location
+    };
+  }
+
+  private uniqueDisplayId(candidate: string, displayIds: Set<string>): string {
+    let id = candidate;
+    let suffix = 2;
+    while (displayIds.has(id)) {
+      id = `${candidate}::${suffix}`;
+      suffix += 1;
+    }
+    displayIds.add(id);
+    return id;
   }
 
   private buildMonthGroups(): readonly MemoryMonthGroup[] {
