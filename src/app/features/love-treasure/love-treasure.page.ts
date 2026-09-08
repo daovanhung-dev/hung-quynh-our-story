@@ -31,28 +31,6 @@ interface PhotoPlacement {
   top: number;
 }
 
-interface PanelPosition {
-  left: number;
-  top: number;
-}
-
-interface DragSession {
-  pointerId: number;
-  originX: number;
-  originY: number;
-  startLeft: number;
-  startTop: number;
-}
-
-interface LayoutRect {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
-  width: number;
-  height: number;
-}
-
 const TREASURE_LINES = [
   'Anh đã cất những ngày bình thường này thành một kho báu.',
   'Mỗi bức ảnh là một vì sao nhỏ trong câu chuyện H ♡ Q.',
@@ -135,34 +113,6 @@ const LOVE_TRACKS: readonly LoveTrack[] = [
       <section #stage class="treasure-stage" aria-labelledby="treasure-title">
         <div class="treasure-vignette" aria-hidden="true"></div>
 
-        <svg class="galaxy-orbits" viewBox="0 0 100 100" aria-hidden="true">
-          <ellipse class="orbit orbit--one" cx="50" cy="53" rx="35" ry="24"></ellipse>
-          <ellipse class="orbit orbit--two" cx="50" cy="53" rx="43" ry="18" transform="rotate(28 50 53)"></ellipse>
-          <ellipse class="orbit orbit--three" cx="50" cy="53" rx="30" ry="39" transform="rotate(-32 50 53)"></ellipse>
-          <path class="constellation-line" d="M18 37 L31 22 L50 17 L70 23 L84 40"></path>
-          <path class="constellation-line constellation-line--lower" d="M84 40 L78 70 L57 79 L29 72 L16 38"></path>
-          <circle class="constellation-star" cx="31" cy="22" r=".7"></circle>
-          <circle class="constellation-star" cx="70" cy="23" r=".7"></circle>
-          <circle class="constellation-star" cx="57" cy="79" r=".7"></circle>
-        </svg>
-
-        <span class="star star--one" aria-hidden="true">✦</span>
-        <span class="star star--three" aria-hidden="true">✧</span>
-        <span class="star star--five" aria-hidden="true">✦</span>
-        <span class="star star--six" aria-hidden="true">·</span>
-
-        <div class="galaxy-core" aria-hidden="true">
-          <span class="core-halo"></span>
-          <span class="core-seal">H<br><i>♡</i> Q</span>
-        </div>
-
-        <header class="treasure-heading">
-          <p class="treasure-kicker">H ♡ Q <span>·</span> memory constellation</p>
-          <h1 id="treasure-title">Chúc mừng vợ yêu <em>khám phá được thêm một kho báu</em></h1>
-          <p class="treasure-subtitle">Mỗi tấm ảnh là một vì sao nhỏ trong bầu trời của chúng mình.</p>
-          <p class="treasure-guidance">Chạm vào một kỷ niệm để giữ lại lâu hơn.</p>
-        </header>
-
         <audio
           #audio
           class="love-audio-source"
@@ -178,51 +128,121 @@ const LOVE_TRACKS: readonly LoveTrack[] = [
           (error)="onAudioError()"
         ></audio>
 
-        <div class="music-console">
-            <div #record class="record-stage" aria-hidden="true">
-            <div class="record-halo"></div>
-            <div class="vinyl-record">
-              <span class="vinyl-disc-face">
-                <span class="vinyl-grooves"></span>
-                <span class="vinyl-sheen"></span>
-                <span class="vinyl-label">H<br><i>♡</i> Q</span>
-                <span class="vinyl-hole"></span>
-              </span>
-            </div>
-            <div class="record-arm"><span class="record-needle"></span></div>
-          </div>
+        <div class="treasure-layout">
+          <section class="treasure-artboard" aria-label="Không gian kỷ niệm">
+            <header class="treasure-heading">
+              <p class="treasure-kicker">H ♡ Q <span>·</span> memory constellation</p>
+              <h1 id="treasure-title">Chúc mừng vợ yêu <em>khám phá được thêm một kho báu</em></h1>
+              <p class="treasure-subtitle">Mỗi tấm ảnh là một vì sao nhỏ trong bầu trời của chúng mình.</p>
+              <p class="treasure-guidance">Chạm vào một kỷ niệm để giữ lại lâu hơn.</p>
+            </header>
 
-          <aside
-            #panel
-            class="music-panel"
-            [class.is-positioned]="panelPosition() !== null"
-            [style.left.px]="panelPosition()?.left ?? null"
-            [style.top.px]="panelPosition()?.top ?? null"
-            [attr.data-panel-position]="panelPosition() ? 'custom' : 'default'"
-            aria-label="Trình phát nhạc"
-          >
-            <header class="music-panel-header">
-              <div class="music-panel-header-row">
-                <div
-                  class="music-panel-drag-handle"
-                  role="button"
-                  tabindex="0"
-                  [attr.aria-label]="panelDragging() ? 'Đang kéo menu phát nhạc' : 'Kéo để di chuyển menu phát nhạc'"
-                  [attr.aria-grabbed]="panelDragging()"
-                  (pointerdown)="startPanelDrag($event)"
-                  (pointermove)="movePanelDrag($event)"
-                  (pointerup)="endPanelDrag($event)"
-                  (pointercancel)="endPanelDrag($event)"
-                  (keydown)="onPanelKeydown($event)"
-                >
-                  <span>H ♡ Q <i>·</i> love archive</span>
-                  <b aria-hidden="true">⠿</b>
-                </div>
-                <button class="panel-reset" type="button" aria-label="Đặt lại vị trí menu phát nhạc" (click)="resetPanelPosition()">↺</button>
+            <div class="treasure-visual-zone">
+              <svg class="galaxy-orbits" viewBox="0 0 100 100" aria-hidden="true">
+                <ellipse class="orbit orbit--one" cx="50" cy="53" rx="35" ry="24"></ellipse>
+                <ellipse class="orbit orbit--two" cx="50" cy="53" rx="43" ry="18" transform="rotate(28 50 53)"></ellipse>
+                <ellipse class="orbit orbit--three" cx="50" cy="53" rx="30" ry="39" transform="rotate(-32 50 53)"></ellipse>
+                <path class="constellation-line" d="M18 37 L31 22 L50 17 L70 23 L84 40"></path>
+                <path class="constellation-line constellation-line--lower" d="M84 40 L78 70 L57 79 L29 72 L16 38"></path>
+                <circle class="constellation-star" cx="31" cy="22" r=".7"></circle>
+                <circle class="constellation-star" cx="70" cy="23" r=".7"></circle>
+                <circle class="constellation-star" cx="57" cy="79" r=".7"></circle>
+              </svg>
+
+              <span class="star star--one" aria-hidden="true">✦</span>
+              <span class="star star--three" aria-hidden="true">✧</span>
+              <span class="star star--five" aria-hidden="true">✦</span>
+              <span class="star star--six" aria-hidden="true">·</span>
+
+              <div class="galaxy-core" aria-hidden="true">
+                <span class="core-halo"></span>
+                <span class="core-seal">H<br><i>♡</i> Q</span>
               </div>
+
+              <div
+                class="treasure-stream"
+                [class.has-selection]="selectedFrame() !== undefined"
+                aria-label="Dòng ảnh kỷ niệm"
+                [attr.data-total-photos]="totalPhotos"
+                [attr.data-active-limit]="activeLimit"
+              >
+                @for (frame of activePhotos(); track frame.key) {
+                  <button
+                    class="treasure-photo"
+                    [class.is-selected]="selectedKey() === frame.key"
+                    type="button"
+                    [attr.data-photo-id]="frame.media.id"
+                    [attr.aria-label]="photoAriaLabel(frame)"
+                    [attr.aria-pressed]="selectedKey() === frame.key"
+                    [style.--photo-left]="frame.left + '%'"
+                    [style.--photo-top]="frame.top + '%'"
+                    [style.--photo-rotation]="frame.rotation + 'deg'"
+                    [style.--photo-scale]="frame.scale"
+                    [style.--photo-brightness]="frame.brightness"
+                    [style.--photo-delay]="frame.delayMs + 'ms'"
+                    [style.--photo-duration]="frame.durationMs + 'ms'"
+                    [style.z-index]="frame.depth"
+                    (click)="selectPhoto(frame)"
+                  >
+                    <span class="photo-aura" aria-hidden="true"></span>
+                    <span class="photo-paper">
+                      <app-media-frame [media]="frame.media" alt="" [priority]="frame.key <= 2" sizes="(max-width: 680px) 24vw, 13vw" />
+                    </span>
+                  </button>
+                } @empty {
+                  <p class="treasure-empty">Kho báu đang chờ những kỷ niệm đầu tiên.</p>
+                }
+              </div>
+            </div>
+
+            <div class="treasure-footer">
+              <div class="treasure-note" aria-live="polite" aria-atomic="true">
+                @if (selectedFrame(); as selected) {
+                  <span>Đang giữ lại một vì sao của chúng mình.</span>
+                } @else {
+                  <span>{{ currentLine() }}</span>
+                }
+              </div>
+
+              @if (selectedFrame(); as selected) {
+                <aside class="treasure-memory-panel" aria-label="Thông tin kỷ niệm đang chọn">
+                  <button class="panel-close" type="button" aria-label="Bỏ giữ ảnh" (click)="clearSelection()">×</button>
+                  <p class="panel-date">{{ selected.context.date ? formatDate(selected.context.date) : 'một ngày anh muốn nhớ' }}</p>
+                  <h2>{{ selected.context.title || 'Một khoảnh khắc anh vẫn muốn giữ bên em' }}</h2>
+                  @if (selected.context.caption) { <p class="panel-caption">{{ selected.context.caption }}</p> }
+                  @if (selected.context.location) { <p class="panel-location">⌖ {{ selected.context.location }}</p> }
+                </aside>
+              }
+
+              <div class="treasure-bottom">
+                @if (totalPhotos > 0) {
+                  <p class="stream-counter" aria-hidden="true">
+                    <span>{{ sequencePosition() }}</span><i></i><small>{{ totalPhotos }} kỷ niệm · vòng lặp vô tận</small>
+                  </p>
+                }
+              </div>
+            </div>
+          </section>
+
+          <aside class="music-column" aria-label="Khu vực phát nhạc">
+            <div class="record-stage" aria-hidden="true">
+              <div class="record-halo"></div>
+              <div class="vinyl-record">
+                <span class="vinyl-disc-face">
+                  <span class="vinyl-grooves"></span>
+                  <span class="vinyl-sheen"></span>
+                  <span class="vinyl-label">H<br><i>♡</i> Q</span>
+                  <span class="vinyl-hole"></span>
+                </span>
+              </div>
+              <div class="record-arm"><span class="record-needle"></span></div>
+            </div>
+
+            <aside class="music-panel" aria-label="Trình phát nhạc">
+            <header class="music-panel-header">
+              <p>H ♡ Q <span>·</span> love archive</p>
               <h2>Nhạc cho kho báu này</h2>
             </header>
-            <p class="panel-drag-status sr-only" aria-live="polite">{{ panelDragStatus() }}</p>
 
             <div class="now-playing" aria-live="polite" aria-atomic="true">
               <p>Đang phát cho riêng em</p>
@@ -312,191 +332,324 @@ const LOVE_TRACKS: readonly LoveTrack[] = [
               {{ paused() ? 'Tiếp tục ảnh' : 'Tạm dừng ảnh' }}
             </button>
 
-            <button class="treasure-control music-return" type="button" (click)="returnToLetter()">Quay lại lá thư <span aria-hidden="true">↗</span></button>
+              <button class="treasure-control music-return" type="button" (click)="returnToLetter()">Quay lại lá thư <span aria-hidden="true">↗</span></button>
+            </aside>
           </aside>
         </div>
 
-        <div
-          class="treasure-stream"
-          [class.has-selection]="selectedFrame() !== undefined"
-          aria-label="Dòng ảnh kỷ niệm"
-          [attr.data-total-photos]="totalPhotos"
-          [attr.data-active-limit]="activeLimit"
-        >
-          @for (frame of activePhotos(); track frame.key) {
-            <button
-              class="treasure-photo"
-              [class.is-selected]="selectedKey() === frame.key"
-              type="button"
-              [attr.data-photo-id]="frame.media.id"
-              [attr.aria-label]="photoAriaLabel(frame)"
-              [attr.aria-pressed]="selectedKey() === frame.key"
-              [style.--photo-left]="frame.left + '%'"
-              [style.--photo-top]="frame.top + '%'"
-              [style.--photo-rotation]="frame.rotation + 'deg'"
-              [style.--photo-scale]="frame.scale"
-              [style.--photo-brightness]="frame.brightness"
-              [style.--photo-delay]="frame.delayMs + 'ms'"
-              [style.--photo-duration]="frame.durationMs + 'ms'"
-              [style.z-index]="frame.depth"
-              (click)="selectPhoto(frame)"
-            >
-              <span class="photo-aura" aria-hidden="true"></span>
-              <span class="photo-paper">
-                <app-media-frame [media]="frame.media" alt="" [priority]="frame.key <= 2" sizes="(max-width: 680px) 24vw, 13vw" />
-              </span>
-            </button>
-          } @empty {
-            <p class="treasure-empty">Kho báu đang chờ những kỷ niệm đầu tiên.</p>
-          }
-        </div>
-
-        <div class="treasure-note" aria-live="polite" aria-atomic="true">
-          @if (selectedFrame(); as selected) {
-            <span>Đang giữ lại một vì sao của chúng mình.</span>
-          } @else {
-            <span>{{ currentLine() }}</span>
-          }
-        </div>
-
-        @if (selectedFrame(); as selected) {
-          <aside class="treasure-memory-panel" aria-label="Thông tin kỷ niệm đang chọn">
-            <button class="panel-close" type="button" aria-label="Bỏ giữ ảnh" (click)="clearSelection()">×</button>
-            <p class="panel-date">{{ selected.context.date ? formatDate(selected.context.date) : 'một ngày anh muốn nhớ' }}</p>
-            <h2>{{ selected.context.title || 'Một khoảnh khắc anh vẫn muốn giữ bên em' }}</h2>
-            @if (selected.context.caption) { <p class="panel-caption">{{ selected.context.caption }}</p> }
-            @if (selected.context.location) { <p class="panel-location">⌖ {{ selected.context.location }}</p> }
-          </aside>
-        }
-
-        <p class="treasure-live sr-only" aria-live="polite">
+        <p class="treasure-live sr-only">
           @if (selectedFrame(); as selected) {
             Đã chọn {{ selected.context.title || 'một kỷ niệm' }}.
           } @else {
             Chưa chọn ảnh kỷ niệm.
           }
         </p>
-
-        <div class="treasure-bottom">
-          @if (totalPhotos > 0) {
-            <p class="stream-counter" aria-hidden="true">
-              <span>{{ sequencePosition() }}</span><i></i><small>{{ totalPhotos }} kỷ niệm · vòng lặp vô tận</small>
-            </p>
-          }
-        </div>
       </section>
     </main>
   `,
   styles: [`
-    :host { display:block; }
-    .treasure-page { --treasure-night:#10070d; --treasure-wine:#762b46; --treasure-rose:#eea2b3; --treasure-champagne:#f4d3a0; --treasure-ink:#fff7f0; min-height:100dvh; overflow:hidden; background:var(--treasure-night); color:var(--treasure-ink); }
-    .treasure-stage { position:relative; isolation:isolate; display:block; min-height:calc(100dvh - 72px); overflow:hidden; background:radial-gradient(circle at 50% 48%,rgba(118,43,70,.5),transparent 24rem),radial-gradient(circle at 17% 84%,rgba(238,162,179,.15),transparent 22rem),radial-gradient(circle at 88% 18%,rgba(244,211,160,.12),transparent 20rem),var(--treasure-night); }
-    .treasure-stage::before { position:absolute; inset:1rem; z-index:12; border:1px solid rgba(244,211,160,.2); content:""; pointer-events:none; }
-    .treasure-stage::after { position:absolute; inset:0; z-index:11; background:linear-gradient(180deg,rgba(16,7,13,.62),transparent 26%,transparent 72%,rgba(16,7,13,.86)); content:""; pointer-events:none; }
-    .treasure-vignette { position:absolute; inset:-12%; z-index:10; border-radius:50%; box-shadow:inset 0 0 13rem 6rem rgba(0,0,0,.58); pointer-events:none; }
-    .galaxy-orbits { position:absolute; inset:12% 3% 10%; z-index:1; width:94%; height:78%; overflow:visible; opacity:.82; pointer-events:none; }
-    .orbit { fill:none; stroke:rgba(244,211,160,.2); stroke-width:.16; stroke-dasharray:1.5 1.8; transform-box:fill-box; transform-origin:center; animation:orbit-breathe 12s ease-in-out infinite alternate; }
-    .orbit--two { stroke:rgba(238,162,179,.25); animation-duration:16s; animation-direction:alternate-reverse; }
-    .orbit--three { stroke:rgba(244,211,160,.16); animation-duration:19s; }
+    :host { display:block; min-width:0; }
+    .treasure-page {
+      --treasure-night:#10070d;
+      --treasure-rose:#eea2b3;
+      --treasure-champagne:#f4d3a0;
+      --treasure-ink:#fff7f0;
+      width:min(1380px,calc(100% - 1.2rem));
+      min-height:calc(100dvh - .8rem);
+      margin:.4rem auto;
+      overflow-x:clip;
+      border:1px solid rgba(239,210,165,.12);
+      border-radius:clamp(24px,3vw,42px);
+      background:var(--hq-night,var(--treasure-night));
+      box-shadow:0 24px 70px rgba(0,0,0,.38);
+    }
+    .treasure-stage {
+      position:relative;
+      isolation:isolate;
+      min-height:calc(100dvh - 1rem);
+      overflow:visible;
+      border-radius:inherit;
+      background:
+        radial-gradient(circle at 50% 50%,rgba(123,53,73,.34),transparent 24rem),
+        radial-gradient(circle at 16% 82%,rgba(231,160,177,.1),transparent 20rem),
+        linear-gradient(145deg,#12080d,#1d0d14 55%,#0d0609);
+    }
+    .treasure-stage::before { position:absolute; inset:.75rem; z-index:1; border:1px solid rgba(244,211,160,.2); border-radius:calc(clamp(24px,3vw,42px) - .75rem); content:""; opacity:.7; pointer-events:none; }
+    .treasure-stage::after { position:absolute; inset:0; z-index:0; background:linear-gradient(180deg,rgba(16,7,13,.5),transparent 30%,transparent 70%,rgba(16,7,13,.56)); content:""; pointer-events:none; }
+    .treasure-vignette { position:absolute; inset:-12%; z-index:0; border-radius:50%; box-shadow:inset 0 0 13rem 6rem rgba(0,0,0,.58); pointer-events:none; }
+    .treasure-layout {
+      position:relative;
+      z-index:2;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(19rem,25rem);
+      gap:clamp(1rem,3vw,3rem);
+      min-height:calc(100dvh - 2.5rem);
+      margin:0 auto;
+      padding:clamp(1rem,2.5vw,2.25rem);
+    }
+    .treasure-artboard {
+      display:grid;
+      grid-template-rows:auto minmax(24rem,1fr) auto;
+      min-width:0;
+      min-height:calc(100dvh - 4.5rem);
+      overflow:hidden;
+      border:1px solid rgba(239,210,165,.13);
+      border-radius:clamp(18px,2.5vw,30px);
+      background:rgba(18,8,13,.3);
+    }
+    .galaxy-orbits { position:absolute; inset:0; z-index:0; width:100%; height:100%; overflow:visible; opacity:.34; pointer-events:none; transform:scale(.9); }
+    .orbit { fill:none; stroke:rgba(244,211,160,.2); stroke-width:.16; stroke-dasharray:1.5 1.8; }
+    .orbit--two { stroke:rgba(238,162,179,.25); }
+    .orbit--three { stroke:rgba(244,211,160,.16); }
     .constellation-line { fill:none; stroke:rgba(238,162,179,.24); stroke-width:.11; stroke-dasharray:.8 1.8; }
     .constellation-line--lower { stroke:rgba(244,211,160,.17); }
     .constellation-star { fill:var(--treasure-champagne); filter:drop-shadow(0 0 3px rgba(244,211,160,.9)); }
-    .star { position:absolute; z-index:2; color:var(--treasure-champagne); font-family:Georgia,serif; opacity:.76; text-shadow:0 0 12px rgba(244,211,160,.8); animation:star-twinkle 3.8s ease-in-out infinite; pointer-events:none; }
+    .star { position:absolute; z-index:2; color:var(--treasure-champagne); font-family:Georgia,serif; opacity:.46; text-shadow:0 0 12px rgba(244,211,160,.8); pointer-events:none; }
     .star--one { top:26%; left:11%; font-size:1.1rem; }
     .star--three { top:37%; right:10%; font-size:1.2rem; animation-delay:2s; }
     .star--five { bottom:16%; left:16%; font-size:.9rem; animation-delay:2.5s; }
     .star--six { top:66%; left:7%; animation-delay:1.6s; }
-    .galaxy-core { position:absolute; top:54%; left:50%; z-index:2; display:grid; width:min(35vw,25rem); aspect-ratio:1; place-items:center; border:1px solid rgba(244,211,160,.12); border-radius:50%; opacity:.84; transform:translate(-50%,-50%); pointer-events:none; }
-    .galaxy-core::before,.galaxy-core::after { position:absolute; inset:9%; border:1px solid rgba(238,162,179,.12); border-radius:50%; content:""; animation:core-pulse 5s ease-in-out infinite; }
-    .galaxy-core::after { inset:22%; border-color:rgba(244,211,160,.15); animation-delay:1s; }
-    .core-halo { position:absolute; width:40%; aspect-ratio:1; border-radius:50%; background:rgba(238,162,179,.28); filter:blur(26px); animation:core-pulse 4.5s ease-in-out infinite alternate; }
+    .galaxy-core { position:absolute; top:50%; left:50%; z-index:1; display:grid; width:min(58%,22rem); aspect-ratio:1; place-items:center; border:1px solid rgba(244,211,160,.12); border-radius:50%; opacity:.56; transform:translate(-50%,-50%); pointer-events:none; }
+    .galaxy-core::before,.galaxy-core::after { position:absolute; inset:9%; border:1px solid rgba(238,162,179,.12); border-radius:50%; content:""; }
+    .galaxy-core::after { inset:22%; border-color:rgba(244,211,160,.15); }
+    .core-halo { position:absolute; width:40%; aspect-ratio:1; border-radius:50%; background:rgba(238,162,179,.28); filter:blur(26px); }
     .core-seal { position:relative; display:grid; width:4.5rem; height:4.5rem; place-content:center; border:1px solid rgba(244,211,160,.7); border-radius:50%; outline:1px solid rgba(238,162,179,.26); outline-offset:5px; color:var(--treasure-champagne); font-family:var(--font-display); font-size:1rem; line-height:.75; text-align:center; }
     .core-seal i { color:var(--treasure-rose); font-style:normal; }
-    .treasure-heading { position:absolute; top:clamp(3.6rem,9vh,6rem); right:1rem; left:1rem; z-index:13; display:grid; justify-items:center; margin:auto; text-align:center; pointer-events:none; }
+    .treasure-heading {
+      position:relative;
+      z-index:3;
+      width:100%;
+      min-width:0;
+      padding:clamp(1.4rem,4vw,3rem) clamp(1rem,4vw,3.5rem) clamp(.75rem,2vw,1.25rem);
+      display:grid;
+      justify-items:center;
+      margin:0;
+      text-align:center;
+      pointer-events:none;
+    }
     .treasure-kicker { margin:0 0 1.15rem; color:rgba(244,211,160,.82); font-size:.62rem; font-weight:700; letter-spacing:.22em; text-transform:uppercase; }
     .treasure-kicker span { margin:0 .5rem; color:var(--treasure-rose); }
-    h1 { max-width:68rem; margin:0; color:var(--treasure-ink); font-family:var(--font-display); font-size:clamp(2.7rem,6vw,6.1rem); font-weight:400; letter-spacing:-.075em; line-height:.87; text-shadow:0 14px 35px rgba(0,0,0,.38); }
+    h1 { width:100%; max-width:58rem; margin:0; color:var(--treasure-ink); font-family:var(--font-display); font-size:clamp(2.35rem,5.5vw,5.2rem); font-weight:400; letter-spacing:-.075em; line-height:.87; text-shadow:0 14px 35px rgba(0,0,0,.38); overflow-wrap:anywhere; }
     h1 em { display:block; color:var(--treasure-rose); font-style:italic; }
-    .treasure-subtitle { max-width:28rem; margin:1.35rem 0 0; color:rgba(255,247,240,.66); font-family:var(--font-display); font-size:.92rem; line-height:1.7; }
+    .treasure-subtitle { max-width:32rem; margin:1.35rem 0 0; color:rgba(255,247,240,.66); font-family:var(--font-display); font-size:.92rem; line-height:1.7; }
     .treasure-guidance { margin:1rem 0 0; color:rgba(244,211,160,.68); font-size:.59rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; }
-    .treasure-stream { position:absolute; inset:0; z-index:5; overflow:hidden; pointer-events:none; }
-    .treasure-photo { position:absolute; left:var(--photo-left); top:var(--photo-top); display:block; width:clamp(6.5rem,10vw,8.5rem); aspect-ratio:4 / 5; margin:0; padding:0; border:0; background:transparent; cursor:pointer; opacity:1; filter:brightness(var(--photo-brightness)); transform:translate(-50%,-50%) rotate(var(--photo-rotation)) scale(var(--photo-scale)); pointer-events:auto; transition:filter 300ms var(--ease-out),transform 300ms var(--ease-out); }
+    .treasure-visual-zone {
+      position:relative;
+      min-width:0;
+      min-height:clamp(24rem,38vw,38rem);
+      overflow:hidden;
+      isolation:isolate;
+      border-top:1px solid rgba(239,210,165,.08);
+      border-bottom:1px solid rgba(239,210,165,.08);
+    }
+    .treasure-stream { position:absolute; inset:0; z-index:2; overflow:hidden; pointer-events:none; }
+    .treasure-photo { position:absolute; top:var(--photo-top); left:var(--photo-left); display:block; width:clamp(5.75rem,9vw,8rem); max-width:25%; aspect-ratio:4 / 5; margin:0; padding:0; border:0; background:transparent; cursor:pointer; opacity:1; filter:brightness(var(--photo-brightness)); transform:translate(-50%,-50%) rotate(var(--photo-rotation)) scale(var(--photo-scale)); pointer-events:auto; transition:filter 300ms var(--ease-out),transform 300ms var(--ease-out); }
     .photo-aura { position:absolute; inset:8%; border-radius:50%; background:rgba(238,162,179,.38); filter:blur(24px); opacity:.42; }
     .photo-paper { position:absolute; inset:0; padding:.36rem .36rem 1.15rem; background:#fff9f1; box-shadow:0 22px 42px rgba(0,0,0,.46),0 0 24px rgba(238,162,179,.12); will-change:transform,opacity,filter; transform:translateZ(0); animation:treasure-paper-in var(--photo-duration) var(--ease-cinematic) var(--photo-delay) both; }
     .photo-paper app-media-frame { display:block; width:100%; height:100%; }
-    .treasure-photo:hover,.treasure-photo:focus-visible { opacity:1; filter:brightness(1.08); outline:0; }
-    .treasure-photo.is-selected { z-index:20!important; opacity:1; filter:none; transform:translate(-50%,-50%) scale(1.06) rotate(0deg); }
-    .treasure-photo.is-selected .photo-paper { animation:none; opacity:1; filter:none; transform:none; }
+    .treasure-photo:hover,.treasure-photo:focus-visible { filter:brightness(1.08); outline:0; }
+    .treasure-photo.is-selected { z-index:20!important; filter:none; transform:translate(-50%,-50%) scale(1.08) rotate(0deg); }
+    .treasure-photo.is-selected .photo-paper { animation:none; opacity:1; filter:none; transform:none; box-shadow:0 28px 68px rgba(0,0,0,.54),0 0 44px rgba(238,162,179,.35); }
     .treasure-photo.is-selected .photo-aura { opacity:1; transform:scale(1.25); }
-    .treasure-photo.is-selected .photo-paper { box-shadow:0 28px 68px rgba(0,0,0,.54),0 0 44px rgba(238,162,179,.35); }
     .treasure-photo:focus-visible .photo-paper { outline:3px solid var(--treasure-champagne); outline-offset:5px; }
-    .treasure-empty { position:absolute; inset:50% auto auto 50%; margin:0; color:rgba(255,247,240,.72); font-family:var(--font-display); transform:translate(-50%,-50%); }
-    .treasure-note { position:absolute; right:1rem; bottom:7.8rem; left:1rem; z-index:13; display:grid; justify-items:center; min-height:2rem; color:rgba(255,247,240,.64); font-family:var(--font-display); font-size:clamp(.88rem,1.5vw,1.08rem); line-height:1.4; text-align:center; pointer-events:none; }
-    .treasure-note span { max-width:30rem; padding:.3rem .7rem; }
-    .treasure-memory-panel { position:absolute; right:1rem; bottom:9.7rem; left:1rem; z-index:21; display:grid; justify-items:center; width:min(calc(100% - 2rem),28rem); margin:auto; padding:1rem 2rem .9rem; border:1px solid rgba(244,211,160,.36); background:rgba(29,10,20,.8); box-shadow:0 18px 42px rgba(0,0,0,.3),0 0 28px rgba(238,162,179,.12); backdrop-filter:blur(16px); text-align:center; animation:panel-in 420ms var(--ease-out) both; }
-    .panel-close { position:absolute; top:.25rem; right:.45rem; display:grid; width:32px; height:32px; place-items:center; border:0; background:transparent; color:rgba(255,247,240,.7); cursor:pointer; font-size:1.35rem; line-height:1; }
-    .panel-close:hover { color:var(--treasure-champagne); }
-    .panel-date { margin:0 0 .35rem; color:var(--treasure-champagne); font-size:.57rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
-    .treasure-memory-panel h2 { margin:0; color:#fff9f1; font-family:var(--font-display); font-size:1.35rem; font-weight:400; line-height:1.08; }
-    .panel-caption { max-width:24rem; margin:.45rem 0 0; color:rgba(255,247,240,.67); font-family:var(--font-display); font-size:.78rem; line-height:1.45; }
-    .panel-location { margin:.42rem 0 0; color:var(--treasure-rose); font-size:.62rem; letter-spacing:.08em; }
-    .treasure-bottom { position:absolute; right:1rem; bottom:max(1.35rem,env(safe-area-inset-bottom)); left:1rem; z-index:22; display:grid; justify-items:center; gap:.72rem; pointer-events:none; }
-    .stream-counter { display:flex; align-items:center; gap:.65rem; margin:0; color:rgba(244,211,160,.78); font-size:.59rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; }
+    .treasure-empty { position:absolute; top:50%; left:50%; margin:0; color:rgba(255,247,240,.72); font-family:var(--font-display); transform:translate(-50%,-50%); }
+    .treasure-footer {
+      display:grid;
+      gap:.7rem;
+      min-width:0;
+      padding:clamp(.85rem,2vw,1.35rem) clamp(1rem,3vw,2.5rem) clamp(1rem,2vw,1.5rem);
+    }
+    .treasure-note {
+      position:relative;
+      min-height:2.2rem;
+      padding-inline:.5rem;
+      display:grid;
+      justify-items:center;
+      color:rgba(255,247,240,.64);
+      font-family:var(--font-display);
+      font-size:clamp(.88rem,1.5vw,1.08rem);
+      line-height:1.4;
+      text-align:center;
+      pointer-events:none;
+    }
+    .treasure-note span { max-width:42rem; }
+    .treasure-memory-panel {
+      position:relative;
+      width:min(100%,38rem);
+      display:grid;
+      justify-items:center;
+      margin:0;
+      padding:1rem clamp(2.25rem,5vw,3rem) 1rem 1.25rem;
+      border:1px solid rgba(239,210,165,.2);
+      border-radius:18px;
+      background:rgba(24,10,17,.84);
+      box-shadow:0 22px 60px rgba(0,0,0,.26);
+      backdrop-filter:blur(18px);
+      text-align:center;
+    }
+    .treasure-bottom {
+      position:relative;
+      display:flex;
+      justify-content:center;
+      min-width:0;
+      pointer-events:none;
+    }
+    .stream-counter { display:flex; align-items:center; flex-wrap:wrap; justify-content:center; gap:.65rem; margin:0; color:rgba(244,211,160,.78); font-size:.59rem; font-weight:700; letter-spacing:.15em; text-align:center; text-transform:uppercase; }
     .stream-counter span { color:var(--treasure-rose); font-family:var(--font-display); font-size:1rem; }
     .stream-counter i { width:2.4rem; height:1px; background:rgba(244,211,160,.44); }
     .stream-counter small { color:rgba(255,247,240,.46); font-size:.56rem; font-weight:600; }
+    .panel-close { position:absolute; top:.25rem; right:.45rem; display:grid; width:32px; height:32px; place-items:center; border:0; background:transparent; color:rgba(255,247,240,.7); cursor:pointer; font-size:1.35rem; line-height:1; }
+    .panel-close:hover { color:var(--treasure-champagne); }
+    .panel-date { margin:0 0 .35rem; color:var(--treasure-champagne); font-size:.57rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+    .treasure-memory-panel h2 { max-width:32rem; margin:0; color:#fff9f1; font-family:var(--font-display); font-size:1.35rem; font-weight:400; line-height:1.08; overflow-wrap:anywhere; }
+    .panel-caption { max-width:24rem; margin:.45rem 0 0; color:rgba(255,247,240,.67); font-family:var(--font-display); font-size:.78rem; line-height:1.45; }
+    .panel-location { margin:.42rem 0 0; color:var(--treasure-rose); font-size:.62rem; letter-spacing:.08em; }
     .treasure-control { display:inline-flex; align-items:center; gap:.62rem; min-height:46px; padding:.72rem 1rem; border:1px solid rgba(244,211,160,.48); background:rgba(16,7,13,.62); color:rgba(255,247,240,.88); backdrop-filter:blur(12px); cursor:pointer; font-size:.67rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; transition:background 180ms ease,border-color 180ms ease,color 180ms ease,transform 180ms var(--ease-out); }
     .treasure-control:hover { border-color:var(--treasure-champagne); background:rgba(118,43,70,.76); color:#fffaf4; transform:translateY(-2px); }
-    .treasure-page.is-paused :where(.treasure-photo,.photo-paper,.orbit,.star,.galaxy-core::before,.galaxy-core::after,.core-halo) { animation-play-state:paused; }
+    .treasure-page.is-paused :where(.treasure-photo,.photo-paper) { animation-play-state:paused; }
     .pause-icon { display:inline-flex; gap:3px; }
     .pause-icon i { display:block; width:2px; height:11px; background:currentColor; }
     .treasure-page.is-paused .pause-icon i { width:0; height:0; border-top:6px solid transparent; border-bottom:6px solid transparent; border-left:8px solid currentColor; }
     .treasure-page.is-paused .pause-icon i + i { display:none; }
     .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
     @keyframes treasure-paper-in { 0% { opacity:0; filter:blur(11px); transform:translateY(10px) rotate(-8deg) scale(.7); } 17% { opacity:.98; filter:blur(0); transform:translateY(0) rotate(0deg) scale(1); } 68% { opacity:.96; filter:blur(0); transform:translateY(-3px) rotate(1deg) scale(1); } 100% { opacity:0; filter:blur(7px); transform:translateY(-12px) rotate(6deg) scale(.82); } }
-    @keyframes orbit-breathe { from { opacity:.46; transform:rotate(-3deg) scale(.98); } to { opacity:1; transform:rotate(3deg) scale(1.02); } }
-    @keyframes star-twinkle { 0%,100% { opacity:.36; transform:scale(.72); } 50% { opacity:.94; transform:scale(1.12); } }
-    @keyframes core-pulse { 0%,100% { opacity:.38; transform:scale(.96); } 50% { opacity:.9; transform:scale(1.04); } }
-    @keyframes panel-in { from { opacity:0; transform:translateY(10px) scale(.98); } to { opacity:1; transform:none; } }
     @media (prefers-reduced-motion:reduce) {
-      .treasure-photo,.photo-paper,.orbit,.star,.galaxy-core::before,.galaxy-core::after,.core-halo,.treasure-memory-panel { animation:none!important; }
+      .treasure-photo,.photo-paper,.treasure-memory-panel { animation:none!important; }
       .treasure-photo { opacity:1; filter:none; transform:translate(-50%,-50%) rotate(0deg) scale(1); }
       .photo-paper { opacity:.86; filter:none; transform:none; }
       .treasure-photo.is-selected { transform:translate(-50%,-50%) scale(1); }
-      .treasure-control { transition:none; }
-      .treasure-control:hover { transform:none; }
+      .treasure-control,.music-icon-button,.music-play-button,.music-track { transition:none; }
+      .treasure-control:hover,.music-icon-button:hover,.music-play-button:hover,.music-track:hover { transform:none; }
+    }
+
+    .love-audio-source { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
+    .music-column {
+      display:grid;
+      align-content:center;
+      gap:clamp(1rem,2.5vw,1.75rem);
+      min-width:0;
+    }
+    .record-stage {
+      position:relative;
+      width:min(100%,20rem);
+      aspect-ratio:1;
+      margin:0 auto;
+      pointer-events:none;
+      transform:none;
+    }
+    .record-halo { position:absolute; inset:8%; border-radius:50%; background:rgba(238,162,179,.25); filter:blur(42px); opacity:.78; }
+    .vinyl-record { position:absolute; inset:8%; overflow:hidden; border:1px solid rgba(244,211,160,.5); border-radius:50%; background:#0b080d; box-shadow:0 24px 62px rgba(0,0,0,.58),inset 0 0 0 10px rgba(255,255,255,.02),0 0 46px rgba(238,162,179,.16); }
+    .vinyl-disc-face { position:absolute; inset:0; overflow:hidden; border-radius:50%; background:repeating-radial-gradient(circle,#0b080d 0 2px,#1c0e17 2.5px 3.5px,#08060a 4px 5px); transform-origin:center; animation:vinyl-spin 15s linear infinite; animation-play-state:paused; }
+    .treasure-page.is-playing .vinyl-disc-face { animation-play-state:running; }
+    .vinyl-grooves { position:absolute; inset:6%; border:1px solid rgba(255,255,255,.08); border-radius:50%; box-shadow:inset 0 0 0 7px rgba(255,255,255,.025),inset 0 0 0 14px rgba(0,0,0,.28),inset 0 0 0 22px rgba(255,255,255,.025),inset 0 0 0 31px rgba(0,0,0,.28); }
+    .vinyl-sheen { position:absolute; inset:0; border-radius:50%; background:linear-gradient(116deg,transparent 32%,rgba(255,255,255,.13) 43%,transparent 51%,rgba(238,162,179,.08) 68%,transparent 78%); mix-blend-mode:screen; }
+    .vinyl-label { position:absolute; top:50%; left:50%; display:grid; width:33%; aspect-ratio:1; place-content:center; border:1px solid rgba(255,247,240,.42); border-radius:50%; background:radial-gradient(circle at 36% 30%,#e8b5be,#813449 72%); color:#fff4e9; font-family:var(--font-display); font-size:clamp(.8rem,1.4vw,1.1rem); line-height:.72; text-align:center; transform:translate(-50%,-50%); }
+    .vinyl-label i { color:#f6d7a7; font-style:normal; }
+    .vinyl-hole { position:absolute; top:50%; left:50%; width:6px; height:6px; border:1px solid rgba(255,247,240,.78); border-radius:50%; background:#1a0b13; transform:translate(-50%,-50%); }
+    .record-arm { position:absolute; top:7%; right:0; width:38%; height:5px; border-radius:999px; background:linear-gradient(90deg,#f4d3a0,#fff6e8); box-shadow:0 0 10px rgba(244,211,160,.36); transform:rotate(-24deg); transform-origin:right center; transition:transform 900ms var(--ease-cinematic); }
+    .treasure-page.is-playing .record-arm { transform:rotate(-8deg); }
+    .record-needle { position:absolute; right:-2px; bottom:-7px; width:2px; height:12px; background:#e99aaa; transform:rotate(25deg); transform-origin:top center; }
+    .music-panel {
+      position:relative;
+      display:grid;
+      gap:.65rem;
+      width:100%;
+      min-width:0;
+      padding:1rem;
+      border:1px solid rgba(239,210,165,.24);
+      border-radius:22px;
+      background:linear-gradient(145deg,rgba(44,14,29,.94),rgba(16,7,13,.94));
+      box-shadow:0 24px 64px rgba(0,0,0,.36),0 0 34px rgba(238,162,179,.1);
+      backdrop-filter:blur(18px) saturate(1.06);
+    }
+    .music-panel-header { display:grid; gap:.3rem; min-width:0; }
+    .music-panel-header p { margin:0; color:rgba(244,211,160,.74); font-size:.54rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; }
+    .music-panel-header p span { margin:0 .35rem; color:var(--treasure-rose); }
+    .music-panel-header h2 { margin:0; color:#fff7f0; font-family:var(--font-display); font-size:clamp(1.3rem,2.1vw,1.8rem); font-weight:400; line-height:1.08; overflow-wrap:anywhere; }
+    .now-playing { display:grid; gap:.22rem; min-width:0; padding:.72rem .8rem; border-left:2px solid var(--treasure-rose); background:rgba(255,247,240,.045); }
+    .now-playing p { margin:0; color:rgba(244,211,160,.7); font-size:.54rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+    .now-playing strong { min-width:0; overflow:hidden; color:#fff9f1; font-family:var(--font-display); font-size:1.16rem; font-weight:400; text-overflow:ellipsis; white-space:nowrap; }
+    .now-playing span { color:rgba(255,247,240,.55); font-size:.6rem; letter-spacing:.05em; text-transform:uppercase; }
+    .autoplay-hint,.audio-error { margin:0; color:rgba(255,247,240,.62); font-size:.62rem; line-height:1.45; }
+    .audio-error { color:#f3b4be; }
+    .autoplay-fallback { width:100%; min-height:44px; border:1px solid var(--treasure-champagne); border-radius:999px; background:var(--treasure-champagne); color:#26101b; cursor:pointer; font-size:.65rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    .autoplay-fallback:hover { background:#fff0cf; }
+    .music-transport { display:flex; align-items:center; justify-content:center; gap:1.1rem; }
+    .music-icon-button,.music-play-button { display:grid; place-items:center; border:0; cursor:pointer; }
+    .music-icon-button { width:44px; height:44px; background:transparent; color:rgba(255,247,240,.75); font-family:Georgia,serif; font-size:1.25rem; transition:color 180ms ease,transform 180ms var(--ease-out); }
+    .music-icon-button:hover { color:var(--treasure-champagne); transform:scale(1.1); }
+    .music-play-button { width:52px; height:52px; border:1px solid rgba(244,211,160,.72); border-radius:50%; background:var(--treasure-champagne); color:#26101b; font-size:.95rem; box-shadow:0 0 24px rgba(244,211,160,.18); transition:background 180ms ease,transform 180ms var(--ease-out); }
+    .music-play-button:hover { background:#fff0cf; transform:scale(1.06); }
+    .music-progress { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:.5rem; min-width:0; color:rgba(255,247,240,.5); font-size:.55rem; }
+    .music-progress-range,.music-volume input { width:100%; height:3px; accent-color:var(--treasure-rose); cursor:pointer; }
+    .music-progress-range:disabled { cursor:default; opacity:.4; }
+    .music-volume { display:flex; align-items:center; gap:.5rem; color:rgba(244,211,160,.62); font-size:.75rem; }
+    .music-volume input { flex:1; min-width:0; }
+    .music-playlist { display:grid; gap:.28rem; min-width:0; margin:0; padding:0; list-style:none; }
+    .music-track { display:grid; grid-template-columns:1.5rem minmax(0,1fr) auto; align-items:center; gap:.55rem; width:100%; min-height:48px; padding:.3rem .48rem; border:1px solid transparent; border-radius:12px; background:transparent; color:rgba(255,247,240,.7); cursor:pointer; text-align:left; transition:background 180ms ease,border-color 180ms ease,color 180ms ease,transform 180ms var(--ease-out); }
+    .music-track:hover,.music-track:focus-visible { border-color:rgba(244,211,160,.28); background:rgba(255,247,240,.06); color:#fff9f1; outline:0; transform:translateX(2px); }
+    .music-track.is-active { border-color:rgba(238,162,179,.35); background:rgba(118,43,70,.34); color:#fff9f1; }
+    .track-index { color:rgba(244,211,160,.52); font-size:.57rem; font-weight:700; letter-spacing:.08em; }
+    .music-track.is-active .track-index { color:var(--treasure-rose); }
+    .track-copy { display:grid; min-width:0; gap:.16rem; }
+    .track-copy strong { min-width:0; overflow:hidden; font-family:var(--font-display); font-size:.9rem; font-weight:400; text-overflow:ellipsis; white-space:nowrap; }
+    .track-copy small { overflow:hidden; color:rgba(255,247,240,.4); font-size:.5rem; letter-spacing:.08em; text-overflow:ellipsis; text-transform:uppercase; white-space:nowrap; }
+    .track-state { display:grid; min-width:2.2rem; place-items:center; color:rgba(244,211,160,.58); font-size:.55rem; }
+    .track-state i { display:block; width:2px; height:12px; background:var(--treasure-rose); animation:equalizer 720ms ease-in-out infinite alternate; }
+    .track-state i:nth-child(2) { animation-delay:180ms; }
+    .track-state i:nth-child(3) { animation-delay:360ms; }
+    .track-state:has(i) { display:flex; align-items:center; justify-content:center; gap:3px; }
+    .music-return,.stream-control { justify-content:center; }
+    .treasure-page.is-playing .record-halo { animation:halo-pulse 3.8s ease-in-out infinite alternate; }
+    @keyframes vinyl-spin { to { transform:rotate(360deg); } }
+    @keyframes equalizer { from { height:4px; opacity:.45; } to { height:15px; opacity:1; } }
+    @keyframes halo-pulse { from { opacity:.45; transform:scale(.9); } to { opacity:.9; transform:scale(1.08); } }
+
+    @media (max-width:959px) {
+      .treasure-layout { grid-template-columns:minmax(0,1fr); min-height:0; }
+      .treasure-artboard { min-height:0; }
+      .music-column { grid-template-columns:minmax(12rem,.7fr) minmax(0,1.3fr); align-items:center; }
+      .record-stage { width:min(100%,18rem); }
     }
     @media (max-width:680px) {
-      .treasure-stage { min-height:calc(100dvh - 116px); }
-      .treasure-stage::before { inset:.65rem; }
-      .treasure-heading { top:2.8rem; }
+      .treasure-page { width:calc(100% - .6rem); margin:.3rem auto; border-radius:24px; }
+      .treasure-stage { min-height:0; }
+      .treasure-layout { gap:1.15rem; padding:.7rem; }
+      .treasure-artboard { grid-template-rows:auto minmax(25rem,1fr) auto; border-radius:18px; }
+      .treasure-heading { padding:1.5rem .9rem .75rem; }
+      .treasure-heading h1 { max-width:100%; font-size:clamp(2rem,9.7vw,3.8rem); }
       .treasure-kicker { max-width:18rem; margin-bottom:.85rem; font-size:.53rem; line-height:1.7; }
-      h1 { max-width:20rem; font-size:clamp(2.05rem,9.7vw,3.8rem); }
       .treasure-subtitle { max-width:18rem; margin-top:1rem; font-size:.75rem; }
       .treasure-guidance { margin-top:.72rem; font-size:.51rem; letter-spacing:.1em; }
-      .galaxy-orbits { inset:18% 0 12%; width:100%; height:70%; }
-      .galaxy-core { top:54%; width:16rem; opacity:.68; }
+      .treasure-visual-zone { min-height:clamp(25rem,100vw,32rem); }
+      .galaxy-core { width:min(65vw,17rem); }
       .core-seal { width:3.35rem; height:3.35rem; font-size:.75rem; }
-      .treasure-photo { width:clamp(5.9rem,24vw,7.5rem); }
+      .treasure-photo { width:clamp(5.7rem,24vw,7.5rem); max-width:30%; }
       .photo-paper { padding:.24rem .24rem .82rem; }
-      .treasure-note { bottom:7.6rem; font-size:.76rem; }
-      .treasure-memory-panel { bottom:9.2rem; width:min(calc(100% - 1.6rem),20rem); padding:.75rem 1.7rem .72rem; }
+      .treasure-footer { padding:.8rem .7rem 1rem; }
+      .treasure-note { min-height:2rem; padding-inline:.25rem; font-size:.76rem; }
+      .treasure-memory-panel { padding:.85rem 2.2rem .85rem .9rem; }
       .treasure-memory-panel h2 { font-size:1.05rem; }
       .panel-caption { font-size:.7rem; }
-      .treasure-bottom { right:.8rem; bottom:max(.82rem,env(safe-area-inset-bottom)); left:.8rem; }
       .stream-counter { gap:.4rem; font-size:.5rem; }
       .stream-counter i { width:1.25rem; }
       .stream-counter small { font-size:.47rem; }
-      .treasure-control { flex:1; justify-content:center; min-height:48px; padding-inline:.48rem; font-size:.55rem; letter-spacing:.06em; }
-      .star--one { left:6%; }
-      .star--three { right:4%; }
+      .music-column { grid-template-columns:minmax(0,1fr); gap:1rem; }
+      .record-stage { width:min(58vw,14rem); }
+      .music-panel { padding:.8rem; border-radius:18px; }
+      .music-panel-header h2 { font-size:1.25rem; }
+      .now-playing { padding:.55rem .65rem; }
+      .now-playing strong { font-size:1rem; }
+      .music-transport { gap:.8rem; }
+      .music-play-button { width:46px; height:46px; }
+      .music-track { min-height:48px; padding:.28rem .35rem; }
+      .track-copy strong { font-size:.78rem; }
+      .track-copy small { font-size:.43rem; }
+      .music-return { min-height:44px; font-size:.56rem; }
     }
-    @media (max-width:360px) {
-      .treasure-heading { top:2.4rem; }
-      h1 { font-size:2rem; }
-      .treasure-photo { width:5.7rem; }
-      .treasure-note { bottom:7.45rem; font-size:.7rem; }
-      .treasure-memory-panel { bottom:9rem; }
+    @media (prefers-reduced-motion:reduce) {
+      .vinyl-record,.vinyl-disc-face,.treasure-page.is-playing .record-halo,.track-state i { animation:none; }
+      .record-arm { transform:rotate(-14deg); transition:none; }
     }
   `]
 })
@@ -504,9 +657,6 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
   private readonly memoryService = inject(MemoryService);
   private readonly router = inject(Router);
 
-  @ViewChild('stage') private stageRef?: ElementRef<HTMLElement>;
-  @ViewChild('record') private recordRef?: ElementRef<HTMLElement>;
-  @ViewChild('panel') private panelRef?: ElementRef<HTMLElement>;
   @ViewChild('audio') private audioRef?: ElementRef<HTMLAudioElement>;
   protected readonly tracks = LOVE_TRACKS;
   protected readonly photos: readonly MemoryMedia[] = this.memoryService.getAllImageMedia();
@@ -521,9 +671,6 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
   protected readonly autoplayBlocked = signal(false);
   protected readonly audioError = signal(false);
   protected readonly volume = signal(.72);
-  protected readonly panelPosition = signal<PanelPosition | null>(null);
-  protected readonly panelDragging = signal(false);
-  protected readonly panelDragStatus = signal('Menu đang ở vị trí mặc định.');
   protected readonly activeTrack = computed(() => {
     const track = LOVE_TRACKS[this.activeTrackIndex()];
     return { ...track, duration: this.trackDurations()[track.id] ?? track.duration };
@@ -551,7 +698,6 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
   private shouldResumeAudio = false;
   private pendingAudioPlay = false;
   private audioPlayWasAutoplay = false;
-  private dragSession?: DragSession;
   private order: readonly MemoryMedia[] = [];
   private cursor = 0;
   private slotCursor = 0;
@@ -577,32 +723,14 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
       audio.volume = this.volume();
       this.playAudio(true);
     }
-    window.requestAnimationFrame(() => this.reflowPhotos());
   }
 
   ngOnDestroy(): void {
     this.stopStream();
     this.shouldResumeAudio = false;
     this.pendingAudioPlay = false;
-    this.endPanelDrag();
     this.audioRef?.nativeElement.pause();
     this.mediaQuery?.removeEventListener?.('change', this.mediaQueryListener);
-  }
-
-  @HostListener('window:resize')
-  protected handleWindowResize(): void {
-    const current = this.panelPosition();
-    if (current && !this.setPanelPosition(current, false)) {
-      const fallback = this.findSafePanelPosition(current);
-      if (fallback) this.setPanelPosition(fallback, false);
-      else this.resetPanelPosition();
-    }
-    this.reflowPhotos(this.panelPosition() || undefined);
-  }
-
-  @HostListener('window:blur')
-  protected handleWindowBlur(): void {
-    this.endPanelDrag();
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -629,215 +757,9 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
     this.selectedKey.set(null);
   }
 
-  protected startPanelDrag(event: PointerEvent): void {
-    const panel = this.panelRef?.nativeElement;
-    const stage = this.stageRef?.nativeElement;
-    if (!panel || !stage || (event.pointerType === 'mouse' && event.button !== 0)) return;
-
-    const stageRect = stage.getBoundingClientRect();
-    const panelRect = panel.getBoundingClientRect();
-    const startPosition = this.panelPosition() || {
-      left: panelRect.left - stageRect.left,
-      top: panelRect.top - stageRect.top
-    };
-    const clampedStart = this.clampPanelPosition(startPosition);
-    const safeStart = this.findSafePanelPosition(clampedStart) || clampedStart;
-    this.panelPosition.set(safeStart);
-    this.reflowPhotos(safeStart);
-    this.dragSession = {
-      pointerId: event.pointerId,
-      originX: event.clientX,
-      originY: event.clientY,
-      startLeft: safeStart.left,
-      startTop: safeStart.top
-    };
-    this.panelDragging.set(true);
-    this.panelDragStatus.set('Đang kéo menu phát nhạc.');
-    try { (event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId); } catch { /* Synthetic test events may not have an active pointer. */ }
-    event.preventDefault();
-  }
-
-  protected movePanelDrag(event: PointerEvent): void {
-    const drag = this.dragSession;
-    if (!drag || event.pointerId !== drag.pointerId) return;
-
-    const candidate = this.clampPanelPosition({
-      left: drag.startLeft + event.clientX - drag.originX,
-      top: drag.startTop + event.clientY - drag.originY
-    });
-    if (this.setPanelPosition(candidate, false)) this.panelDragStatus.set('Menu đang ở vị trí an toàn.');
-    event.preventDefault();
-  }
-
-  protected endPanelDrag(event?: PointerEvent): void {
-    if (event && this.dragSession && event.pointerId !== this.dragSession.pointerId) return;
-    if (event) {
-      const target = event.currentTarget as HTMLElement;
-      try {
-        if (target.hasPointerCapture?.(event.pointerId)) target.releasePointerCapture(event.pointerId);
-      } catch { /* Ignore a pointer that was cancelled by the browser. */ }
-      event.preventDefault();
-    }
-    if (!this.dragSession) return;
-    this.dragSession = undefined;
-    this.panelDragging.set(false);
-    this.panelDragStatus.set('Đã đặt menu ở vị trí an toàn.');
-  }
-
-  protected onPanelKeydown(event: KeyboardEvent): void {
-    const direction: Record<string, PanelPosition> = {
-      ArrowLeft: { left: -24, top: 0 },
-      ArrowRight: { left: 24, top: 0 },
-      ArrowUp: { left: 0, top: -24 },
-      ArrowDown: { left: 0, top: 24 }
-    };
-    if (event.key === 'Home') {
-      this.resetPanelPosition();
-      event.preventDefault();
-      return;
-    }
-    const delta = direction[event.key];
-    if (!delta) return;
-    const current = this.getCurrentPanelPosition();
-    if (!current) return;
-    if (this.setPanelPosition({ left: current.left + delta.left, top: current.top + delta.top }, true)) event.preventDefault();
-  }
-
-  protected resetPanelPosition(): void {
-    this.endPanelDrag();
-    this.panelPosition.set(null);
-    this.panelDragStatus.set('Menu đã về vị trí mặc định.');
-    window.requestAnimationFrame(() => this.reflowPhotos());
-  }
-
-  private setPanelPosition(position: PanelPosition, announce: boolean): boolean {
-    const safePosition = this.clampPanelPosition(position);
-    if (!this.canPlacePanel(safePosition)) {
-      if (announce) this.panelDragStatus.set('Vị trí này không đủ khoảng trống cho ảnh.');
-      return false;
-    }
-    this.panelPosition.set(safePosition);
-    this.reflowPhotos(safePosition);
-    if (announce) this.panelDragStatus.set('Đã di chuyển menu phát nhạc.');
-    return true;
-  }
-
-  private getCurrentPanelPosition(): PanelPosition | null {
-    const position = this.panelPosition();
-    if (position) return position;
-    const panel = this.panelRef?.nativeElement;
-    const stage = this.stageRef?.nativeElement;
-    if (!panel || !stage) return null;
-    const stageRect = stage.getBoundingClientRect();
-    const panelRect = panel.getBoundingClientRect();
-    return this.clampPanelPosition({ left: panelRect.left - stageRect.left, top: panelRect.top - stageRect.top });
-  }
-
-  private clampPanelPosition(position: PanelPosition): PanelPosition {
-    const stage = this.stageRef?.nativeElement;
-    const panel = this.panelRef?.nativeElement;
-    if (!stage || !panel) return position;
-    const stageRect = stage.getBoundingClientRect();
-    const inset = 16;
-    return {
-      left: Math.min(Math.max(inset, position.left), Math.max(inset, stageRect.width - panel.offsetWidth - inset)),
-      top: Math.min(Math.max(inset, position.top), Math.max(inset, stageRect.height - panel.offsetHeight - inset))
-    };
-  }
-
-  private canPlacePanel(position: PanelPosition): boolean {
-    const panelRect = this.getPanelRect(position);
-    const recordRect = this.getElementRect(this.recordRef?.nativeElement);
-    const headingRect = this.getElementRect(this.stageRef?.nativeElement.querySelector('.treasure-heading'));
-    if (!panelRect || !recordRect || !headingRect) return false;
-    if (this.rectsOverlap(panelRect, recordRect, 12) || this.rectsOverlap(panelRect, headingRect, 12)) return false;
-    return this.findPhotoPlacements(this.activePhotos().length, panelRect, recordRect, headingRect).length === this.activePhotos().length;
-  }
-
-  private findSafePanelPosition(preferred: PanelPosition): PanelPosition | null {
-    const stage = this.stageRef?.nativeElement;
-    const panel = this.panelRef?.nativeElement;
-    if (!stage || !panel) return null;
-    const stageRect = stage.getBoundingClientRect();
-    const inset = 16;
-    const maxLeft = Math.max(inset, stageRect.width - panel.offsetWidth - inset);
-    const maxTop = Math.max(inset, stageRect.height - panel.offsetHeight - inset);
-    const candidates = [
-      this.clampPanelPosition(preferred),
-      { left: inset, top: inset },
-      { left: maxLeft, top: inset },
-      { left: inset, top: maxTop },
-      { left: maxLeft, top: maxTop },
-      { left: Math.max(inset, (stageRect.width - panel.offsetWidth) / 2), top: Math.max(inset, (stageRect.height - panel.offsetHeight) / 2) }
-    ];
-    return candidates.find((candidate) => this.canPlacePanel(candidate)) || null;
-  }
-
-  private reflowPhotos(panelPosition?: PanelPosition | null): void {
-    if (!this.stageRef?.nativeElement || !this.panelRef?.nativeElement || !this.activePhotos().length) return;
-    const panelRect = this.getPanelRect(panelPosition === undefined ? undefined : panelPosition);
-    const recordRect = this.getElementRect(this.recordRef?.nativeElement);
-    const headingRect = this.getElementRect(this.stageRef.nativeElement.querySelector('.treasure-heading'));
-    if (!panelRect || !recordRect || !headingRect) return;
-    const placements = this.findPhotoPlacements(this.activePhotos().length, panelRect, recordRect, headingRect);
-    if (placements.length !== this.activePhotos().length) return;
-    this.activePhotos.update((frames) => frames.map((frame, index) => ({ ...frame, ...placements[index] })));
-  }
-
-  private findPhotoPlacements(count: number, panelRect: LayoutRect, recordRect: LayoutRect, headingRect: LayoutRect): readonly PhotoPlacement[] {
-    const stage = this.stageRef?.nativeElement;
-    if (!stage) return [];
-    const stageRect = stage.getBoundingClientRect();
-    const used: LayoutRect[] = [];
-    const placements: PhotoPlacement[] = [];
-    for (const placement of this.getPhotoPlacements()) {
-      const photoRect = this.getPhotoRect(placement, stageRect);
-      if (this.rectsOverlap(photoRect, panelRect, 10) || this.rectsOverlap(photoRect, recordRect, 10) || this.rectsOverlap(photoRect, headingRect, 10)) continue;
-      if (used.some((rect) => this.rectsOverlap(photoRect, rect, 7))) continue;
-      used.push(photoRect);
-      placements.push(placement);
-      if (placements.length === count) break;
-    }
-    return placements;
-  }
-
   private getPhotoPlacements(): readonly PhotoPlacement[] {
     if (this.activeLimit <= 6) return MOBILE_PHOTO_PLACEMENTS;
     return window.innerWidth <= 900 ? TABLET_PHOTO_PLACEMENTS : DESKTOP_PHOTO_PLACEMENTS;
-  }
-
-  private getPanelRect(position?: PanelPosition | null): LayoutRect | null {
-    const panel = this.panelRef?.nativeElement;
-    const stage = this.stageRef?.nativeElement;
-    if (!panel || !stage) return null;
-    const stageRect = stage.getBoundingClientRect();
-    if (position) return this.makeRect(stageRect.left + position.left, stageRect.top + position.top, panel.offsetWidth, panel.offsetHeight);
-    return this.getElementRect(panel);
-  }
-
-  private getPhotoRect(placement: PhotoPlacement, stageRect: DOMRect): LayoutRect {
-    const mobile = this.mediaQuery?.matches ?? window.innerWidth <= 680;
-    const width = mobile
-      ? Math.min(120, Math.max(94, window.innerWidth * .24))
-      : Math.min(136, Math.max(104, window.innerWidth * .1));
-    const height = width * 1.25;
-    const centerX = stageRect.left + stageRect.width * placement.left / 100;
-    const centerY = stageRect.top + stageRect.height * placement.top / 100;
-    return this.makeRect(centerX - width / 2, centerY - height / 2, width, height);
-  }
-
-  private getElementRect(element: HTMLElement | null | undefined): LayoutRect | null {
-    if (!element) return null;
-    const rect = element.getBoundingClientRect();
-    return this.makeRect(rect.left, rect.top, rect.width, rect.height);
-  }
-
-  private makeRect(left: number, top: number, width: number, height: number): LayoutRect {
-    return { left, top, right: left + width, bottom: top + height, width, height };
-  }
-
-  private rectsOverlap(first: LayoutRect, second: LayoutRect, gap: number): boolean {
-    return first.left < second.right + gap && first.right > second.left - gap && first.top < second.bottom + gap && first.bottom > second.top - gap;
   }
 
   protected playAudio(isAutoplay = false): void {
@@ -1055,20 +977,11 @@ export class LoveTreasurePage implements AfterViewInit, OnInit, OnDestroy {
     this.sequencePosition.set(((this.sequenceCount - 1) % this.totalPhotos) + 1);
     if (this.sequenceCount % 4 === 0) this.copyIndex.set((this.copyIndex() + 1) % TREASURE_LINES.length);
     this.activePhotos.update((frames) => [...frames.filter((item) => item.slot !== slot), frame].sort((a, b) => a.slot - b.slot));
-    window.requestAnimationFrame(() => this.reflowPhotos(this.panelPosition() || undefined));
   }
 
   private getPlacement(slot: number): { left: number; top: number } {
-    const fallbackSlots = this.activeLimit <= 6 ? MOBILE_PHOTO_PLACEMENTS : DESKTOP_PHOTO_PLACEMENTS;
-    const stage = this.stageRef?.nativeElement;
-    const record = this.getElementRect(this.recordRef?.nativeElement);
-    const heading = this.getElementRect(stage?.querySelector('.treasure-heading'));
-    const panel = this.getPanelRect(this.panelPosition());
-    if (stage && record && heading && panel) {
-      const safeSlots = this.findPhotoPlacements(this.activeLimit, panel, record, heading);
-      if (safeSlots.length === this.activeLimit) return safeSlots[slot % safeSlots.length];
-    }
-    return fallbackSlots[slot % fallbackSlots.length];
+    const placements = this.getPhotoPlacements();
+    return placements[slot % placements.length];
   }
 
   private nextPhoto(activeIds: ReadonlySet<string>): MemoryMedia {
