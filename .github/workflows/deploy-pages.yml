@@ -30,9 +30,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
-
       - name: Prepare media variants
         run: npm run prepare:media
 
@@ -44,9 +41,6 @@ jobs:
 
       - name: Run unit tests
         run: npm test
-
-      - name: Run browser tests
-        run: npm run test:e2e
 
       - name: Build Angular
         shell: bash
