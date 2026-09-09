@@ -18,6 +18,7 @@ declare module 'three' {
     set(x: number, y: number, z: number): this;
     setFromMatrixPosition(matrix: Matrix4): this;
     copy(vector: Vector3): this;
+    clone(): Vector3;
     add(vector: Vector3): this;
     addScaledVector(vector: Vector3, scalar: number): this;
     sub(vector: Vector3): this;
@@ -26,10 +27,19 @@ declare module 'three' {
     transformDirection(matrix: Matrix4): this;
     normalize(): this;
     lengthSq(): number;
+    project(camera: Camera): this;
   }
 
   export class Quaternion {}
-  export class Matrix4 {}
+  export class Matrix4 {
+    makeTranslation(x: number, y: number, z: number): this;
+  }
+
+  export class Box3 {
+    min: Vector3;
+    max: Vector3;
+    setFromObject(object: Object3D): this;
+  }
 
   export class Fog {
     constructor(color: string | number, near: number, far: number);
@@ -39,8 +49,10 @@ declare module 'three' {
     name: string;
     position: Vector3;
     rotation: { x: number; y: number; z: number };
-    scale: { z: number; set(x: number, y: number, z: number): void; setScalar(value: number): void };
+    scale: { x: number; y: number; z: number; set(x: number, y: number, z: number): void; setScalar(value: number): void };
+    visible: boolean;
     children: Object3D[];
+    parent: Object3D | null;
     userData: Record<string, unknown>;
     matrixWorld: Matrix4;
     quaternion: Quaternion;
@@ -48,6 +60,7 @@ declare module 'three' {
     getWorldPosition(target: Vector3): this;
     addEventListener(type: string, listener: () => void): void;
     traverse(callback: (object: Object3D) => void): void;
+    clear(): void;
   }
 
   export class Group extends Object3D {}
@@ -63,6 +76,7 @@ declare module 'three' {
   export class PerspectiveCamera extends Camera {
     constructor(fov: number, aspect: number, near: number, far: number);
     aspect: number;
+    far: number;
     updateProjectionMatrix(): void;
     lookAt(x: number, y: number, z: number): void;
   }
@@ -78,6 +92,14 @@ declare module 'three' {
 
   export class BoxGeometry extends BufferGeometry {
     constructor(width: number, height: number, depth: number);
+  }
+
+  export class SphereGeometry extends BufferGeometry {
+    constructor(radius: number, widthSegments?: number, heightSegments?: number, phiStart?: number, phiLength?: number, thetaStart?: number, thetaLength?: number);
+  }
+
+  export class CylinderGeometry extends BufferGeometry {
+    constructor(radiusTop: number, radiusBottom: number, height: number, radialSegments?: number);
   }
 
   export class Texture {
@@ -110,10 +132,45 @@ declare module 'three' {
     constructor(parameters?: Record<string, unknown>);
   }
 
+  export class AnimationClip {
+    name: string;
+  }
+
+  export class AnimationAction {
+    enabled: boolean;
+    paused: boolean;
+    timeScale: number;
+    clampWhenFinished: boolean;
+    reset(): this;
+    play(): this;
+    stop(): this;
+    fadeIn(duration: number): this;
+    fadeOut(duration: number): this;
+    setLoop(mode: number, repetitions: number): this;
+  }
+
+  export class AnimationMixer {
+    constructor(root: Object3D);
+    clipAction(clip: AnimationClip): AnimationAction;
+    update(delta: number): void;
+  }
+
   export class Mesh extends Object3D {
     constructor(geometry: BufferGeometry, material: Material | Material[]);
     geometry: BufferGeometry;
     material: Material | Material[];
+  }
+
+  export class LOD extends Object3D {
+    addLevel(object: Object3D, distance?: number, hysteresis?: number): this;
+    update(camera: Camera): void;
+  }
+
+  export class InstancedMesh extends Mesh {
+    constructor(geometry: BufferGeometry, material: Material, count: number);
+    count: number;
+    instanceMatrix: { needsUpdate: boolean };
+    setMatrixAt(index: number, matrix: Matrix4): void;
   }
 
   export class Line extends Object3D {
@@ -128,6 +185,11 @@ declare module 'three' {
 
   export class PointLight extends Object3D {
     constructor(color: string, intensity: number, distance: number, decay: number);
+  }
+
+  export class SpotLight extends Object3D {
+    constructor(color: string, intensity: number, distance: number, angle: number, penumbra: number, decay: number);
+    target: Object3D;
   }
 
   export class TextureLoader {

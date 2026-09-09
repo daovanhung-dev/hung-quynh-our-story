@@ -1,0 +1,76 @@
+{
+  "licensePolicy": "CC0 only",
+  "runtimeCdn": false,
+  "assets": [
+    {
+      "id": "gallery-architecture",
+      "kind": "environment",
+      "src": "museum-assets/procedural/gallery-architecture.json",
+      "sourceUrl": "https://polyhaven.com/license",
+      "license": "CC0"
+    },
+    {
+      "id": "gallery-props",
+      "kind": "prop",
+      "src": "museum-assets/procedural/gallery-props.json",
+      "sourceUrl": "https://polyhaven.com/license",
+      "license": "CC0"
+    },
+    {
+      "id": "visitor-a",
+      "kind": "visitor",
+      "src": "museum-assets/kenney/blocky-characters/character-a.glb",
+      "sourceUrl": "https://www.kenney.nl/assets/blocky-characters",
+      "license": "CC0"
+    },
+    {
+      "id": "visitor-b",
+      "kind": "visitor",
+      "src": "museum-assets/kenney/blocky-characters/character-b.glb",
+      "sourceUrl": "https://www.kenney.nl/assets/blocky-characters",
+      "license": "CC0"
+    },
+    {
+      "id": "visitor-c",
+      "kind": "visitor",
+      "src": "museum-assets/kenney/blocky-characters/character-c.glb",
+      "sourceUrl": "https://www.kenney.nl/assets/blocky-characters",
+      "license": "CC0"
+    },
+    {
+      "id": "visitor-d",
+      "kind": "visitor",
+      "src": "museum-assets/kenney/blocky-characters/character-d.glb",
+      "sourceUrl": "https://www.kenney.nl/assets/blocky-characters",
+      "license": "CC0"
+    },
+    {
+      "id": "visitor-e",
+      "kind": "visitor",
+      "src": "museum-assets/kenney/blocky-characters/character-e.glb",
+      "sourceUrl": "https://www.kenney.nl/assets/blocky-characters",
+      "license": "CC0"
+    },
+    {
+      "id": "visitor-f",
+      "kind": "visitor",
+      "src": "museum-assets/kenney/blocky-characters/character-f.glb",
+      "sourceUrl": "https://www.kenney.nl/assets/blocky-characters",
+      "license": "CC0"
+    },
+    {
+      "id": "visitor-g",
+      "kind": "visitor",
+      "src": "museum-assets/kenney/blocky-characters/character-g.glb",
+      "sourceUrl": "https://www.kenney.nl/assets/blocky-characters",
+      "license": "CC0"
+    },
+    {
+      "id": "visitor-h",
+      "kind": "visitor",
+      "src": "museum-assets/kenney/blocky-characters/character-h.glb",
+      "sourceUrl": "https://www.kenney.nl/assets/blocky-characters",
+      "license": "CC0"
+    }
+  ]
+}

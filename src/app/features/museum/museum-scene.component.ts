@@ -18,13 +18,23 @@ import * as THREE from 'three';
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
 import { VRButton } from 'three/addons/webxr/VRButton.js';
 import type { MuseumDisplay, MuseumRoom } from '../../core/models/museum.model';
+import { MuseumDialogueService } from '../../core/services/museum-dialogue.service';
+import { MuseumCrowdSystem, type MuseumDialogueBubble } from './museum-crowd-system';
+import {
+  getMuseumDisplaySlot,
+  getMuseumRoomLayout,
+  isMuseumPropPositionSafe,
+  type MuseumRoomLayout
+} from './museum-layout';
 
 interface RoomBounds {
   room: MuseumRoom;
   start: number;
   end: number;
   height: number;
+  layout: MuseumRoomLayout;
   group: THREE.Group;
+  built: boolean;
 }
 
 interface DisplayNode {
@@ -34,6 +44,14 @@ interface DisplayNode {
   imageMesh: THREE.Mesh;
   imageMaterial: THREE.MeshStandardMaterial;
   texture?: THREE.Texture;
+}
+
+interface TextureRequest {
+  displayId: string;
+  roomId: string;
+  url: string;
+  priority: number;
+  token: number;
 }
 
 type XRNavigator = Navigator & {
@@ -52,6 +70,19 @@ type XRNavigator = Navigator & {
       [class.is-reduced-motion]="reducedMotion"
       [attr.data-webgl-supported]="webglSupported()"
       [attr.data-xr-supported]="xrSupported()"
+      [attr.data-dialogue-count]="dialogueCount"
+      [attr.data-active-visitors]="activeVisitors()"
+      [attr.data-visitor-pool]="visitorPool()"
+      [attr.data-visitor-pose]="visitorPose()"
+      [attr.data-visitor-animation]="visitorAnimation()"
+      [attr.data-invalid-visitor-animations]="invalidVisitorAnimations()"
+      [attr.data-crowd-motion]="crowdMotion()"
+      [attr.data-visitor-position-hash]="visitorPositionHash()"
+      [attr.data-rendered-displays]="renderedDisplays()"
+      [attr.data-loaded-textures]="loadedTextures()"
+      [attr.data-texture-concurrency]="textureConcurrency()"
+      [attr.data-textures-pending]="texturesPending()"
+      data-photo-occlusion="clear"
     >
       <canvas
         #canvas
@@ -63,6 +94,16 @@ type XRNavigator = Navigator & {
         (pointerup)="onCanvasPointerUp($event)"
         (pointercancel)="onCanvasPointerUp($event)"
       ></canvas>
+
+      @if (dialogueBubbles().length) {
+        <div class="museum-dialogue-layer" aria-live="polite" aria-label="Lời trò chuyện của khách tham quan">
+          @for (bubble of dialogueBubbles(); track bubble.id) {
+            <div class="dialogue-bubble" [class]="'mood-' + bubble.mood" [style.left.%]="bubble.left" [style.top.%]="bubble.top">
+              <span class="dialogue-dot" aria-hidden="true">♡</span>{{ bubble.text }}
+            </div>
+          }
+        </div>
+      }
 
       @if (isLoading()) {
         <div class="scene-loading" aria-live="polite">
@@ -104,6 +145,12 @@ type XRNavigator = Navigator & {
     .museum-scene-shell { position:relative; width:100%; height:100%; min-height:clamp(480px,72svh,760px); overflow:hidden; background:radial-gradient(circle at 50% 40%,#4c2630 0,#201318 62%,#120a0d 100%); }
     .museum-canvas { display:block; width:100%; height:100%; min-height:clamp(480px,72svh,760px); cursor:grab; touch-action:none; }
     .museum-canvas:active { cursor:grabbing; }
+    .museum-dialogue-layer { position:absolute; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
+    .dialogue-bubble { position:absolute; width:min(230px,42%); padding:.62rem .72rem; border:1px solid rgba(255,253,249,.52); border-radius:1rem 1rem 1rem .25rem; background:rgba(255,248,234,.94); color:#47242e; box-shadow:0 10px 25px rgba(0,0,0,.18); font-family:var(--font-display, Georgia, serif); font-size:.8rem; line-height:1.32; transform:translate(-50%,-100%); }
+    .dialogue-bubble.mood-playful { background:#f3d6c1; }
+    .dialogue-bubble.mood-curious { background:#e4e7d5; }
+    .dialogue-bubble.mood-tender { background:#f2d9df; }
+    .dialogue-dot { margin-right:.25rem; color:#a85c6c; font-family:Georgia,serif; }
     .scene-loading,.scene-fallback { position:absolute; inset:50% auto auto 50%; display:grid; justify-items:center; gap:.75rem; width:min(86%,380px); padding:1.5rem; border:1px solid rgba(255,253,249,.22); background:rgba(28,15,19,.9); color:#fffdf9; text-align:center; transform:translate(-50%,-50%); box-shadow:0 18px 60px rgba(0,0,0,.28); }
     .scene-loading { pointer-events:none; }
     .scene-loading:not(:has(+ .scene-fallback)) { animation:scene-pulse 1.8s ease-in-out infinite; }
@@ -123,13 +170,17 @@ type XRNavigator = Navigator & {
 })
 export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy {
   private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly dialogueService = inject(MuseumDialogueService);
   private readonly raycaster = new THREE.Raycaster();
   private readonly pointer = new THREE.Vector2();
   private readonly keys = new Set<string>();
   private readonly textureLoader = new THREE.TextureLoader();
   private readonly roomBounds: RoomBounds[] = [];
   private readonly displayNodes = new Map<string, DisplayNode>();
-  private readonly roomTextures = new Set<string>();
+  private readonly selectablePhotoMeshes: THREE.Mesh[] = [];
+  private readonly textureQueue: TextureRequest[] = [];
+  private readonly textureStates = new Map<string, 'queued' | 'loading' | 'loaded' | 'failed'>();
+  private readonly desiredTextureIds = new Set<string>();
   private readonly lookPointer = { id: -1, x: 0, y: 0 };
   private readonly joystickPointer = { id: -1, x: 0, y: 0 };
   private readonly joystick = { x: 0, y: 0 };
@@ -147,18 +198,42 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
   private disposed = false;
   private totalLength = 18;
   private readonly direction = new THREE.Vector3();
+  private readonly rightDirection = new THREE.Vector3();
   private readonly movement = new THREE.Vector3();
   private readonly roomScratch = new THREE.Vector3();
+  private crowd?: MuseumCrowdSystem;
+  private lastCrowdHudUpdate = 0;
+  private lastTextureWindowUpdate = 0;
+  private lastTextureWindowZ = Number.NaN;
+  private textureRequestToken = 0;
+  private textureLoadingCount = 0;
+  private lastActiveRoomIndex = -1;
+  private textureNeighborDirection: -1 | 1 = 1;
 
   @ViewChild('canvas', { static: true }) private readonly canvasRef!: ElementRef<HTMLCanvasElement>;
   @Input() rooms: readonly MuseumRoom[] = [];
   @Output() readonly photoSelected = new EventEmitter<MuseumDisplay>();
   @Output() readonly roomChanged = new EventEmitter<string>();
   @Output() readonly xrAvailabilityChanged = new EventEmitter<boolean>();
+  @Output() readonly visitorCountChanged = new EventEmitter<number>();
+  @Output() readonly visitorPoolChanged = new EventEmitter<number>();
 
   protected readonly isLoading = signal(false);
   protected readonly webglSupported = signal<boolean | null>(null);
   protected readonly xrSupported = signal(false);
+  protected readonly activeVisitors = signal(0);
+  protected readonly visitorPool = signal(0);
+  protected readonly visitorPose = signal<'standing'>('standing');
+  protected readonly visitorAnimation = signal<'idle' | 'walk' | 'mixed' | 'reduced'>('idle');
+  protected readonly invalidVisitorAnimations = signal(0);
+  protected readonly dialogueBubbles = signal<readonly (MuseumDialogueBubble & { left: number; top: number })[]>([]);
+  protected readonly renderedDisplays = signal(0);
+  protected readonly loadedTextures = signal(0);
+  protected readonly textureConcurrency = signal(0);
+  protected readonly texturesPending = signal(0);
+  protected readonly crowdMotion = signal<'moving' | 'paused' | 'reduced'>('paused');
+  protected readonly visitorPositionHash = signal('');
+  protected readonly dialogueCount = this.dialogueService.getAll().length;
   protected touchDevice = false;
   protected reducedMotion = false;
   protected joystickX = 0;
@@ -192,7 +267,14 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
   }
 
   focusDisplay(displayId: string): void {
-    const node = this.displayNodes.get(displayId);
+    let node = this.displayNodes.get(displayId);
+    if (!node) {
+      const room = this.roomBounds.find((item) => item.room.displays.some((display) => display.id === displayId));
+      if (room) {
+        this.setActiveRoom(room, true);
+        node = this.displayNodes.get(displayId);
+      }
+    }
     if (!node || !this.camera) {
       return;
     }
@@ -299,10 +381,11 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
     try {
       this.renderer = new THREE.WebGLRenderer({
         canvas,
-        antialias: true,
+        antialias: !this.touchDevice,
         powerPreference: 'high-performance'
       });
-      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+      const maxPixelRatio = this.touchDevice ? 1.25 : 1.5;
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxPixelRatio));
       this.renderer.outputColorSpace = THREE.SRGBColorSpace;
       this.renderer.xr.enabled = true;
       this.webglSupported.set(true);
@@ -334,7 +417,19 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
     this.disposeScene();
     this.roomBounds.length = 0;
     this.displayNodes.clear();
-    this.roomTextures.clear();
+    this.selectablePhotoMeshes.length = 0;
+    this.textureQueue.length = 0;
+    this.textureStates.clear();
+    this.desiredTextureIds.clear();
+    this.textureRequestToken += 1;
+    this.textureLoadingCount = 0;
+    this.textureConcurrency.set(0);
+    this.texturesPending.set(0);
+    this.renderedDisplays.set(0);
+    this.loadedTextures.set(0);
+    this.lastTextureWindowUpdate = 0;
+    this.lastTextureWindowZ = Number.NaN;
+    this.lastActiveRoomIndex = -1;
     this.totalLength = 18;
 
     this.addLighting();
@@ -342,19 +437,50 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
 
     let cursor = 0;
     for (const room of this.rooms) {
-      const roomBounds = this.buildRoom(room, cursor);
+      const layout = getMuseumRoomLayout(room.displays.length);
+      const group = new THREE.Group();
+      group.name = `room-${room.id}`;
+      const roomBounds: RoomBounds = {
+        room,
+        start: cursor,
+        end: cursor + layout.depth,
+        height: layout.height,
+        layout,
+        group,
+        built: false
+      };
+      this.scene.add(group);
       this.roomBounds.push(roomBounds);
       cursor = roomBounds.end + 1.4;
     }
 
     this.totalLength = Math.max(cursor + 2, 18);
+    this.camera.far = Math.max(160, this.totalLength + 24);
+    this.camera.updateProjectionMatrix();
+    if (this.roomBounds.length && this.webglSupported()) {
+      this.crowd = new MuseumCrowdSystem(
+        this.roomBounds.map((item) => ({
+          id: item.room.id,
+          start: item.start,
+          end: item.end,
+          isArchive: item.room.isArchive
+        })),
+        this.dialogueService,
+        { mobile: this.touchDevice, reducedMotion: this.reducedMotion }
+      );
+      this.scene.add(this.crowd.group);
+      this.activeVisitors.set(this.crowd.maxVisitors);
+      this.visitorPool.set(this.crowd.maxVisitors);
+      this.visitorCountChanged.emit(this.crowd.maxVisitors);
+      this.visitorPoolChanged.emit(this.crowd.maxVisitors);
+    }
     if (this.roomBounds.length) {
       const first = this.roomBounds[0];
       this.camera.position.set(0, 1.65, -6.5);
       this.camera.lookAt(0, 1.7, first.start + 7);
       this.setActiveRoom(first, false);
     }
-    this.isLoading.set(false);
+    this.updateSceneMetrics();
   }
 
   private addLighting(): void {
@@ -366,6 +492,9 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
     const key = new THREE.PointLight('#ffd9b5', 2.2, 30, 1.7);
     key.position.set(0, 5.4, 2);
     this.scene.add(key);
+    const ceilingGlow = new THREE.PointLight('#b87983', 1.4, 46, 1.8);
+    ceilingGlow.position.set(0, 7, 20);
+    this.scene.add(ceilingGlow);
   }
 
   private addLobby(): void {
@@ -399,23 +528,52 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
     const entryPlaque = this.createTextPlaque('H ♡ Q · MEMORY MUSEUM', 0, 4.25, -0.35, 0.62);
     entryPlaque.rotation.y = Math.PI;
     lobby.add(entryPlaque);
+    this.addLobbyDetails(lobby);
     this.scene.add(lobby);
   }
 
-  private buildRoom(room: MuseumRoom, start: number): RoomBounds {
-    if (!this.scene) {
-      throw new Error('Museum scene is not ready');
+  private addLobbyDetails(lobby: THREE.Group): void {
+    const wood = new THREE.MeshStandardMaterial({ color: '#4c2b29', roughness: .78, metalness: .06 });
+    const champagne = new THREE.MeshStandardMaterial({ color: '#dcae72', roughness: .42, metalness: .58 });
+    const cream = new THREE.MeshStandardMaterial({ color: '#e7d2b8', roughness: .72 });
+    const columnGeometry = new THREE.BoxGeometry(.42, 6.2, .42);
+    for (const x of [-7.8, 7.8]) {
+      const column = new THREE.Mesh(columnGeometry, wood);
+      column.position.set(x, 3.1, -8.8);
+      lobby.add(column);
+      const capital = new THREE.Mesh(new THREE.BoxGeometry(.72, .18, .72), champagne);
+      capital.position.set(x, 6.2, -8.8);
+      lobby.add(capital);
+    }
+    const welcomeDesk = new THREE.Mesh(new THREE.BoxGeometry(4.4, .95, 1.1), wood);
+    welcomeDesk.position.set(0, .48, -5.2);
+    lobby.add(welcomeDesk);
+    const guestbook = new THREE.Mesh(new THREE.BoxGeometry(1.5, .12, .9), cream);
+    guestbook.position.set(0, 1.03, -5.2);
+    guestbook.rotation.y = -.12;
+    lobby.add(guestbook);
+    const lamp = new THREE.Mesh(new THREE.SphereGeometry(.22, 12, 8), champagne);
+    lamp.position.set(-1.35, 1.12, -5.2);
+    lobby.add(lamp);
+    const bench = new THREE.Mesh(new THREE.BoxGeometry(3.6, .28, .72), cream);
+    bench.position.set(0, .72, -1.75);
+    lobby.add(bench);
+    const benchLegs = new THREE.BoxGeometry(.18, .7, .18);
+    for (const x of [-1.35, 1.35]) {
+      const leg = new THREE.Mesh(benchLegs, wood);
+      leg.position.set(x, .36, -1.75);
+      lobby.add(leg);
+    }
+  }
+
+  private buildRoom(roomBounds: RoomBounds): void {
+    if (roomBounds.built) {
+      return;
     }
 
-    const displaysPerSide = Math.max(1, Math.ceil(room.displays.length / 2));
-    const columns = Math.min(5, Math.max(1, Math.ceil(displaysPerSide / 2)));
-    const rows = Math.max(1, Math.ceil(displaysPerSide / columns));
-    const depth = Math.max(17, columns * 4.15 + 5.5);
-    const height = Math.max(6.3, rows * 2.65 + 3.6);
-    const end = start + depth;
+    const { room, start, end, height, layout, group: roomGroup } = roomBounds;
+    const depth = end - start;
     const center = start + depth / 2;
-    const roomGroup = new THREE.Group();
-    roomGroup.name = `room-${room.id}`;
 
     const floor = new THREE.Mesh(
       new THREE.PlaneGeometry(18, depth),
@@ -452,15 +610,131 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
     const roomLight = new THREE.PointLight(room.isArchive ? '#d18a9d' : '#ffd6b0', room.isArchive ? 2.1 : 2.6, 24, 1.8);
     roomLight.position.set(0, height - 0.7, center);
     roomGroup.add(roomLight);
+    this.addRoomDetails(roomGroup, center, depth, height, room.isArchive, layout, room.displays.length);
 
     room.displays.forEach((display, index) => {
-      const node = this.createDisplayNode(display, room.id, index, columns, center, height);
+      const node = this.createDisplayNode(display, room.id, index, layout, center);
       roomGroup.add(node.group);
       this.displayNodes.set(display.id, node);
+      this.selectablePhotoMeshes.push(node.imageMesh);
     });
 
-    this.scene.add(roomGroup);
-    return { room, start, end, height, group: roomGroup };
+    roomBounds.built = true;
+    this.updateSceneMetrics();
+  }
+
+  private addRoomDetails(group: THREE.Group, center: number, depth: number, height: number, archive: boolean, layout: MuseumRoomLayout, displayCount: number): void {
+    const wood = new THREE.MeshStandardMaterial({ color: archive ? '#352027' : '#5a332d', roughness: .8, metalness: .04 });
+    const trim = new THREE.MeshStandardMaterial({ color: archive ? '#9b6271' : '#b98267', roughness: .62, metalness: .12 });
+    const plaster = new THREE.MeshStandardMaterial({ color: archive ? '#432c36' : '#d9c0a5', roughness: .95 });
+    const columnGeometry = new THREE.BoxGeometry(.36, height, .36);
+    const columnCount = Math.max(2, Math.floor(depth / 6));
+    for (let index = 0; index <= columnCount; index += 1) {
+      const z = center - depth / 2 + .8 + index * ((depth - 1.6) / columnCount);
+      for (const x of [-8.96, 8.96]) {
+        const column = new THREE.Mesh(columnGeometry, wood);
+        column.position.set(x, height / 2, z);
+        group.add(column);
+        const capital = new THREE.Mesh(new THREE.BoxGeometry(.62, .16, .62), trim);
+        capital.position.set(x, height - .18, z);
+        group.add(capital);
+      }
+    }
+
+    for (const y of [height - .35, height - 1.1]) {
+      const beam = new THREE.Mesh(new THREE.BoxGeometry(17.1, .16, .22), trim);
+      beam.position.set(0, y, center);
+      group.add(beam);
+    }
+
+    const trackGeometry = new THREE.BoxGeometry(5.4, .1, .18);
+    for (const z of [center - depth * .28, center + depth * .28]) {
+      const track = new THREE.Mesh(trackGeometry, wood);
+      track.position.set(0, height - .48, z);
+      group.add(track);
+      for (const x of [-1.8, 0, 1.8]) {
+        const spotlight = new THREE.SpotLight(archive ? '#e1a4b1' : '#ffe3bd', 1.55, 8, .46, .48, 1.6);
+        spotlight.position.set(x, height - .5, z);
+        spotlight.target.position.set(x * .7, 1.2, z + (z < center ? 2.3 : -2.3));
+        group.add(spotlight, spotlight.target);
+      }
+    }
+
+    const start = center - depth / 2;
+    const end = center + depth / 2;
+    const displayZs = Array.from({ length: displayCount }, (_, index) => getMuseumDisplaySlot(index, layout, center).z);
+    const benchZ = start + 2.4;
+    const plantNearZ = end - 2.45;
+    const sculptureZ = end - 2.15;
+    if (isMuseumPropPositionSafe(0, benchZ, layout, center, displayZs)) {
+      this.addBench(group, benchZ, wood, plaster);
+    }
+    if (isMuseumPropPositionSafe(-2.8, plantNearZ, layout, center, displayZs)) {
+      this.addPlant(group, plantNearZ, -2.8, archive);
+    }
+    if (isMuseumPropPositionSafe(2.8, start + 2.35, layout, center, displayZs)) {
+      this.addPlant(group, start + 2.35, 2.8, archive);
+    }
+    if (isMuseumPropPositionSafe(0, sculptureZ, layout, center, displayZs)) {
+      this.addSculpture(group, sculptureZ, archive);
+      this.addRopeBarrier(group, sculptureZ, archive);
+    }
+  }
+
+  private addBench(group: THREE.Group, z: number, wood: THREE.MeshStandardMaterial, seatMaterial: THREE.MeshStandardMaterial): void {
+    const seat = new THREE.Mesh(new THREE.BoxGeometry(2.8, .24, .7), seatMaterial);
+    seat.position.set(0, .76, z);
+    group.add(seat);
+    for (const x of [-1, 1]) {
+      const leg = new THREE.Mesh(new THREE.BoxGeometry(.14, .75, .14), wood);
+      leg.position.set(x, .37, z);
+      group.add(leg);
+    }
+  }
+
+  private addPlant(group: THREE.Group, z: number, x: number, archive: boolean): void {
+    const pot = new THREE.Mesh(
+      new THREE.CylinderGeometry(.44, .55, .68, 12),
+      new THREE.MeshStandardMaterial({ color: archive ? '#552d3b' : '#9b5f4c', roughness: .8 })
+    );
+    pot.position.set(x, .34, z);
+    group.add(pot);
+    const leafMaterial = new THREE.MeshStandardMaterial({ color: archive ? '#3d5a4a' : '#55785d', roughness: .9 });
+    for (let index = 0; index < 5; index += 1) {
+      const leaf = new THREE.Mesh(new THREE.SphereGeometry(.26, 8, 6), leafMaterial);
+      leaf.scale.set(.68, 1.5, .55);
+      leaf.position.set(x + Math.sin(index * 1.4) * .35, .85 + (index % 3) * .3, z + Math.cos(index * 1.4) * .25);
+      group.add(leaf);
+    }
+  }
+
+  private addSculpture(group: THREE.Group, z: number, archive: boolean): void {
+    const pedestal = new THREE.Mesh(
+      new THREE.BoxGeometry(1.35, 1.05, 1.35),
+      new THREE.MeshStandardMaterial({ color: archive ? '#48303a' : '#b6a18c', roughness: .72 })
+    );
+    pedestal.position.set(0, .53, z);
+    const sculpture = new THREE.Mesh(
+      new THREE.SphereGeometry(.5, 18, 12),
+      new THREE.MeshStandardMaterial({ color: archive ? '#ba6f83' : '#d8aa6c', roughness: .3, metalness: .55 })
+    );
+    sculpture.position.set(0, 1.48, z);
+    sculpture.scale.set(.72, 1.2, .72);
+    group.add(pedestal, sculpture);
+  }
+
+  private addRopeBarrier(group: THREE.Group, z: number, archive: boolean): void {
+    const postMaterial = new THREE.MeshStandardMaterial({ color: archive ? '#a46c7b' : '#d0a36d', roughness: .45, metalness: .55 });
+    const ropeMaterial = new THREE.MeshStandardMaterial({ color: archive ? '#6d3a4a' : '#7b434d', roughness: .9 });
+    for (const x of [-2.25, 2.25]) {
+      const post = new THREE.Mesh(new THREE.CylinderGeometry(.1, .12, 1.05, 10), postMaterial);
+      post.position.set(x, .53, z);
+      group.add(post);
+    }
+    const rope = new THREE.Mesh(new THREE.CylinderGeometry(.035, .035, 4.5, 8), ropeMaterial);
+    rope.rotation.z = Math.PI / 2;
+    rope.position.set(0, .92, z);
+    group.add(rope);
   }
 
   private createRoomHeader(room: MuseumRoom, center: number, height: number): THREE.Group {
@@ -480,23 +754,18 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
     display: MuseumDisplay,
     roomId: string,
     index: number,
-    columns: number,
-    center: number,
-    height: number
+    layout: MuseumRoomLayout,
+    center: number
   ): DisplayNode {
-    const side = index % 2 === 0 ? -1 : 1;
-    const slot = Math.floor(index / 2);
-    const column = slot % columns;
-    const row = Math.floor(slot / columns);
-    const frameWidth = 2.75;
-    const frameHeight = 1.85;
-    const z = center - (columns - 1) * 2.05 + column * 4.1;
-    const y = Math.min(height - 2.2, 1.9 + row * 2.35);
+    const slot = getMuseumDisplaySlot(index, layout, center);
+    const side = slot.side;
+    const frameWidth = layout.frameWidth;
+    const frameHeight = layout.frameHeight;
     const group = new THREE.Group();
     group.name = `display-${display.id}`;
     group.userData['displayId'] = display.id;
     group.userData['display'] = display;
-    group.position.set(side * 8.78, y, z);
+    group.position.set(slot.x, slot.y, slot.z);
     group.rotation.y = side === -1 ? Math.PI / 2 : -Math.PI / 2;
 
     const frame = new THREE.Mesh(
@@ -520,8 +789,8 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
 
   private createTextPlaque(text: string, x: number, y: number, z: number, size: number): THREE.Mesh {
     const canvas = document.createElement('canvas');
-    canvas.width = 1024;
-    canvas.height = 180;
+    canvas.width = 384;
+    canvas.height = 72;
     const context = canvas.getContext('2d');
     if (context) {
       context.clearRect(0, 0, canvas.width, canvas.height);
@@ -598,7 +867,7 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
     const origin = new THREE.Vector3().setFromMatrixPosition(controller.matrixWorld);
     const direction = new THREE.Vector3(0, 0, -1).transformDirection(controller.matrixWorld);
     this.raycaster.set(origin, direction);
-    const photoHit = this.raycaster.intersectObjects([...this.displayNodes.values()].map((node) => node.imageMesh), false)[0];
+    const photoHit = this.raycaster.intersectObjects(this.selectablePhotoMeshes, false)[0];
     if (photoHit) {
       const displayId = photoHit.object.userData['displayId'] as string | undefined;
       const node = displayId ? this.displayNodes.get(displayId) : undefined;
@@ -627,7 +896,7 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
     this.pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
     this.pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
     this.raycaster.setFromCamera(this.pointer, this.camera);
-    const photoHit = this.raycaster.intersectObjects([...this.displayNodes.values()].map((node) => node.imageMesh), false)[0];
+    const photoHit = this.raycaster.intersectObjects(this.selectablePhotoMeshes, false)[0];
     if (!photoHit) {
       return;
     }
@@ -653,65 +922,160 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
     this.selectedNode = node;
   }
 
-  private loadRoomTextures(roomId: string): void {
-    if (this.roomTextures.has(roomId)) {
+  private updateTextureWindow(activeRoomId: string, neighborRoomId?: string): void {
+    if (!this.camera) {
       return;
     }
 
-    this.roomTextures.add(roomId);
-    const nodes = [...this.displayNodes.values()].filter((node) => node.roomId === roomId);
-    this.isLoading.set(nodes.length > 0);
-    for (const node of nodes) {
-      const source = node.display.media.displaySrc || node.display.media.mediumSrc || node.display.media.src;
-      let url: string;
-      try {
-        url = new URL(source, document.baseURI).href;
-      } catch {
+    const activeNodes = [...this.displayNodes.values()]
+      .filter((node) => node.roomId === activeRoomId)
+      .sort((a, b) => Math.abs(a.group.position.z - this.camera!.position.z) - Math.abs(b.group.position.z - this.camera!.position.z));
+    const neighborNodes = neighborRoomId
+      ? [...this.displayNodes.values()]
+        .filter((node) => node.roomId === neighborRoomId)
+        .sort((a, b) => a.group.position.z - b.group.position.z)
+      : [];
+    const desired = new Set<string>();
+    for (const node of activeNodes.slice(0, 18)) {
+      desired.add(node.display.id);
+    }
+    for (const node of neighborNodes.slice(0, 6)) {
+      desired.add(node.display.id);
+    }
+
+    const desiredChanged = desired.size !== this.desiredTextureIds.size || [...desired].some((displayId) => !this.desiredTextureIds.has(displayId));
+    if (!desiredChanged) {
+      this.pumpTextureQueue();
+      this.lastTextureWindowUpdate = performance.now();
+      this.lastTextureWindowZ = this.camera.position.z;
+      return;
+    }
+
+    this.desiredTextureIds.clear();
+    for (const displayId of desired) {
+      this.desiredTextureIds.add(displayId);
+    }
+    this.textureRequestToken += 1;
+    this.textureQueue.length = 0;
+
+    for (const node of this.displayNodes.values()) {
+      if (this.desiredTextureIds.has(node.display.id)) {
         continue;
       }
-
-      this.textureLoader.load(
-        url,
-        (texture) => {
-          if (this.disposed) {
-            texture.dispose();
-            return;
-          }
-          texture.colorSpace = THREE.SRGBColorSpace;
-          node.texture = texture;
-          node.imageMaterial.map = texture;
-          node.imageMaterial.color.set('#ffffff');
-          node.imageMaterial.needsUpdate = true;
-          this.isLoading.set(false);
-        },
-        undefined,
-        () => {
-          node.imageMaterial.color.set('#c8a78d');
-          node.imageMaterial.needsUpdate = true;
-          this.isLoading.set(false);
-        }
-      );
+      this.releaseNodeTexture(node);
+      this.textureStates.delete(node.display.id);
     }
+
+    for (const node of activeNodes.slice(0, 18)) {
+      this.queueTexture(node, 0);
+    }
+    for (const node of neighborNodes.slice(0, 6)) {
+      this.queueTexture(node, 1);
+    }
+    this.textureQueue.sort((a, b) => a.priority - b.priority);
+    this.pumpTextureQueue();
+    this.lastTextureWindowUpdate = performance.now();
+    this.lastTextureWindowZ = this.camera.position.z;
+    this.updateSceneMetrics();
   }
 
-  private unloadRoomTextures(keepRoomIds: readonly string[]): void {
-    const keep = new Set(keepRoomIds);
-    for (const roomId of [...this.roomTextures]) {
-      if (keep.has(roomId)) {
+  private queueTexture(node: DisplayNode, priority: number): void {
+    if (node.texture || this.textureStates.has(node.display.id)) {
+      return;
+    }
+    const source = node.display.media.displaySrc || node.display.media.mediumSrc;
+    if (!source) {
+      node.imageMaterial.color.set('#c8a78d');
+      node.imageMaterial.needsUpdate = true;
+      this.textureStates.set(node.display.id, 'failed');
+      return;
+    }
+
+    let url: string;
+    try {
+      url = new URL(source, document.baseURI).href;
+    } catch {
+      node.imageMaterial.color.set('#c8a78d');
+      node.imageMaterial.needsUpdate = true;
+      this.textureStates.set(node.display.id, 'failed');
+      return;
+    }
+
+    const token = this.textureRequestToken;
+    this.textureStates.set(node.display.id, 'queued');
+    this.textureQueue.push({ displayId: node.display.id, roomId: node.roomId, url, priority, token });
+  }
+
+  private pumpTextureQueue(): void {
+    const maxConcurrent = 4;
+    while (!this.disposed && this.textureLoadingCount < maxConcurrent && this.textureQueue.length) {
+      const request = this.textureQueue.shift();
+      if (!request || request.token !== this.textureRequestToken || !this.desiredTextureIds.has(request.displayId)) {
         continue;
       }
-      for (const node of this.displayNodes.values()) {
-        if (node.roomId !== roomId || !node.texture) {
-          continue;
-        }
-        node.texture.dispose();
-        node.texture = undefined;
-        node.imageMaterial.map = null;
-        node.imageMaterial.color.set('#fff6e7');
-        node.imageMaterial.needsUpdate = true;
+      const node = this.displayNodes.get(request.displayId);
+      if (!node) {
+        continue;
       }
-      this.roomTextures.delete(roomId);
+      this.textureStates.set(request.displayId, 'loading');
+      this.textureLoadingCount += 1;
+      this.textureConcurrency.set(this.textureLoadingCount);
+      try {
+        this.textureLoader.load(
+          request.url,
+          (texture) => this.finishTextureRequest(request, node, texture),
+          undefined,
+          () => this.failTextureRequest(request, node)
+        );
+      } catch {
+        this.failTextureRequest(request, node);
+      }
     }
+    this.updateSceneMetrics();
+  }
+
+  private finishTextureRequest(request: TextureRequest, node: DisplayNode, texture: THREE.Texture): void {
+    this.textureLoadingCount = Math.max(0, this.textureLoadingCount - 1);
+    this.textureConcurrency.set(this.textureLoadingCount);
+    const current = !this.disposed && request.token === this.textureRequestToken && this.desiredTextureIds.has(request.displayId) && this.displayNodes.get(request.displayId) === node;
+    if (!current) {
+      texture.dispose();
+      this.pumpTextureQueue();
+      return;
+    }
+    texture.colorSpace = THREE.SRGBColorSpace;
+    node.texture = texture;
+    node.imageMaterial.map = texture;
+    node.imageMaterial.color.set('#ffffff');
+    node.imageMaterial.needsUpdate = true;
+    this.textureStates.set(request.displayId, 'loaded');
+    this.pumpTextureQueue();
+  }
+
+  private failTextureRequest(request: TextureRequest, node: DisplayNode): void {
+    this.textureLoadingCount = Math.max(0, this.textureLoadingCount - 1);
+    this.textureConcurrency.set(this.textureLoadingCount);
+    if (this.displayNodes.get(request.displayId) === node && request.token === this.textureRequestToken) {
+      node.imageMaterial.color.set('#c8a78d');
+      node.imageMaterial.needsUpdate = true;
+      this.textureStates.set(request.displayId, 'failed');
+    }
+    this.pumpTextureQueue();
+  }
+
+  private releaseNodeTexture(node: DisplayNode): void {
+    node.texture?.dispose();
+    node.texture = undefined;
+    node.imageMaterial.map = null;
+    node.imageMaterial.color.set('#fff6e7');
+    node.imageMaterial.needsUpdate = true;
+  }
+
+  private updateSceneMetrics(): void {
+    this.renderedDisplays.set(this.displayNodes.size);
+    this.loadedTextures.set([...this.displayNodes.values()].filter((node) => Boolean(node.texture)).length);
+    this.texturesPending.set(this.textureQueue.length + this.textureLoadingCount);
+    this.isLoading.set(this.textureQueue.length + this.textureLoadingCount > 0 && this.renderedDisplays() > 0);
   }
 
   private updateActiveRoom(force = false): void {
@@ -719,7 +1083,12 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
       return;
     }
 
-    const next = this.roomBounds.find((room) => this.camera!.position.z >= room.start && this.camera!.position.z <= room.end) || this.roomBounds[0];
+    const containingRoom = this.roomBounds.find((room) => this.camera!.position.z >= room.start && this.camera!.position.z <= room.end);
+    const next = containingRoom || this.roomBounds.reduce((closest, room) => {
+      const distance = this.camera!.position.z < room.start ? room.start - this.camera!.position.z : this.camera!.position.z - room.end;
+      const closestDistance = this.camera!.position.z < closest.start ? closest.start - this.camera!.position.z : this.camera!.position.z - closest.end;
+      return distance < closestDistance ? room : closest;
+    }, this.roomBounds[0]);
     if (!force && this.activeRoom?.room.id === next.room.id) {
       return;
     }
@@ -729,15 +1098,56 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
   private setActiveRoom(room: RoomBounds, announce: boolean): void {
     this.activeRoom = room;
     const roomIndex = this.roomBounds.indexOf(room);
-    const neighbors = this.roomBounds.slice(Math.max(0, roomIndex - 1), roomIndex + 2).map((item) => item.room.id);
-    this.loadRoomTextures(room.room.id);
-    for (const neighborId of neighbors) {
-      this.loadRoomTextures(neighborId);
+    const direction = this.lastActiveRoomIndex >= 0 && roomIndex < this.lastActiveRoomIndex ? -1 : 1;
+    this.textureNeighborDirection = direction;
+    const neighborIndex = Math.min(this.roomBounds.length - 1, Math.max(0, roomIndex + direction));
+    const neighbors = [...new Set([room.room.id, this.roomBounds[neighborIndex]?.room.id].filter((id): id is string => Boolean(id)))];
+    for (const roomBound of this.roomBounds) {
+      const shouldBuild = neighbors.includes(roomBound.room.id);
+      if (shouldBuild) {
+        this.buildRoom(roomBound);
+        roomBound.group.visible = true;
+      } else {
+        this.unbuildRoom(roomBound);
+        roomBound.group.visible = false;
+      }
     }
-    this.unloadRoomTextures(neighbors);
+    this.lastActiveRoomIndex = roomIndex;
+    this.crowd?.setActiveRoom(room.room.id);
+    this.updateTextureWindow(room.room.id, this.roomBounds[neighborIndex]?.room.id);
     if (announce) {
       this.roomChanged.emit(room.room.id);
     }
+  }
+
+  private unbuildRoom(roomBounds: RoomBounds): void {
+    if (!roomBounds.built) {
+      return;
+    }
+
+    this.textureRequestToken += 1;
+    this.textureQueue.length = 0;
+    for (const display of roomBounds.room.displays) {
+      const node = this.displayNodes.get(display.id);
+      if (!node) {
+        continue;
+      }
+      this.releaseNodeTexture(node);
+      this.textureStates.delete(display.id);
+      this.desiredTextureIds.delete(display.id);
+      const meshIndex = this.selectablePhotoMeshes.indexOf(node.imageMesh);
+      if (meshIndex >= 0) {
+        this.selectablePhotoMeshes.splice(meshIndex, 1);
+      }
+      if (this.selectedNode === node) {
+        this.selectedNode = undefined;
+      }
+      this.displayNodes.delete(display.id);
+    }
+    this.floorMeshes = this.floorMeshes.filter((floor) => floor.parent !== roomBounds.group);
+    this.disposeGroupContents(roomBounds.group);
+    roomBounds.built = false;
+    this.updateSceneMetrics();
   }
 
   private updateMovement(delta: number): void {
@@ -760,10 +1170,10 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
     this.direction.set(0, 0, -1).applyQuaternion(this.camera.quaternion);
     this.direction.y = 0;
     this.direction.normalize();
-    const rightDirection = new THREE.Vector3(1, 0, 0).applyQuaternion(this.camera.quaternion);
-    rightDirection.y = 0;
-    rightDirection.normalize();
-    this.movement.copy(this.direction).multiplyScalar(inputForward).addScaledVector(rightDirection, inputRight);
+    this.rightDirection.set(1, 0, 0).applyQuaternion(this.camera.quaternion);
+    this.rightDirection.y = 0;
+    this.rightDirection.normalize();
+    this.movement.copy(this.direction).multiplyScalar(inputForward).addScaledVector(this.rightDirection, inputRight);
     if (this.movement.lengthSq() > 1) {
       this.movement.normalize();
     }
@@ -803,10 +1213,59 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
       return;
     }
 
-    const delta = this.lastFrameTime ? Math.min((time - this.lastFrameTime) / 1000, 0.05) : 0;
+    if (document.visibilityState === 'hidden' && !this.renderer.xr.isPresenting) {
+      // Avoid applying the whole time spent in a background tab to either the
+      // camera or the crowd when the tab becomes visible again.
+      this.lastFrameTime = 0;
+      return;
+    }
+
+    const delta = this.lastFrameTime ? Math.min(Math.max(0, (time - this.lastFrameTime) / 1000), 0.12) : 0;
     this.lastFrameTime = time;
     this.updateMovement(delta);
+    this.crowd?.update(delta, time / 1000, this.activeRoom?.room.id, this.camera);
+    if (time - this.lastCrowdHudUpdate > 100) {
+      this.refreshCrowdHud(time / 1000);
+      this.lastCrowdHudUpdate = time;
+    }
+    if (this.activeRoom && time - this.lastTextureWindowUpdate > 350 && Math.abs(this.camera.position.z - this.lastTextureWindowZ) > 2) {
+      const activeIndex = this.roomBounds.indexOf(this.activeRoom);
+      const direction = this.textureNeighborDirection;
+      const neighborIndex = Math.min(this.roomBounds.length - 1, Math.max(0, activeIndex + direction));
+      this.updateTextureWindow(this.activeRoom.room.id, this.roomBounds[neighborIndex]?.room.id);
+    }
     this.renderer.render(this.scene, this.camera);
+  }
+
+  private refreshCrowdHud(now: number): void {
+    const activeVisitorCount = this.crowd?.getActiveVisitorCount(this.activeRoom?.room.id) ?? 0;
+    if (activeVisitorCount !== this.activeVisitors()) {
+      this.activeVisitors.set(activeVisitorCount);
+      this.visitorCountChanged.emit(activeVisitorCount);
+    }
+    this.crowdMotion.set(this.crowd?.getMotionState(this.activeRoom?.room.id) ?? 'paused');
+    this.visitorPose.set(this.crowd?.getPoseState(this.activeRoom?.room.id) ?? 'standing');
+    this.visitorAnimation.set(this.crowd?.getAnimationState(this.activeRoom?.room.id) ?? 'idle');
+    this.invalidVisitorAnimations.set(this.crowd?.getInvalidAnimationCount() ?? 0);
+    this.visitorPositionHash.set(this.crowd?.getPositionHash(this.activeRoom?.room.id) ?? '');
+    const bubbles = this.crowd?.getBubbles(now, this.activeRoom?.room.id) ?? [];
+    if (!this.camera || !this.renderer) {
+      this.dialogueBubbles.set([]);
+      return;
+    }
+    const nextBubbles = bubbles
+      .map((bubble) => {
+        const projected = this.roomScratch.copy(bubble.position).project(this.camera!);
+        return {
+          ...bubble,
+          left: THREE.MathUtils.clamp((projected.x * .5 + .5) * 100, 24, 76),
+          top: THREE.MathUtils.clamp((-projected.y * .5 + .5) * 100, 10, 78),
+          depth: projected.z
+        };
+      })
+      .filter((bubble) => bubble.depth > -1 && bubble.depth < 1)
+      .map(({ depth: _depth, ...bubble }) => bubble);
+    this.dialogueBubbles.set(nextBubbles);
   }
 
   private updateJoystick(event: PointerEvent): void {
@@ -835,10 +1294,53 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
     this.renderer.setSize(width, height, false);
   }
 
+  private disposeGroupContents(group: THREE.Group): void {
+    const geometries = new Set<THREE.BufferGeometry>();
+    const materials = new Set<THREE.Material>();
+    const textures = new Set<THREE.Texture>();
+    group.traverse((object) => {
+      if (!(object instanceof THREE.Mesh || object instanceof THREE.Line)) {
+        return;
+      }
+      geometries.add(object.geometry);
+      const objectMaterials = Array.isArray(object.material) ? object.material : [object.material];
+      for (const material of objectMaterials) {
+        materials.add(material);
+        if (material.map) {
+          textures.add(material.map);
+        }
+      }
+    });
+    for (const geometry of geometries) geometry.dispose();
+    for (const material of materials) material.dispose();
+    for (const texture of textures) texture.dispose();
+    group.clear();
+  }
+
   private disposeScene(): void {
     if (!this.scene) {
       return;
     }
+
+    this.crowd?.dispose();
+    this.crowd = undefined;
+    this.dialogueBubbles.set([]);
+    this.activeVisitors.set(0);
+    this.visitorPool.set(0);
+    this.visitorPose.set('standing');
+    this.visitorAnimation.set('idle');
+    this.invalidVisitorAnimations.set(0);
+    this.crowdMotion.set('paused');
+    this.visitorPositionHash.set('');
+    this.textureRequestToken += 1;
+    this.textureQueue.length = 0;
+    this.textureStates.clear();
+    this.desiredTextureIds.clear();
+    this.textureLoadingCount = 0;
+    this.textureConcurrency.set(0);
+    this.texturesPending.set(0);
+    this.renderedDisplays.set(0);
+    this.loadedTextures.set(0);
 
     const geometries = new Set<THREE.BufferGeometry>();
     const materials = new Set<THREE.Material>();
@@ -851,10 +1353,8 @@ export class MuseumSceneComponent implements AfterViewInit, OnChanges, OnDestroy
       const objectMaterials = Array.isArray(object.material) ? object.material : [object.material];
       for (const material of objectMaterials) {
         materials.add(material);
-        if (material instanceof THREE.MeshBasicMaterial || material instanceof THREE.MeshStandardMaterial || material instanceof THREE.LineBasicMaterial) {
-          if (material.map) {
-            textures.add(material.map);
-          }
+        if (material.map) {
+          textures.add(material.map);
         }
       }
     });

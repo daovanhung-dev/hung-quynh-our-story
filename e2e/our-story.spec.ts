@@ -148,12 +148,56 @@ test('museum catalog selects a dated photo and reuses the existing photo viewer'
   await expect(page.locator('dialog[open]')).toHaveCount(0);
 });
 
+test('museum exposes the cinematic audio, crowd and dialogue HUD', async ({ page }) => {
+  await page.goto('/museum');
+  const museum = page.locator('.museum-page');
+  const shell = page.locator('.museum-scene-shell');
+  await expect(museum).toHaveAttribute('data-dialogue-count', '128');
+  await expect(museum).toHaveAttribute('data-visitor-pool', '30');
+  await expect(shell).toHaveAttribute('data-visitor-pose', 'standing');
+  await expect(shell).toHaveAttribute('data-invalid-visitor-animations', '0');
+  await expect.poll(() => shell.getAttribute('data-visitor-animation')).toMatch(/idle|walk|mixed/);
+  await expect.poll(async () => Number(await museum.getAttribute('data-active-visitors'))).toBeLessThanOrEqual(30);
+  await expect(page.locator('.museum-audio')).toBeVisible();
+  await expect(page.locator('audio')).toHaveJSProperty('paused', true);
+  await expect(page.getByRole('button', { name: /Bật nhạc/i })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Bài trước/i })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Bài tiếp/i })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Bật tiếng khách/i })).toBeVisible();
+  await page.getByRole('button', { name: /Bật nhạc/i }).click();
+  await expect.poll(() => page.locator('audio').evaluate((audio) => audio.paused)).toBe(false);
+});
+
+test('museum renders visitor dialogue bubbles after entering a gallery', async ({ page }) => {
+  await page.goto('/museum');
+  await expect(page.locator('.museum-scene-shell')).toHaveAttribute('data-dialogue-count', '128');
+  await expect(page.locator('.dialogue-bubble').first()).toBeVisible({ timeout: 8_000 });
+});
+
+test('museum visitors keep moving and the active texture budget stays bounded', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop', 'This scenario is covered by the desktop Playwright project.');
+  await page.goto('/museum');
+  const shell = page.locator('.museum-scene-shell');
+  const initialHash = await shell.getAttribute('data-visitor-position-hash');
+  await expect(shell).toHaveAttribute('data-crowd-motion', 'moving', { timeout: 6_000 });
+  await expect.poll(() => shell.getAttribute('data-visitor-position-hash'), { timeout: 6_000 }).not.toBe(initialHash);
+  await expect.poll(async () => Number(await shell.getAttribute('data-texture-concurrency'))).toBeLessThanOrEqual(4);
+  await expect.poll(async () => Number(await shell.getAttribute('data-loaded-textures'))).toBeLessThanOrEqual(24);
+  await expect(shell).toHaveAttribute('data-photo-occlusion', 'clear');
+});
+
 test('museum mobile controls are visible, touch friendly and reduced motion is respected', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobile', 'This scenario is covered by the mobile Playwright project.');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/museum');
   await expect(page.locator('.museum-joystick')).toBeVisible();
+  await expect(page.locator('.museum-page')).toHaveAttribute('data-visitor-pool', '12');
+  await expect(page.locator('.museum-scene-shell')).toHaveAttribute('data-visitor-pose', 'standing');
+  await expect(page.locator('.museum-scene-shell')).toHaveAttribute('data-visitor-animation', 'reduced');
+  await expect(page.locator('.museum-scene-shell')).toHaveAttribute('data-invalid-visitor-animations', '0');
   await expectTouchTarget(page.locator('.museum-joystick'));
+  await expectTouchTarget(page.getByRole('button', { name: /Bật nhạc/i }));
+  await expectTouchTarget(page.getByRole('button', { name: /Bật tiếng khách/i }));
   await expectTouchTarget(page.getByRole('link', { name: /Thoát bảo tàng/i }));
   await expectTouchTarget(page.getByRole('button', { name: /Ẩn hướng dẫn|Hướng dẫn/i }));
   await expect(page.locator('.museum-scene-shell')).toHaveClass(/is-reduced-motion/);

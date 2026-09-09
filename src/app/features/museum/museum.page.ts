@@ -4,12 +4,14 @@ import { RouterLink } from '@angular/router';
 import { MemoryService } from '../../core/services/memory.service';
 import type { MemoryMedia } from '../../core/models/memory.model';
 import type { MuseumDisplay, MuseumRoom } from '../../core/models/museum.model';
+import { MUSEUM_DIALOGUES } from '../../core/content/museum-dialogue.content';
 import { PhotoViewerComponent } from '../../shared/components/photo-viewer/photo-viewer.component';
+import { MuseumAudioPlayerComponent } from './museum-audio-player.component';
 import { MuseumSceneComponent } from './museum-scene.component';
 
 @Component({
   standalone: true,
-  imports: [DecimalPipe, RouterLink, PhotoViewerComponent, MuseumSceneComponent],
+  imports: [DecimalPipe, RouterLink, PhotoViewerComponent, MuseumAudioPlayerComponent, MuseumSceneComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <main
@@ -17,6 +19,9 @@ import { MuseumSceneComponent } from './museum-scene.component';
       aria-labelledby="museum-title"
       [attr.data-total-photos]="totalPhotos"
       [attr.data-room-count]="rooms.length"
+      [attr.data-dialogue-count]="dialogueCount"
+      [attr.data-active-visitors]="activeVisitors()"
+      [attr.data-visitor-pool]="visitorPool()"
     >
       <header class="museum-header">
         <div>
@@ -31,10 +36,16 @@ import { MuseumSceneComponent } from './museum-scene.component';
         <span><strong>{{ totalPhotos }}</strong> ảnh được trưng bày</span>
         <span aria-hidden="true">·</span>
         <span><strong>{{ rooms.length }}</strong> căn phòng</span>
+        <span class="museum-crowd-meta"><strong>{{ activeVisitors() }} / {{ visitorPool() }}</strong> khách đang dạo</span>
         <span class="museum-mode" [class.is-vr-ready]="xrAvailable()">
           <i aria-hidden="true"></i>{{ xrAvailable() ? 'WebXR sẵn sàng' : 'Chế độ trình duyệt' }}
         </span>
       </section>
+
+      <app-museum-audio-player
+        (playingChange)="setMusicPlaying($event)"
+        (ambientMutedChange)="setAmbientMuted($event)"
+      ></app-museum-audio-player>
 
       <section class="museum-stage" aria-label="Không gian bảo tàng 3D">
         <app-museum-scene
@@ -42,12 +53,18 @@ import { MuseumSceneComponent } from './museum-scene.component';
           (photoSelected)="selectDisplay($event)"
           (roomChanged)="setCurrentRoom($event)"
           (xrAvailabilityChanged)="setXRAvailability($event)"
+          (visitorCountChanged)="setActiveVisitors($event)"
+          (visitorPoolChanged)="setVisitorPool($event)"
         ></app-museum-scene>
 
         <div class="stage-toolbar">
           <div class="room-indicator" aria-live="polite">
             <span class="toolbar-label">Đang ở</span>
             <strong>{{ currentRoomLabel() }}</strong>
+          </div>
+          <div class="stage-status" aria-live="polite">
+            <span>{{ musicPlaying() ? '♫ Nhạc đang phát' : 'Nhạc đang tắt' }}</span>
+            <span>{{ ambientMuted() ? 'Khách đang im lặng' : 'Có tiếng trò chuyện nền' }}</span>
           </div>
           <button class="help-button" type="button" (click)="helpOpen.set(!helpOpen())" [attr.aria-expanded]="helpOpen()">
             {{ helpOpen() ? 'Ẩn hướng dẫn' : 'Hướng dẫn' }}
@@ -148,15 +165,17 @@ import { MuseumSceneComponent } from './museum-scene.component';
     .museum-exit:hover span { transform:translate(3px,-3px); }
     .museum-meta { display:flex; align-items:center; gap:.75rem; margin-top:clamp(3rem,6vw,5rem); padding:1rem 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); color:var(--text-muted); font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; }
     .museum-meta strong { color:var(--wine); font-size:.9rem; font-weight:600; }
+    .museum-crowd-meta strong { color:#95606c; }
     .museum-mode { display:inline-flex; align-items:center; gap:.45rem; margin-left:auto; }
     .museum-mode i { display:block; width:7px; height:7px; border-radius:50%; background:#b2a096; }
     .museum-mode.is-vr-ready i { background:#7caa7f; box-shadow:0 0 0 4px rgba(124,170,127,.14); }
     .museum-stage { position:relative; margin-top:1.25rem; border:1px solid rgba(127,59,75,.28); background:#1a0e12; box-shadow:0 24px 80px rgba(60,28,33,.15); }
-    .stage-toolbar { position:absolute; z-index:5; top:1rem; right:1rem; left:1rem; display:flex; align-items:flex-start; justify-content:space-between; pointer-events:none; }
+    .stage-toolbar { position:absolute; z-index:5; top:1rem; right:1rem; left:1rem; display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; pointer-events:none; }
     .room-indicator,.help-button { border:1px solid rgba(255,253,249,.2); background:rgba(27,15,19,.68); color:#fffdf9; backdrop-filter:blur(10px); }
     .room-indicator { display:grid; gap:.3rem; min-width:170px; padding:.7rem .9rem; }
     .toolbar-label { color:rgba(255,253,249,.56); font-size:.6rem; letter-spacing:.14em; text-transform:uppercase; }
     .room-indicator strong { font-family:var(--font-display); font-size:1.05rem; font-weight:400; }
+    .stage-status { display:grid; gap:.25rem; margin-left:auto; padding:.7rem .9rem; color:rgba(255,253,249,.7); font-size:.62rem; letter-spacing:.05em; text-align:right; text-transform:uppercase; }
     .help-button { min-width:44px; min-height:44px; padding:.7rem .95rem; cursor:pointer; font-size:.66rem; letter-spacing:.08em; text-transform:uppercase; pointer-events:auto; }
     .help-button:hover,.primary-action:hover { background:#955263; }
     .help-overlay,.selection-panel { position:absolute; z-index:7; width:min(360px,calc(100% - 2rem)); padding:1.5rem; border:1px solid rgba(255,253,249,.24); background:rgba(35,18,24,.94); color:#fffdf9; box-shadow:0 20px 70px rgba(0,0,0,.3); backdrop-filter:blur(18px); }
@@ -203,8 +222,10 @@ import { MuseumSceneComponent } from './museum-scene.component';
       .museum-header { display:block; }
       .museum-exit { margin-top:1.5rem; }
       .museum-meta { flex-wrap:wrap; gap:.5rem; font-size:.61rem; }
+      .museum-crowd-meta { width:100%; }
       .museum-mode { width:100%; margin-left:0; }
       .stage-toolbar { top:.75rem; right:.75rem; left:.75rem; }
+      .stage-status { display:none; }
       .room-indicator { min-width:130px; padding:.6rem .7rem; }
       .help-button { padding:.6rem .7rem; }
       .help-overlay { top:5.2rem; left:.75rem; }
@@ -231,6 +252,11 @@ export class MuseumPage {
   protected readonly viewerOpen = signal(false);
   protected readonly viewerMedia = signal<readonly MemoryMedia[]>([]);
   protected readonly viewerIndex = signal(0);
+  protected readonly musicPlaying = signal(false);
+  protected readonly ambientMuted = signal(true);
+  protected readonly activeVisitors = signal(0);
+  protected readonly visitorPool = signal(0);
+  protected readonly dialogueCount = MUSEUM_DIALOGUES.length;
 
   protected currentRoomLabel(): string {
     const room = this.rooms.find((item) => item.id === this.currentRoomId());
@@ -243,6 +269,22 @@ export class MuseumPage {
 
   protected setXRAvailability(available: boolean): void {
     this.xrAvailable.set(available);
+  }
+
+  protected setMusicPlaying(playing: boolean): void {
+    this.musicPlaying.set(playing);
+  }
+
+  protected setAmbientMuted(muted: boolean): void {
+    this.ambientMuted.set(muted);
+  }
+
+  protected setActiveVisitors(count: number): void {
+    this.activeVisitors.set(count);
+  }
+
+  protected setVisitorPool(count: number): void {
+    this.visitorPool.set(count);
   }
 
   protected selectDisplay(display: MuseumDisplay): void {
