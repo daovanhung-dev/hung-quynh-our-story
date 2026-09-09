@@ -39,6 +39,7 @@ export class LoveFightSessionService {
   private readonly platformId = inject(PLATFORM_ID);
   private seed = this.createSeed();
   private readonly timers = new Set<ReturnType<typeof setTimeout>>();
+  private feedbackToken = 0;
 
   readonly state = signal<LoveFightState>('intro');
   readonly setup = signal<MatchSetup>(this.restoreSetup());
@@ -54,6 +55,18 @@ export class LoveFightSessionService {
   readonly hungAction = signal('TIMID_IDLE');
   readonly quynhX = signal(270);
   readonly hungX = signal(690);
+  readonly velocityX = signal(0);
+  readonly velocityY = signal(0);
+  readonly isGrounded = signal(true);
+  readonly isCrouching = signal(false);
+  readonly isDashing = signal(false);
+  readonly comboCount = signal(0);
+  readonly dashReady = signal(true);
+  readonly engineReady = signal(false);
+  readonly cameraX = signal(0);
+  readonly cameraZoom = signal(1);
+  readonly actionFeedback = signal('');
+  readonly feedbackTone = signal<'neutral' | 'good' | 'warning'>('neutral');
   readonly paused = signal(false);
   readonly muted = signal(this.readPreference(PREFERENCE_KEYS.muted) === 'true');
   readonly photoRain = signal<readonly MemoryMedia[]>([]);
@@ -74,7 +87,16 @@ export class LoveFightSessionService {
     quynhAction: this.quynhAction(),
     hungAction: this.hungAction(),
     quynhX: this.quynhX(),
-    hungX: this.hungX()
+    hungX: this.hungX(),
+    velocityX: this.velocityX(),
+    velocityY: this.velocityY(),
+    isGrounded: this.isGrounded(),
+    isCrouching: this.isCrouching(),
+    isDashing: this.isDashing(),
+    comboCount: this.comboCount(),
+    dashReady: this.dashReady(),
+    cameraX: this.cameraX(),
+    cameraZoom: this.cameraZoom()
   }));
 
   goToOutfitSelection(): void {
@@ -151,6 +173,21 @@ export class LoveFightSessionService {
     this.paused.update((paused) => !paused);
   }
 
+  setEngineReady(ready: boolean): void {
+    this.engineReady.set(ready);
+  }
+
+  announceFeedback(message: string, tone: 'neutral' | 'good' | 'warning' = 'neutral', durationMs = 850): void {
+    const token = ++this.feedbackToken;
+    this.actionFeedback.set(message);
+    this.feedbackTone.set(tone);
+    this.schedule(() => {
+      if (token !== this.feedbackToken) return;
+      this.actionFeedback.set('');
+      this.feedbackTone.set('neutral');
+    }, durationMs);
+  }
+
   setTimer(seconds: number): void {
     if (this.state() !== 'playing' || this.paused()) return;
     this.timerSec.set(Math.max(0, Math.ceil(seconds)));
@@ -161,6 +198,15 @@ export class LoveFightSessionService {
     if (snapshot.hungAction) this.hungAction.set(snapshot.hungAction);
     if (typeof snapshot.quynhX === 'number') this.quynhX.set(Math.round(snapshot.quynhX));
     if (typeof snapshot.hungX === 'number') this.hungX.set(Math.round(snapshot.hungX));
+    if (typeof snapshot.velocityX === 'number') this.velocityX.set(snapshot.velocityX);
+    if (typeof snapshot.velocityY === 'number') this.velocityY.set(snapshot.velocityY);
+    if (typeof snapshot.isGrounded === 'boolean') this.isGrounded.set(snapshot.isGrounded);
+    if (typeof snapshot.isCrouching === 'boolean') this.isCrouching.set(snapshot.isCrouching);
+    if (typeof snapshot.isDashing === 'boolean') this.isDashing.set(snapshot.isDashing);
+    if (typeof snapshot.comboCount === 'number') this.comboCount.set(Math.max(0, Math.floor(snapshot.comboCount)));
+    if (typeof snapshot.dashReady === 'boolean') this.dashReady.set(snapshot.dashReady);
+    if (typeof snapshot.cameraX === 'number') this.cameraX.set(snapshot.cameraX);
+    if (typeof snapshot.cameraZoom === 'number') this.cameraZoom.set(snapshot.cameraZoom);
   }
 
   damageCourage(amount: number): void {
@@ -240,6 +286,9 @@ export class LoveFightSessionService {
   reset(): void {
     this.timers.forEach((timer) => clearTimeout(timer));
     this.timers.clear();
+    this.feedbackToken += 1;
+    this.actionFeedback.set('');
+    this.feedbackTone.set('neutral');
     this.photoRain.set([]);
     this.galleryPhotos.set([]);
     this.endingKind.set(null);
@@ -262,6 +311,9 @@ export class LoveFightSessionService {
   }
 
   private beginRoundMeters(): void {
+    this.feedbackToken += 1;
+    this.actionFeedback.set('');
+    this.feedbackTone.set('neutral');
     this.anger.set(METER_MAX);
     this.courage.set(METER_MAX);
     this.timerSec.set(60);
@@ -269,6 +321,16 @@ export class LoveFightSessionService {
     this.hungAction.set('TIMID_IDLE');
     this.quynhX.set(270);
     this.hungX.set(690);
+    this.velocityX.set(0);
+    this.velocityY.set(0);
+    this.isGrounded.set(true);
+    this.isCrouching.set(false);
+    this.isDashing.set(false);
+    this.comboCount.set(0);
+    this.dashReady.set(true);
+    this.cameraX.set(0);
+    this.cameraZoom.set(1);
+    this.engineReady.set(false);
   }
 
   private resetRoundMeters(): void {

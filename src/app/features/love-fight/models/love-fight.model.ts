@@ -67,6 +67,15 @@ export interface CombatSnapshot {
   readonly hungAction: string;
   readonly quynhX: number;
   readonly hungX: number;
+  readonly velocityX: number;
+  readonly velocityY: number;
+  readonly isGrounded: boolean;
+  readonly isCrouching: boolean;
+  readonly isDashing: boolean;
+  readonly comboCount: number;
+  readonly dashReady: boolean;
+  readonly cameraX: number;
+  readonly cameraZoom: number;
 }
 
 export const ENDING_COPY = {

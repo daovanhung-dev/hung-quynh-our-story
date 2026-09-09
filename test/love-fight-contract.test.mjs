@@ -11,6 +11,18 @@ const rulesModule = await import(`data:text/javascript;base64,${Buffer.from(ts.t
   compilerOptions: { module: ts.ModuleKind.ES2022, target: ts.ScriptTarget.ES2022 }
 }).outputText).toString('base64')}`);
 
+const loadTsModule = async (relativePath) => {
+  const source = await readFile(resolve(root, relativePath), 'utf8');
+  return import(`data:text/javascript;base64,${Buffer.from(ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.ES2022, target: ts.ScriptTarget.ES2022 }
+  }).outputText).toString('base64')}`);
+};
+
+const motionModule = await loadTsModule('src/app/features/love-fight/engine/motion-rules.ts');
+const comboModule = await loadTsModule('src/app/features/love-fight/engine/combo-rules.ts');
+const cameraModule = await loadTsModule('src/app/features/love-fight/engine/camera-rules.ts');
+const hitboxModule = await loadTsModule('src/app/features/love-fight/engine/hitbox-system.ts');
+
 async function filesIn(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   const nested = await Promise.all(entries.map(async (entry) => {
@@ -70,4 +82,83 @@ test('runtime rules clamp meters, enforce rounds/cooldowns and define the state 
   assert.equal(rulesModule.canTransition('match-result', 'ending-a'), true);
   assert.equal(rulesModule.canTransition('gallery', 'intro'), true);
   assert.ok(rulesModule.HUNG_ALLOWED_ACTIONS.every((action) => !['PUNCH', 'KICK'].includes(action)));
+});
+
+test('arcade movement has acceleration, friction, jump buffering, coyote time and no double jump', () => {
+  let state = motionModule.createMotionState(300);
+  for (let frame = 0; frame < 30; frame += 1) state = motionModule.stepMotion(state, { horizontal: 1, crouching: false, jumpPressed: false, dashPressed: false }, 1000 / 60, frame * 1000 / 60).state;
+  assert.equal(state.velocityX, motionModule.DEFAULT_MOTION_CONFIG.maxSpeed);
+  for (let frame = 0; frame < 30; frame += 1) state = motionModule.stepMotion(state, { horizontal: 0, crouching: false, jumpPressed: false, dashPressed: false }, 1000 / 60, (30 + frame) * 1000 / 60).state;
+  assert.equal(state.velocityX, 0);
+  let jump = motionModule.stepMotion(state, { horizontal: 0, crouching: false, jumpPressed: true, dashPressed: false }, 1000 / 60, 1000).state;
+  assert.equal(jump.grounded, false);
+  const doubleJump = motionModule.stepMotion(jump, { horizontal: 0, crouching: false, jumpPressed: true, dashPressed: false }, 1000 / 60, 1016).events.jumped;
+  assert.equal(doubleJump, false);
+  const buffered = motionModule.stepMotion({ ...jump, grounded: false, y: -1, velocityY: 120, jumpBufferUntilMs: 1200 }, { horizontal: 0, crouching: false, jumpPressed: false, dashPressed: false }, 16, 1100).state;
+  assert.ok(buffered.grounded || buffered.jumpBufferUntilMs > 1100);
+  const coyote = motionModule.stepMotion({ ...state, grounded: false, coyoteUntilMs: 1200 }, { horizontal: 0, crouching: false, jumpPressed: true, dashPressed: false }, 16, 1100);
+  assert.equal(coyote.events.jumped, true);
+});
+
+test('dash travels the configured distance, has an invulnerability window and cooldown', () => {
+  let state = motionModule.createMotionState(300);
+  let now = 0;
+  let dashed = false;
+  for (let frame = 0; frame < 6; frame += 1) {
+    const result = motionModule.stepMotion(state, { horizontal: 1, crouching: false, jumpPressed: false, dashPressed: frame === 0, dashDirection: 1 }, 1000 / 60, now);
+    state = result.state;
+    dashed ||= result.events.dashed;
+    now += 1000 / 60;
+  }
+  assert.equal(dashed, true);
+  assert.equal(Math.round(state.x - 300), 160);
+  assert.equal(motionModule.isInvulnerable(state, 50), true);
+  assert.equal(motionModule.isDashReady(state, 100), false);
+  assert.equal(motionModule.isDashReady(state, 220), true);
+});
+
+test('combo timing accepts J/J/K and weapon chain, then resets after timeout', () => {
+  let combo = comboModule.createComboState();
+  let result = comboModule.advanceCombo(combo, 'light', 0);
+  combo = result.state;
+  assert.equal(result.action, 'light-1');
+  result = comboModule.advanceCombo(combo, 'light', 400);
+  combo = result.state;
+  assert.equal(result.action, 'light-2');
+  result = comboModule.advanceCombo(combo, 'heavy', 449);
+  assert.equal(result.action, 'heavy-finisher');
+  result = comboModule.advanceCombo(combo, 'weapon', 449);
+  assert.equal(result.action, 'weapon-chain');
+  assert.equal(comboModule.comboExpired(combo, 900), true);
+  assert.equal(comboModule.advanceCombo(combo, 'heavy', 900).action, 'rejected');
+});
+
+test('camera follow is smooth but always clamped to the larger arena', () => {
+  assert.equal(cameraModule.clampCameraX(-40), 0);
+  assert.equal(cameraModule.clampCameraX(9999), 320);
+  assert.ok(cameraModule.followCameraX(0, 700, 1100) > 0);
+  assert.ok(cameraModule.cameraZoomFor(80, 3) > cameraModule.cameraZoomFor(500, 0));
+});
+
+test('hitboxes are active only inside their active phase', () => {
+  const hitbox = { activeFromMs: 70, activeToMs: 150, damage: 8, box: { x: 0, y: 0, width: 10, height: 10 } };
+  assert.equal(hitboxModule.isHitboxActive(hitbox, 69), false);
+  assert.equal(hitboxModule.isHitboxActive(hitbox, 70), true);
+  assert.equal(hitboxModule.isHitboxActive(hitbox, 149), true);
+  assert.equal(hitboxModule.isHitboxActive(hitbox, 150), false);
+  assert.equal(hitboxModule.actionPhase(30, 70, 150, 220), 'anticipation');
+  assert.equal(hitboxModule.actionPhase(90, 70, 150, 220), 'active');
+  assert.equal(hitboxModule.actionPhase(180, 70, 150, 220), 'recovery');
+});
+
+test('combat presentation includes pooled VFX and Hùng remains non-physical', async () => {
+  const poolSource = await readFile(resolve(root, 'src/app/features/love-fight/engine/vfx-pool.ts'), 'utf8');
+  const sceneSource = await readFile(resolve(root, 'src/app/features/love-fight/engine/love-fight-scene.ts'), 'utf8');
+  const aiSource = await readFile(resolve(root, 'src/app/features/love-fight/engine/hung-ai-controller.ts'), 'utf8');
+  assert.match(poolSource, /available/);
+  assert.match(poolSource, /release/);
+  assert.match(sceneSource, /spawnHitSpark/);
+  assert.match(sceneSource, /spawnDashTrail/);
+  assert.match(sceneSource, /camera\.shake\(finisher \? 80 : 55/);
+  assert.doesNotMatch(aiSource, /PUNCH|KICK/);
 });

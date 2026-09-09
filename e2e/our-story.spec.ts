@@ -381,7 +381,7 @@ test('origami hint advances one fold with Space and four folds with Enter', asyn
   await hint.locator('.origami-sentinel').scrollIntoViewIfNeeded();
   const crease = hint.locator('.origami-crease-handle');
   await crease.focus();
-  await page.keyboard.press('Space');
+  await page.keyboard.press(' ');
   await expect(hint).toHaveAttribute('data-fold-step', '1');
   await page.keyboard.press('Escape');
 
@@ -1001,6 +1001,39 @@ test('LOVE FIGHT reaches both reconciliation endings through the development hoo
   await expect(page.locator('[data-ending="b"]')).toContainText('Có lẽ đối khi chúng ta còn chưa hiểu nhau một chút thoi nhưng có lẽ sau cuộc cãi vã, anh vẫn bên em, anh vẫn mãi yêu em!!!');
 });
 
+test('LOVE FIGHT arcade movement, dash and combo remain responsive', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop', 'Keyboard movement is covered by the desktop project.');
+  await page.goto('/love-fight');
+  await page.waitForFunction(() => Boolean((window as Window & { __LOVE_FIGHT_DEBUG__?: unknown }).__LOVE_FIGHT_DEBUG__));
+  await page.evaluate(() => {
+    const debug = (window as Window & { __LOVE_FIGHT_DEBUG__?: { skipToFight(): void } }).__LOVE_FIGHT_DEBUG__;
+    debug?.skipToFight();
+  });
+  await expect(page.locator('.fight-canvas canvas')).toHaveCount(1);
+  const fightRoot = page.locator('.love-fight-page');
+  await expect(fightRoot).toHaveAttribute('data-state', 'playing', { timeout: 2_000 });
+  await expect(fightRoot).toHaveAttribute('data-engine-ready', 'true', { timeout: 4_000 });
+  await page.waitForTimeout(150);
+  const qStart = Number(await fightRoot.getAttribute('data-q-x'));
+  await page.keyboard.down('ArrowRight');
+  await expect.poll(async () => Number(await fightRoot.getAttribute('data-q-x'))).toBeGreaterThan(qStart + 20, { timeout: 2_000 });
+  await page.keyboard.up('ArrowRight');
+  const qMoved = Number(await fightRoot.getAttribute('data-q-x'));
+  expect(qMoved).toBeGreaterThan(qStart + 20);
+  await page.keyboard.down('Space');
+  await expect.poll(async () => Number(await fightRoot.getAttribute('data-q-x'))).toBeGreaterThan(qMoved + 80);
+  await page.keyboard.up('Space');
+  await page.keyboard.press('j');
+  await page.waitForTimeout(100);
+  await page.keyboard.press('j');
+  await page.waitForTimeout(100);
+  await page.keyboard.press('k');
+  await expect(fightRoot).toHaveAttribute('data-combo-count', '3', { timeout: 1_000 });
+  await expect(page.locator('.action-status')).toContainText('HIT COMBO');
+  await expect(fightRoot).not.toContainText(/\bHP\b|\bKO\b/);
+  await expect(fightRoot).toHaveAttribute('data-hung-action', /^(TIMID_IDLE|RECOIL|DODGE|PLEAD|HEART_CAST|APOLOGY_CLOUD|LOVE_LETTER|MILK_TEA|CHOCOLATE|BOUQUET|HUG_AURA|RING_PROMISE|KNEEL_APOLOGY)$/);
+});
+
 test('mobile LOVE FIGHT is touch friendly and respects reduced motion', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobile', 'This scenario is covered by the mobile Playwright project.');
   await page.setViewportSize({ width: 390, height: 844 });
@@ -1015,7 +1048,9 @@ test('mobile LOVE FIGHT is touch friendly and respects reduced motion', async ({
   await page.getByRole('button', { name: /Chọn vũ khí/i }).click();
   await page.getByRole('button', { name: /Đưa nhau lên sàn/i }).click();
   await page.getByRole('button', { name: /Bắt đầu dỗ vợ/i }).click();
-  await expect(page.locator('.mobile-controls button')).toHaveCount(6);
-  await expectTouchTarget(page.locator('.mobile-controls button').first());
+  const mobileFightControls = page.locator('.mobile-controls button');
+  await expect(mobileFightControls).toHaveCount(8);
+  await expect(mobileFightControls.first()).toBeVisible();
+  await expectTouchTarget(mobileFightControls.first());
   await expectNoHorizontalOverflow(page);
 });
