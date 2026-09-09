@@ -1,0 +1,1087 @@
+{
+  "version": "1.0.0",
+  "title": "LOVE FIGHT — Dỗi nhau để yêu nhau hơn",
+  "licenseNote": "Original generated prototype assets. No Capcom/Street Fighter assets are included.",
+  "likenessNote": "Generic chibi prototype only. Final Hùng/Quỳnh likeness pass requires user-supplied current-chat reference photos.",
+  "quynh": {
+    "outfits": [
+      {
+        "id": "Q01",
+        "displayName": "Đồ ngủ thỏ",
+        "src": "assets/runtime/quynh/outfits/Q01.webp",
+        "renderSize": [
+          253,
+          411
+        ],
+        "crop": [
+          0,
+          0,
+          280,
+          416
+        ]
+      },
+      {
+        "id": "Q02",
+        "displayName": "Hoodie hồng",
+        "src": "assets/runtime/quynh/outfits/Q02.webp",
+        "renderSize": [
+          276,
+          415
+        ],
+        "crop": [
+          280,
+          0,
+          561,
+          416
+        ]
+      },
+      {
+        "id": "Q03",
+        "displayName": "Váy hẹn hò",
+        "src": "assets/runtime/quynh/outfits/Q03.webp",
+        "renderSize": [
+          259,
+          415
+        ],
+        "crop": [
+          561,
+          0,
+          842,
+          416
+        ]
+      },
+      {
+        "id": "Q04",
+        "displayName": "Váy đen",
+        "src": "assets/runtime/quynh/outfits/Q04.webp",
+        "renderSize": [
+          253,
+          412
+        ],
+        "crop": [
+          842,
+          0,
+          1122,
+          416
+        ]
+      },
+      {
+        "id": "Q05",
+        "displayName": "Sporty",
+        "src": "assets/runtime/quynh/outfits/Q05.webp",
+        "renderSize": [
+          253,
+          417
+        ],
+        "crop": [
+          0,
+          467,
+          280,
+          884
+        ]
+      },
+      {
+        "id": "Q06",
+        "displayName": "Blouse & skirt",
+        "src": "assets/runtime/quynh/outfits/Q06.webp",
+        "renderSize": [
+          278,
+          417
+        ],
+        "crop": [
+          280,
+          467,
+          561,
+          884
+        ]
+      },
+      {
+        "id": "Q07",
+        "displayName": "Cardigan ấm",
+        "src": "assets/runtime/quynh/outfits/Q07.webp",
+        "renderSize": [
+          272,
+          417
+        ],
+        "crop": [
+          561,
+          467,
+          842,
+          884
+        ]
+      },
+      {
+        "id": "Q08",
+        "displayName": "School style",
+        "src": "assets/runtime/quynh/outfits/Q08.webp",
+        "renderSize": [
+          253,
+          417
+        ],
+        "crop": [
+          842,
+          467,
+          1122,
+          884
+        ]
+      },
+      {
+        "id": "Q09",
+        "displayName": "Pajama hồng",
+        "src": "assets/runtime/quynh/outfits/Q09.webp",
+        "renderSize": [
+          253,
+          416
+        ],
+        "crop": [
+          0,
+          935,
+          280,
+          1351
+        ]
+      },
+      {
+        "id": "Q10",
+        "displayName": "Coat & scarf",
+        "src": "assets/runtime/quynh/outfits/Q10.webp",
+        "renderSize": [
+          281,
+          416
+        ],
+        "crop": [
+          280,
+          935,
+          561,
+          1351
+        ]
+      },
+      {
+        "id": "Q11",
+        "displayName": "Váy hoa",
+        "src": "assets/runtime/quynh/outfits/Q11.webp",
+        "renderSize": [
+          256,
+          416
+        ],
+        "crop": [
+          561,
+          935,
+          842,
+          1351
+        ]
+      },
+      {
+        "id": "Q12",
+        "displayName": "Semi-formal hồng",
+        "src": "assets/runtime/quynh/outfits/Q12.webp",
+        "renderSize": [
+          254,
+          416
+        ],
+        "crop": [
+          842,
+          935,
+          1122,
+          1351
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "Q_IDLE_ANGRY",
+        "src": "assets/runtime/quynh/actions/Q_IDLE_ANGRY.webp",
+        "renderSize": [
+          244,
+          375
+        ],
+        "crop": [
+          0,
+          0,
+          280,
+          383
+        ]
+      },
+      {
+        "id": "Q_STEP",
+        "src": "assets/runtime/quynh/actions/Q_STEP.webp",
+        "renderSize": [
+          281,
+          373
+        ],
+        "crop": [
+          280,
+          0,
+          561,
+          383
+        ]
+      },
+      {
+        "id": "Q_PUNCH",
+        "src": "assets/runtime/quynh/actions/Q_PUNCH.webp",
+        "renderSize": [
+          281,
+          373
+        ],
+        "crop": [
+          561,
+          0,
+          842,
+          383
+        ]
+      },
+      {
+        "id": "Q_KICK",
+        "src": "assets/runtime/quynh/actions/Q_KICK.webp",
+        "renderSize": [
+          280,
+          372
+        ],
+        "crop": [
+          842,
+          0,
+          1122,
+          383
+        ]
+      },
+      {
+        "id": "Q_SLIPPER_THROW",
+        "src": "assets/runtime/quynh/actions/Q_SLIPPER_THROW.webp",
+        "renderSize": [
+          280,
+          375
+        ],
+        "crop": [
+          0,
+          467,
+          280,
+          851
+        ]
+      },
+      {
+        "id": "Q_BROOM_SWING",
+        "src": "assets/runtime/quynh/actions/Q_BROOM_SWING.webp",
+        "renderSize": [
+          281,
+          384
+        ],
+        "crop": [
+          280,
+          467,
+          561,
+          851
+        ]
+      },
+      {
+        "id": "Q_PILLOW_SMASH",
+        "src": "assets/runtime/quynh/actions/Q_PILLOW_SMASH.webp",
+        "renderSize": [
+          281,
+          384
+        ],
+        "crop": [
+          561,
+          467,
+          842,
+          851
+        ]
+      },
+      {
+        "id": "Q_HIT",
+        "src": "assets/runtime/quynh/actions/Q_HIT.webp",
+        "renderSize": [
+          280,
+          384
+        ],
+        "crop": [
+          842,
+          467,
+          1122,
+          851
+        ]
+      },
+      {
+        "id": "Q_VICTORY_ANGRY",
+        "src": "assets/runtime/quynh/actions/Q_VICTORY_ANGRY.webp",
+        "renderSize": [
+          464,
+          383
+        ],
+        "crop": [
+          0,
+          935,
+          561,
+          1318
+        ]
+      },
+      {
+        "id": "Q_ENDING_HAPPY",
+        "src": "assets/runtime/quynh/actions/Q_ENDING_HAPPY.webp",
+        "renderSize": [
+          506,
+          383
+        ],
+        "crop": [
+          561,
+          935,
+          1122,
+          1318
+        ]
+      }
+    ],
+    "weapons": [
+      {
+        "id": "slipper",
+        "displayName": "Dép huyền thoại",
+        "src": "assets/runtime/quynh/weapons/slipper.webp",
+        "courageDamage": 9,
+        "cooldownSec": 0.42,
+        "renderSize": [
+          181,
+          210
+        ],
+        "crop": [
+          0,
+          175,
+          187,
+          385
+        ]
+      },
+      {
+        "id": "high_heel",
+        "displayName": "Cao gót cảnh cáo",
+        "src": "assets/runtime/quynh/weapons/high_heel.webp",
+        "courageDamage": 12,
+        "cooldownSec": 0.5,
+        "renderSize": [
+          187,
+          210
+        ],
+        "crop": [
+          187,
+          175,
+          374,
+          385
+        ]
+      },
+      {
+        "id": "broom",
+        "displayName": "Chổi yêu thương",
+        "src": "assets/runtime/quynh/weapons/broom.webp",
+        "courageDamage": 11,
+        "cooldownSec": 0.55,
+        "renderSize": [
+          187,
+          210
+        ],
+        "crop": [
+          374,
+          175,
+          561,
+          385
+        ]
+      },
+      {
+        "id": "pillow",
+        "displayName": "Gối dỗi",
+        "src": "assets/runtime/quynh/weapons/pillow.webp",
+        "courageDamage": 8,
+        "cooldownSec": 0.48,
+        "renderSize": [
+          187,
+          210
+        ],
+        "crop": [
+          561,
+          175,
+          748,
+          385
+        ]
+      },
+      {
+        "id": "hairbrush",
+        "displayName": "Lược thần tốc",
+        "src": "assets/runtime/quynh/weapons/hairbrush.webp",
+        "courageDamage": 7,
+        "cooldownSec": 0.35,
+        "renderSize": [
+          187,
+          210
+        ],
+        "crop": [
+          748,
+          175,
+          935,
+          385
+        ]
+      },
+      {
+        "id": "plush_hammer",
+        "displayName": "Búa bông",
+        "src": "assets/runtime/quynh/weapons/plush_hammer.webp",
+        "courageDamage": 13,
+        "cooldownSec": 0.6,
+        "renderSize": [
+          185,
+          210
+        ],
+        "crop": [
+          935,
+          175,
+          1122,
+          385
+        ]
+      },
+      {
+        "id": "phone",
+        "displayName": "Điện thoại gọi chồng",
+        "src": "assets/runtime/quynh/weapons/phone.webp",
+        "courageDamage": 6,
+        "cooldownSec": 0.3,
+        "renderSize": [
+          176,
+          225
+        ],
+        "crop": [
+          0,
+          465,
+          187,
+          690
+        ]
+      },
+      {
+        "id": "spoon",
+        "displayName": "Thìa cảnh cáo",
+        "src": "assets/runtime/quynh/weapons/spoon.webp",
+        "courageDamage": 7,
+        "cooldownSec": 0.34,
+        "renderSize": [
+          187,
+          225
+        ],
+        "crop": [
+          187,
+          465,
+          374,
+          690
+        ]
+      },
+      {
+        "id": "rolling_pin",
+        "displayName": "Cán bột",
+        "src": "assets/runtime/quynh/weapons/rolling_pin.webp",
+        "courageDamage": 12,
+        "cooldownSec": 0.58,
+        "renderSize": [
+          187,
+          225
+        ],
+        "crop": [
+          374,
+          465,
+          561,
+          690
+        ]
+      },
+      {
+        "id": "teddy_bear",
+        "displayName": "Gấu bông",
+        "src": "assets/runtime/quynh/weapons/teddy_bear.webp",
+        "courageDamage": 8,
+        "cooldownSec": 0.45,
+        "renderSize": [
+          187,
+          225
+        ],
+        "crop": [
+          561,
+          465,
+          748,
+          690
+        ]
+      },
+      {
+        "id": "handbag",
+        "displayName": "Túi xách",
+        "src": "assets/runtime/quynh/weapons/handbag.webp",
+        "courageDamage": 10,
+        "cooldownSec": 0.5,
+        "renderSize": [
+          187,
+          211
+        ],
+        "crop": [
+          748,
+          465,
+          935,
+          690
+        ]
+      },
+      {
+        "id": "paper_fan",
+        "displayName": "Quạt giấy",
+        "src": "assets/runtime/quynh/weapons/paper_fan.webp",
+        "courageDamage": 9,
+        "cooldownSec": 0.38,
+        "renderSize": [
+          177,
+          224
+        ],
+        "crop": [
+          935,
+          465,
+          1122,
+          690
+        ]
+      }
+    ]
+  },
+  "hung": {
+    "outfits": [
+      {
+        "id": "H01",
+        "displayName": "Áo thun jeans",
+        "src": "assets/runtime/hung/outfits/H01.webp",
+        "renderSize": [
+          280,
+          416
+        ],
+        "crop": [
+          0,
+          0,
+          280,
+          416
+        ]
+      },
+      {
+        "id": "H02",
+        "displayName": "Sơ mi xanh",
+        "src": "assets/runtime/hung/outfits/H02.webp",
+        "renderSize": [
+          281,
+          416
+        ],
+        "crop": [
+          280,
+          0,
+          561,
+          416
+        ]
+      },
+      {
+        "id": "H03",
+        "displayName": "Sinh viên",
+        "src": "assets/runtime/hung/outfits/H03.webp",
+        "renderSize": [
+          274,
+          416
+        ],
+        "crop": [
+          561,
+          0,
+          842,
+          416
+        ]
+      },
+      {
+        "id": "H04",
+        "displayName": "Hoodie xám",
+        "src": "assets/runtime/hung/outfits/H04.webp",
+        "renderSize": [
+          250,
+          416
+        ],
+        "crop": [
+          842,
+          0,
+          1122,
+          416
+        ]
+      },
+      {
+        "id": "H05",
+        "displayName": "Homewear gấu",
+        "src": "assets/runtime/hung/outfits/H05.webp",
+        "renderSize": [
+          240,
+          417
+        ],
+        "crop": [
+          0,
+          467,
+          280,
+          884
+        ]
+      },
+      {
+        "id": "H06",
+        "displayName": "Sweater",
+        "src": "assets/runtime/hung/outfits/H06.webp",
+        "renderSize": [
+          278,
+          417
+        ],
+        "crop": [
+          280,
+          467,
+          561,
+          884
+        ]
+      },
+      {
+        "id": "H07",
+        "displayName": "Date semi-formal",
+        "src": "assets/runtime/hung/outfits/H07.webp",
+        "renderSize": [
+          279,
+          417
+        ],
+        "crop": [
+          561,
+          467,
+          842,
+          884
+        ]
+      },
+      {
+        "id": "H08",
+        "displayName": "Polo",
+        "src": "assets/runtime/hung/outfits/H08.webp",
+        "renderSize": [
+          234,
+          417
+        ],
+        "crop": [
+          842,
+          467,
+          1122,
+          884
+        ]
+      },
+      {
+        "id": "H09",
+        "displayName": "Sporty",
+        "src": "assets/runtime/hung/outfits/H09.webp",
+        "renderSize": [
+          252,
+          416
+        ],
+        "crop": [
+          0,
+          935,
+          280,
+          1351
+        ]
+      },
+      {
+        "id": "H10",
+        "displayName": "Jacket xanh",
+        "src": "assets/runtime/hung/outfits/H10.webp",
+        "renderSize": [
+          281,
+          416
+        ],
+        "crop": [
+          280,
+          935,
+          561,
+          1351
+        ]
+      },
+      {
+        "id": "H11",
+        "displayName": "Pajama xanh",
+        "src": "assets/runtime/hung/outfits/H11.webp",
+        "renderSize": [
+          281,
+          416
+        ],
+        "crop": [
+          561,
+          935,
+          842,
+          1351
+        ]
+      },
+      {
+        "id": "H12",
+        "displayName": "Suit + hoa",
+        "src": "assets/runtime/hung/outfits/H12.webp",
+        "renderSize": [
+          235,
+          416
+        ],
+        "crop": [
+          842,
+          935,
+          1122,
+          1351
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "H_IDLE_TIMID",
+        "src": "assets/runtime/hung/actions/H_IDLE_TIMID.webp",
+        "renderSize": [
+          280,
+          379
+        ],
+        "crop": [
+          0,
+          0,
+          280,
+          385
+        ]
+      },
+      {
+        "id": "H_RECOIL",
+        "src": "assets/runtime/hung/actions/H_RECOIL.webp",
+        "renderSize": [
+          281,
+          384
+        ],
+        "crop": [
+          280,
+          0,
+          561,
+          385
+        ]
+      },
+      {
+        "id": "H_DODGE",
+        "src": "assets/runtime/hung/actions/H_DODGE.webp",
+        "renderSize": [
+          281,
+          334
+        ],
+        "crop": [
+          561,
+          0,
+          842,
+          385
+        ]
+      },
+      {
+        "id": "H_PLEAD",
+        "src": "assets/runtime/hung/actions/H_PLEAD.webp",
+        "renderSize": [
+          268,
+          372
+        ],
+        "crop": [
+          842,
+          0,
+          1122,
+          385
+        ]
+      },
+      {
+        "id": "H_HEART_CAST",
+        "src": "assets/runtime/hung/actions/H_HEART_CAST.webp",
+        "renderSize": [
+          353,
+          375
+        ],
+        "crop": [
+          0,
+          470,
+          374,
+          845
+        ]
+      },
+      {
+        "id": "H_BOUQUET",
+        "src": "assets/runtime/hung/actions/H_BOUQUET.webp",
+        "renderSize": [
+          374,
+          375
+        ],
+        "crop": [
+          374,
+          470,
+          748,
+          845
+        ]
+      },
+      {
+        "id": "H_CHOCOLATE",
+        "src": "assets/runtime/hung/actions/H_CHOCOLATE.webp",
+        "renderSize": [
+          374,
+          375
+        ],
+        "crop": [
+          748,
+          470,
+          1122,
+          845
+        ]
+      },
+      {
+        "id": "H_KNEEL_APOLOGY",
+        "src": "assets/runtime/hung/actions/H_KNEEL_APOLOGY.webp",
+        "renderSize": [
+          374,
+          388
+        ],
+        "crop": [
+          0,
+          930,
+          374,
+          1320
+        ]
+      },
+      {
+        "id": "H_DEFEAT_BOUQUET",
+        "src": "assets/runtime/hung/actions/H_DEFEAT_BOUQUET.webp",
+        "renderSize": [
+          374,
+          389
+        ],
+        "crop": [
+          374,
+          930,
+          748,
+          1320
+        ]
+      },
+      {
+        "id": "H_ENDING_HAPPY",
+        "src": "assets/runtime/hung/actions/H_ENDING_HAPPY.webp",
+        "renderSize": [
+          372,
+          390
+        ],
+        "crop": [
+          748,
+          930,
+          1122,
+          1320
+        ]
+      }
+    ],
+    "specialEffects": [
+      {
+        "id": "heart_projectile",
+        "displayName": "Tim bay xin lỗi",
+        "src": "assets/runtime/hung/effects/heart_projectile.webp",
+        "angerReduction": 12,
+        "cooldownSec": 1.4,
+        "renderSize": [
+          187,
+          190
+        ],
+        "crop": [
+          0,
+          865,
+          187,
+          1055
+        ]
+      },
+      {
+        "id": "bouquet",
+        "displayName": "Bó hoa hòa giải",
+        "src": "assets/runtime/hung/effects/bouquet.webp",
+        "angerReduction": 18,
+        "cooldownSec": 3.8,
+        "renderSize": [
+          187,
+          190
+        ],
+        "crop": [
+          187,
+          865,
+          374,
+          1055
+        ]
+      },
+      {
+        "id": "chocolate_box",
+        "displayName": "Chocolate làm lành",
+        "src": "assets/runtime/hung/effects/chocolate_box.webp",
+        "angerReduction": 14,
+        "cooldownSec": 3.0,
+        "renderSize": [
+          187,
+          184
+        ],
+        "crop": [
+          374,
+          865,
+          561,
+          1055
+        ]
+      },
+      {
+        "id": "milk_tea",
+        "displayName": "Trà sữa chuộc lỗi",
+        "src": "assets/runtime/hung/effects/milk_tea.webp",
+        "angerReduction": 16,
+        "cooldownSec": 3.2,
+        "renderSize": [
+          187,
+          190
+        ],
+        "crop": [
+          561,
+          865,
+          748,
+          1055
+        ]
+      },
+      {
+        "id": "love_letter",
+        "displayName": "Thư xin lỗi",
+        "src": "assets/runtime/hung/effects/love_letter.webp",
+        "angerReduction": 15,
+        "cooldownSec": 3.0,
+        "renderSize": [
+          187,
+          188
+        ],
+        "crop": [
+          748,
+          865,
+          935,
+          1055
+        ]
+      },
+      {
+        "id": "ring_box",
+        "displayName": "Lời hứa lấp lánh",
+        "src": "assets/runtime/hung/effects/ring_box.webp",
+        "angerReduction": 20,
+        "cooldownSec": 5.5,
+        "renderSize": [
+          185,
+          190
+        ],
+        "crop": [
+          935,
+          865,
+          1122,
+          1055
+        ]
+      },
+      {
+        "id": "hug_aura",
+        "displayName": "Ôm thật lâu",
+        "src": "assets/runtime/hung/effects/hug_aura.webp",
+        "angerReduction": 22,
+        "cooldownSec": 5.0,
+        "renderSize": [
+          187,
+          190
+        ],
+        "crop": [
+          0,
+          1135,
+          187,
+          1325
+        ]
+      },
+      {
+        "id": "kiss_sparkle",
+        "displayName": "Nụ hôn hòa giải",
+        "src": "assets/runtime/hung/effects/kiss_sparkle.webp",
+        "angerReduction": 24,
+        "cooldownSec": 6.0,
+        "renderSize": [
+          187,
+          190
+        ],
+        "crop": [
+          187,
+          1135,
+          374,
+          1325
+        ]
+      },
+      {
+        "id": "apology_cloud",
+        "displayName": "Xin lũi vợ...",
+        "src": "assets/runtime/hung/effects/apology_cloud.webp",
+        "angerReduction": 10,
+        "cooldownSec": 2.0,
+        "renderSize": [
+          187,
+          190
+        ],
+        "crop": [
+          374,
+          1135,
+          561,
+          1325
+        ]
+      },
+      {
+        "id": "healing_burst",
+        "displayName": "Hồi phục tình yêu",
+        "src": "assets/runtime/hung/effects/healing_burst.webp",
+        "angerReduction": 17,
+        "cooldownSec": 4.0,
+        "renderSize": [
+          187,
+          190
+        ],
+        "crop": [
+          561,
+          1135,
+          748,
+          1325
+        ]
+      },
+      {
+        "id": "shining_stars",
+        "displayName": "Lấp lánh dỗ dành",
+        "src": "assets/runtime/hung/effects/shining_stars.webp",
+        "angerReduction": 13,
+        "cooldownSec": 2.8,
+        "renderSize": [
+          187,
+          190
+        ],
+        "crop": [
+          748,
+          1135,
+          935,
+          1325
+        ]
+      },
+      {
+        "id": "reconciled_double_heart",
+        "displayName": "Hai trái tim làm lành",
+        "src": "assets/runtime/hung/effects/reconciled_double_heart.webp",
+        "angerReduction": 30,
+        "cooldownSec": 8.0,
+        "renderSize": [
+          187,
+          190
+        ],
+        "crop": [
+          935,
+          1135,
+          1122,
+          1325
+        ]
+      }
+    ]
+  },
+  "ui": {
+    "conceptBoard": "assets/ui/love_fight_concept_board.webp"
+  },
+  "audio": [
+    "assets/audio/ui_select.wav",
+    "assets/audio/ui_confirm.wav",
+    "assets/audio/soft_hit.wav",
+    "assets/audio/slipper_whoosh.wav",
+    "assets/audio/heart_cast.wav",
+    "assets/audio/apology_chime.wav",
+    "assets/audio/bouquet_chime.wav",
+    "assets/audio/ending_reconcile.wav"
+  ],
+  "endingCopy": {
+    "A": "Vợ yêu ơi! Chồng trân thành xin lũi em! Vợ iu gọi ngay cho ck iu nhó, ck iu xin lũi vợ ạ !!!",
+    "B": "Có lẽ đối khi chúng ta còn chưa hiểu nhau một chút thoi nhưng có lẽ sau cuộc cãi vã, anh vẫn bên em, anh vẫn mãi yêu em!!!"
+  }
+}

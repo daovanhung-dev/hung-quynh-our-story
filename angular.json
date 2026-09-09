@@ -31,7 +31,9 @@
                 "glob": "**/*",
                 "input": "public",
                 "ignore": [
-                  "images/memories/**/*.{jpg,jpeg,png,heic,JPG,JPEG,PNG,HEIC}"
+                  "images/memories/**/*.{jpg,jpeg,png,heic,JPG,JPEG,PNG,HEIC}",
+                  "games/sf2.zip",
+                  "games/LOVE_FIGHT_ASSET_PACK_v1/**/*"
                 ]
               }
             ],

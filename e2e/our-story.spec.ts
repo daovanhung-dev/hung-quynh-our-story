@@ -943,3 +943,79 @@ test('reduced motion keeps the birthday journey usable', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Happy 22nd Birthday My Love', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: /Mở món quà của em/i })).toBeVisible();
 });
+
+test('event hub opens LOVE FIGHT and setup exposes the full v1 catalog', async ({ page }) => {
+  await page.goto('/events');
+  const card = page.locator('[data-item-id="love-fight-2026"]');
+  await expect(card).toHaveAttribute('href', '/love-fight');
+  await card.click();
+  await expect(page).toHaveURL(/\/love-fight$/);
+  await expect(page.getByRole('heading', { name: /LOVE.*FIGHT/i })).toBeVisible();
+  await page.getByRole('button', { name: /Mở màn dỗ vợ/i }).click();
+  await expect(page.locator('[data-outfit-id^="Q"]')).toHaveCount(12);
+  await page.locator('[data-outfit-id="Q03"]').click();
+  await page.getByRole('button', { name: /Chọn đồ cho Hùng/i }).click();
+  await expect(page.locator('[data-outfit-id^="H"]')).toHaveCount(12);
+  await page.locator('[data-outfit-id="H01"]').click();
+  await page.locator('[data-outfit-id="H02"]').click();
+  await page.locator('[data-outfit-id="H03"]').click();
+  await page.getByRole('button', { name: /Chọn số round/i }).click();
+  await page.locator('[data-rounds="1"]').click();
+  await page.getByRole('button', { name: /Chọn vũ khí/i }).click();
+  await expect(page.locator('[data-weapon-id]')).toHaveCount(12);
+  await page.locator('[data-weapon-id="slipper"]').click();
+  await page.getByRole('button', { name: /Đưa nhau lên sàn/i }).click();
+  await expect(page.getByRole('heading', { name: /Sẵn sàng/i })).toBeVisible();
+  await expect(page.locator('.special-chip')).toHaveCount(4);
+});
+
+test('LOVE FIGHT reaches both reconciliation endings through the development hook', async ({ page }) => {
+  await page.goto('/love-fight');
+  await page.waitForFunction(() => Boolean((window as Window & { __LOVE_FIGHT_DEBUG__?: unknown }).__LOVE_FIGHT_DEBUG__));
+  await page.evaluate(() => {
+    const debug = (window as Window & { __LOVE_FIGHT_DEBUG__?: { skipToFight(): void } }).__LOVE_FIGHT_DEBUG__;
+    debug?.skipToFight();
+  });
+  await expect(page.locator('.fight-canvas canvas')).toHaveCount(1);
+  await page.evaluate(() => {
+    const debug = (window as Window & { __LOVE_FIGHT_DEBUG__?: { forceEndingA(): void } }).__LOVE_FIGHT_DEBUG__;
+    debug?.forceEndingA();
+  });
+  await expect(page.locator('[data-ending="a"]')).toBeVisible();
+  await expect(page.locator('[data-ending="a"]')).toContainText('Vợ yêu ơi! Chồng trân thành xin lũi em! Vợ iu gọi ngay cho ck iu nhó, ck iu xin lũi vợ ạ !!!');
+  await expect(page.locator('.rain-photo')).toHaveCount(24, { timeout: 7_000 });
+  await expect(page.getByRole('heading', { name: /Những ngày/i })).toBeVisible({ timeout: 7_000 });
+  await expect(page.getByRole('link', { name: /Xem chuyện của chúng mình/i })).toHaveAttribute('href', '/timeline');
+  await page.goto('/love-fight');
+  await page.waitForFunction(() => Boolean((window as Window & { __LOVE_FIGHT_DEBUG__?: unknown }).__LOVE_FIGHT_DEBUG__));
+  await page.evaluate(() => {
+    const debug = (window as Window & { __LOVE_FIGHT_DEBUG__?: { skipToFight(): void } }).__LOVE_FIGHT_DEBUG__;
+    debug?.skipToFight();
+  });
+  await expect(page.locator('.fight-canvas canvas')).toHaveCount(1);
+  await page.evaluate(() => {
+    const debug = (window as Window & { __LOVE_FIGHT_DEBUG__?: { forceEndingB(): void } }).__LOVE_FIGHT_DEBUG__;
+    debug?.forceEndingB();
+  });
+  await expect(page.locator('[data-ending="b"]')).toBeVisible();
+  await expect(page.locator('[data-ending="b"]')).toContainText('Có lẽ đối khi chúng ta còn chưa hiểu nhau một chút thoi nhưng có lẽ sau cuộc cãi vã, anh vẫn bên em, anh vẫn mãi yêu em!!!');
+});
+
+test('mobile LOVE FIGHT is touch friendly and respects reduced motion', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'This scenario is covered by the mobile Playwright project.');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/love-fight');
+  await expectNoHorizontalOverflow(page);
+  await page.getByRole('button', { name: /Mở màn dỗ vợ/i }).click();
+  await expectTouchTarget(page.locator('[data-outfit-id="Q01"]'));
+  await expect.poll(async () => Number.parseFloat(await page.locator('.choice-card').first().evaluate((element) => getComputedStyle(element).transitionDuration))).toBeLessThan(0.01);
+  await page.getByRole('button', { name: /Chọn đồ cho Hùng/i }).click();
+  await page.getByRole('button', { name: /Chọn số round/i }).click();
+  await page.getByRole('button', { name: /Chọn vũ khí/i }).click();
+  await page.getByRole('button', { name: /Đưa nhau lên sàn/i }).click();
+  await page.getByRole('button', { name: /Bắt đầu dỗ vợ/i }).click();
+  await expect(page.locator('.mobile-controls button')).toHaveCount(6);
+  await expectTouchTarget(page.locator('.mobile-controls button').first());
+  await expectNoHorizontalOverflow(page);
+});

@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "title": "LOVE FIGHT — Dỗi nhau để yêu nhau hơn",
+  "licenseNote": "Original generated prototype assets. No Capcom/Street Fighter assets are included.",
+  "characters": {
+    "quynhOutfits": "games/love-fight/characters/quynh/Q01-Q12.webp",
+    "hungOutfits": "games/love-fight/characters/hung/H01-H12.webp",
+    "quynhActions": "games/love-fight/characters/quynh/Q_*.webp",
+    "hungActions": "games/love-fight/characters/hung/H_*.webp"
+  },
+  "weapons": "games/love-fight/weapons/*.webp",
+  "effects": "games/love-fight/effects/*.webp",
+  "audio": "games/love-fight/audio/*.wav",
+  "sf2Required": false
+}

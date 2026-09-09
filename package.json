@@ -16,8 +16,9 @@
     "build:dev": "npm run prebuild && ng build --configuration development",
     "prepare:static": "node scripts/prepare-static-host.mjs",
     "verify:artifact": "node scripts/verify-static-artifact.mjs",
-    "check:scripts": "node --check scripts/lib/memory-scanner.mjs && node --check scripts/validate-memories.mjs && node --check scripts/generate-memory-index.mjs && node --check scripts/prepare-static-host.mjs && node --check scripts/migrate-memory-images.mjs && node --check scripts/generate-media-variants.mjs && node --check scripts/verify-static-artifact.mjs",
+    "check:scripts": "node --check scripts/lib/memory-scanner.mjs && node --check scripts/validate-memories.mjs && node --check scripts/generate-memory-index.mjs && node --check scripts/prepare-static-host.mjs && node --check scripts/migrate-memory-images.mjs && node --check scripts/generate-media-variants.mjs && node --check scripts/verify-static-artifact.mjs && node --check scripts/check-sf2-reference.mjs",
     "test": "npm run prepare:media && node --test test/**/*.test.mjs",
+    "check:sf2": "node scripts/check-sf2-reference.mjs",
     "test:e2e": "playwright test"
   },
   "engines": {
@@ -29,6 +30,7 @@
     "@angular/core": "^22.1.5",
     "@angular/platform-browser": "^22.1.5",
     "@angular/router": "^22.1.5",
+    "phaser": "4.2.1",
     "rxjs": "^7.8.2",
     "three": "^0.180.0",
     "tslib": "^2.8.1"

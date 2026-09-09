@@ -48,6 +48,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/love-treasure/love-treasure.page').then((m) => m.LoveTreasurePage)
   },
   {
+    path: 'love-fight',
+    loadComponent: () => import('./features/love-fight/love-fight.page').then((m) => m.LoveFightPage)
+  },
+  {
     path: 'unsaid',
     loadComponent: () => import('./features/unsaid/unsaid.page').then((m) => m.UnsaidPage)
   },

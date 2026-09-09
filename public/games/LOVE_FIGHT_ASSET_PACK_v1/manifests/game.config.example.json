@@ -1,0 +1,18 @@
+{
+  "gameId": "love-fight",
+  "route": "/love-fight",
+  "roundOptions": [
+    1,
+    3,
+    5
+  ],
+  "defaultRounds": 3,
+  "roundTimeSec": 60,
+  "meters": {
+    "quynhAnger": 100,
+    "hungCourage": 100
+  },
+  "endingGalleryRandomPhotos": 24,
+  "sf2ReferencePath": "public/games/sf2.zip",
+  "sf2Required": false
+}

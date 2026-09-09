@@ -9,6 +9,15 @@ export const EVENT_ITEMS: readonly HubItem[] = [
     dateLabel: '05 · 09 · 2026',
     route: '/birthday',
     status: 'available'
+  },
+  {
+    id: 'love-fight-2026',
+    category: 'event',
+    title: 'Dỗ Vợ — LOVE FIGHT',
+    description: 'Vợ đang dỗi? Vào đây xử chồng một trận rồi mình làm lành ❤️',
+    dateLabel: 'MỘT TRẬN LÀM LÀNH',
+    route: '/love-fight',
+    status: 'available'
   }
 ];
 
