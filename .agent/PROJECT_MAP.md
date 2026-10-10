@@ -57,7 +57,7 @@ flowchart LR
 - `MissYouGateService` chỉ lưu flag vào `sessionStorage` theo tab. `HyeuQ` ở client code là Easter egg công khai, không phải xác thực.
 - `LOVE_LETTER_ORIGINAL.md` được copy byte-for-byte vào `public/content/love-letter-miss-you.md`. `letter-parser.ts` chỉ chia segment `**bold**`; template Angular render text binding an toàn. `miss-you-content.test.mjs` và `verify-static-artifact.mjs` so hash, byte size và dòng.
 - `days-apart.ts` tính ngày lịch VN và delay tới nửa đêm VN; page cập nhật khi timer tới hạn, mỗi phút cho clock hiển thị và khi tab resume.
-- `music-tracks.content.ts` là catalog chung. Museum giữ tên alias `MUSEUM_TRACKS`; Love Treasure chỉ thêm adapter duration đang đo trong media element. Miss You tạo một audio element và dừng nó khi route bị destroy.
+- `music-tracks.content.ts` là catalog chung. Museum giữ tên alias `MUSEUM_TRACKS`; Love Treasure chỉ thêm adapter duration đang đo trong media element. Miss You tạo một audio element, thử autoplay khi vào route, báo fallback nếu browser chặn và dừng nó khi route bị destroy.
 - Background mới là `public/images/illustrations/miss-you-autumn.webp` (WebP 1600×900, 206,632 bytes); CSS gradient là fallback. Gallery dùng `PhotoViewerComponent` để giữ keyboard/touch/focus behavior dùng chung.
 
 ## UI dùng chung và style toàn cục

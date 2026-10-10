@@ -128,6 +128,7 @@ export class MissYouMusicPlayerComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.audioRef.nativeElement.volume = this.volume();
     this.setAudioSource();
+    void this.playCurrentTrack();
   }
 
   ngOnDestroy(): void {

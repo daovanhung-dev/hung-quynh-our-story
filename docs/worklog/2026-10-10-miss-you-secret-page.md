@@ -66,7 +66,7 @@ Baseline E2E failures: Museum desktop catalog count; Museum desktop photo select
 
 ## PHASE 8 — Player nhạc
 
-Đã tạo catalog chung cho năm MP3 có sẵn và chuyển Museum cùng Love Treasure sang catalog này, giữ lại tên bài và cách dùng hiện tại. Trang mới dùng một `HTMLAudioElement`, `preload="none"`, chỉ phát sau thao tác người dùng, có chọn bài/seek/volume, phản ánh event lỗi thật và dừng audio khi rời route. Không thêm phụ thuộc. Unit xác nhận đủ năm file trên đĩa; E2E phát MP3 thật, pause và giả lập lỗi tải.
+Đã tạo catalog chung cho năm MP3 có sẵn và chuyển Museum cùng Love Treasure sang catalog này, giữ lại tên bài và cách dùng hiện tại. Trang mới dùng một `HTMLAudioElement`, `preload="none"`, tự thử phát bài đầu khi route vào; nếu trình duyệt chặn autoplay, player báo trạng thái và giữ thao tác phát thủ công làm fallback. Có chọn bài/seek/volume, phản ánh event lỗi thật và dừng audio khi rời route. Không thêm phụ thuộc. Unit xác nhận đủ năm file trên đĩa; E2E bao phủ autoplay/fallback, phát MP3 thật, pause và lỗi tải.
 
 ## PHASE 9 — Kết nối dữ liệu và vòng đời
 
@@ -104,4 +104,12 @@ Năm lỗi legacy còn lại: Museum catalog/photo viewer desktop; Museum HUD de
 - `test-results/` do Playwright tạo trong lượt này đã được dọn; log baseline và ảnh kiểm chứng ở `/tmp` không thuộc repo.
 - NPM báo 11 advisory dependency hiện có sau `npm ci` (3 moderate, 5 high, 3 critical); không chạy lệnh tự động nâng dependency trong phạm vi feature.
 - Cổng chỉ là surprise gate. Thư và media đều nằm trong static artifact công khai của GitHub Pages.
+
+## Follow-up — thử autoplay khi vào trang
+
+- Theo yêu cầu tiếp nối, player gọi `play()` sau khi gắn track đầu tiên lúc component khởi tạo. Nếu browser chặn autoplay, lỗi hiện hướng dẫn bấm nút phát; không thể bảo đảm mọi trình duyệt tự phát khi chưa có tương tác.
+- Cập nhật E2E hiện có để chấp nhận autoplay thành công hoặc fallback do browser policy.
+- `npx playwright test e2e/miss-you-secret-page.spec.ts --grep="player attempts autoplay"`: PASS 2/2 (desktop, mobile).
+- `npm run build:pages`: PASS; artifact verifier xác nhận 1,520 asset references và hash thư.
+- E2E toàn repo không chạy lại sau follow-up này; kết quả full suite phía trên là lần chạy ngay trước thay đổi autoplay.
 

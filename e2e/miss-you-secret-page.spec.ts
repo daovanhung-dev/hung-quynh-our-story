@@ -145,13 +145,14 @@ test('gallery uses real heart-clipped photos and the shared accessible lightbox'
   await expect(photos.nth(1)).toBeFocused();
 });
 
-test('real MP3 starts only after a user gesture and the player follows actual media events', async ({ page }) => {
+test('player attempts autoplay on entry, follows media events, and keeps a manual fallback', async ({ page }) => {
   const mediaRequest = page.waitForRequest((request) => request.resourceType() === 'media' && request.url().includes('/mp3/'));
   await openFromHome(page);
   const audio = page.locator('.music-player audio');
-  await expect(audio).toHaveJSProperty('paused', true);
-  await expect(page.locator('.vinyl-record')).not.toHaveClass(/is-playing/);
-  await page.getByRole('button', { name: 'Phát nhạc' }).click();
+  if (await audio.evaluate((element) => (element as HTMLAudioElement).paused)) {
+    await expect(page.locator('.audio-error')).toContainText(/trình duyệt chưa cho phép|bài hát chưa phát được/i);
+    await page.getByRole('button', { name: 'Phát nhạc' }).click();
+  }
   const request = await mediaRequest;
   expect(request.url()).toContain('/mp3/');
   await expect(audio).toHaveJSProperty('paused', false, { timeout: 8_000 });
