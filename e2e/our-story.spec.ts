@@ -1,10 +1,10 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
 async function expectTouchTarget(locator: Locator): Promise<void> {
-  const box = await locator.boundingBox();
-  expect(box).not.toBeNull();
-  expect(box?.width ?? 0).toBeGreaterThanOrEqual(44);
-  expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
+  await expect.poll(async () => {
+    const box = await locator.boundingBox();
+    return box ? Math.min(box.width, box.height) : 0;
+  }).toBeGreaterThanOrEqual(44);
 }
 
 async function expectNoHorizontalOverflow(page: Page): Promise<void> {

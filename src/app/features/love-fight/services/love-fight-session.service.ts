@@ -61,6 +61,7 @@ export class LoveFightSessionService {
   readonly isCrouching = signal(false);
   readonly isDashing = signal(false);
   readonly comboCount = signal(0);
+  readonly comboRemainingMs = signal(0);
   readonly dashReady = signal(true);
   readonly engineReady = signal(false);
   readonly cameraX = signal(0);
@@ -94,6 +95,7 @@ export class LoveFightSessionService {
     isCrouching: this.isCrouching(),
     isDashing: this.isDashing(),
     comboCount: this.comboCount(),
+    comboRemainingMs: this.comboRemainingMs(),
     dashReady: this.dashReady(),
     cameraX: this.cameraX(),
     cameraZoom: this.cameraZoom()
@@ -204,6 +206,7 @@ export class LoveFightSessionService {
     if (typeof snapshot.isCrouching === 'boolean') this.isCrouching.set(snapshot.isCrouching);
     if (typeof snapshot.isDashing === 'boolean') this.isDashing.set(snapshot.isDashing);
     if (typeof snapshot.comboCount === 'number') this.comboCount.set(Math.max(0, Math.floor(snapshot.comboCount)));
+    if (typeof snapshot.comboRemainingMs === 'number') this.comboRemainingMs.set(Math.max(0, Math.round(snapshot.comboRemainingMs)));
     if (typeof snapshot.dashReady === 'boolean') this.dashReady.set(snapshot.dashReady);
     if (typeof snapshot.cameraX === 'number') this.cameraX.set(snapshot.cameraX);
     if (typeof snapshot.cameraZoom === 'number') this.cameraZoom.set(snapshot.cameraZoom);
@@ -327,6 +330,7 @@ export class LoveFightSessionService {
     this.isCrouching.set(false);
     this.isDashing.set(false);
     this.comboCount.set(0);
+    this.comboRemainingMs.set(0);
     this.dashReady.set(true);
     this.cameraX.set(0);
     this.cameraZoom.set(1);

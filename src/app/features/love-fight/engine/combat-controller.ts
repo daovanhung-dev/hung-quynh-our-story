@@ -99,8 +99,8 @@ export class LoveFightCombatController {
       this.pendingHit = null;
       const stillInRange = !this.effects.targetDistance || this.effects.targetDistance() <= pending.maxDistance;
       if (!stillInRange || now < this.hungInvulnerableUntil) return;
-      this.session.damageCourage(pending.hitbox.damage);
       this.effects.hitConfirm?.(pending.action, pending.finisher);
+      this.session.damageCourage(pending.hitbox.damage);
       this.effects.hitStop(pending.hitStopMs);
     } else if (age >= pending.hitbox.activeToMs) {
       this.pendingHit = null;

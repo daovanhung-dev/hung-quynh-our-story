@@ -1,10 +1,13 @@
 import { access, readdir, readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 
 const projectRoot = process.cwd();
 const artifactRoot = path.join(projectRoot, 'dist', 'our-story');
 const manifestPath = path.join(projectRoot, 'src', 'app', 'generated', 'memories.generated.ts');
 const expectedBaseHref = '/hung-quynh-our-story/';
+const expectedLetterHash = '1752b77b6170143ff4ab77181da28d3a1a2e166d40c9901831f46bca58804186';
+const letterRelativePath = path.join('content', 'love-letter-miss-you.md');
 const SOURCE_IMAGE = /\.(?:jpe?g|png|heic)$/i;
 
 async function exists(filePath) {
@@ -20,12 +23,26 @@ async function listFiles(directory) {
   return nested.flat();
 }
 
-for (const required of ['index.html', '404.html', '.nojekyll', 'favicon.svg', 'images/generated/memories/media-manifest.json']) {
+for (const required of ['index.html', '404.html', '.nojekyll', 'favicon.svg', 'images/generated/memories/media-manifest.json', letterRelativePath]) {
   if (!(await exists(path.join(artifactRoot, required)))) throw new Error(`Artifact thiếu: dist/our-story/${required}`);
 }
 
 const indexHtml = await readFile(path.join(artifactRoot, 'index.html'), 'utf8');
 if (!indexHtml.includes(`<base href="${expectedBaseHref}">`)) throw new Error(`Artifact có base href sai, cần ${expectedBaseHref}`);
+
+const [sourceLetter, publicLetter, artifactLetter] = await Promise.all([
+  readFile(path.join(projectRoot, 'LOVE_LETTER_ORIGINAL.md')),
+  readFile(path.join(projectRoot, 'public', letterRelativePath)),
+  readFile(path.join(artifactRoot, letterRelativePath))
+]);
+for (const [label, bytes] of [['LOVE_LETTER_ORIGINAL.md', sourceLetter], ['public copy', publicLetter], ['Pages artifact', artifactLetter]]) {
+  const hash = createHash('sha256').update(bytes).digest('hex');
+  if (hash !== expectedLetterHash) throw new Error(`${label} sai SHA-256 thư gốc: ${hash}`);
+}
+if (!sourceLetter.equals(publicLetter) || !publicLetter.equals(artifactLetter)) throw new Error('Các bản thư không khớp byte-for-byte.');
+if (sourceLetter.byteLength !== 10_220 || sourceLetter.toString('utf8').split('\n').length - 1 !== 30) {
+  throw new Error('Thư nguồn phải giữ nguyên 30 dòng và 10,220 bytes UTF-8.');
+}
 
 const manifest = await readFile(manifestPath, 'utf8');
 const assets = [...manifest.matchAll(/"(?:src|thumbnailSrc|displaySrc|mediumSrc|posterSrc|originalSrc)": "([^"]+)"/g)].map((match) => match[1]);
@@ -46,4 +63,4 @@ const leakedOriginals = artifactFiles.filter((filePath) => {
 });
 if (leakedOriginals.length > 0) throw new Error(`Artifact vẫn chứa ${leakedOriginals.length} ảnh gốc, ví dụ: ${leakedOriginals.slice(0, 5).join(', ')}`);
 
-console.log(`Static artifact OK: ${assets.length} asset references verified; no original images deployed.`);
+console.log(`Static artifact OK: ${assets.length} asset references verified; letter hash verified; no original images deployed.`);

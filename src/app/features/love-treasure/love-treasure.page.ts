@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { MUSIC_TRACKS, type MusicTrack } from '../../core/content/music-tracks.content';
 import type { Memory, MemoryMedia } from '../../core/models/memory.model';
 import { MemoryService } from '../../core/services/memory.service';
 import { MediaFrameComponent } from '../../shared/components/media-frame/media-frame.component';
@@ -89,20 +90,11 @@ const TABLET_PHOTO_PLACEMENTS: readonly PhotoPlacement[] = [
   { left: 93, top: 70 }
 ] as const;
 
-interface LoveTrack {
-  id: string;
-  title: string;
-  src: string;
+interface LoveTrack extends MusicTrack {
   duration: number;
 }
 
-const LOVE_TRACKS: readonly LoveTrack[] = [
-  { id: 'cafe', title: 'Cà phê đắng như ly cafe', src: `mp3/${encodeURIComponent('Cà phê đắng như ly cafe.mp3')}`, duration: 0 },
-  { id: 'mascara', title: 'Mascara', src: `mp3/${encodeURIComponent('Mascara.mp3')}`, duration: 0 },
-  { id: 'mo', title: 'Mơ', src: `mp3/${encodeURIComponent('Mơ.mp3')}`, duration: 0 },
-  { id: 'thang-dien', title: 'Thằng Điên', src: `mp3/${encodeURIComponent('Thằng Điên.mp3')}`, duration: 0 },
-  { id: 'vi-anh-dau-co-biet', title: 'Vì anh đâu có biết', src: `mp3/${encodeURIComponent('Vì anh đâu có biết.mp3')}`, duration: 0 }
-] as const;
+const LOVE_TRACKS: readonly LoveTrack[] = MUSIC_TRACKS.map((track) => ({ ...track, duration: 0 }));
 
 @Component({
   standalone: true,

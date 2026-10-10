@@ -73,6 +73,7 @@ export interface CombatSnapshot {
   readonly isCrouching: boolean;
   readonly isDashing: boolean;
   readonly comboCount: number;
+  readonly comboRemainingMs: number;
   readonly dashReady: boolean;
   readonly cameraX: number;
   readonly cameraZoom: number;

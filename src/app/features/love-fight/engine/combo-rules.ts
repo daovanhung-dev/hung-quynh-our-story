@@ -17,6 +17,10 @@ export const resetCombo = (): ComboState => createComboState();
 
 export const comboExpired = (state: ComboState, nowMs: number): boolean => state.count > 0 && nowMs > state.expiresAtMs;
 
+export const comboRemainingMs = (state: ComboState, nowMs: number): number => (
+  state.count > 0 ? Math.max(0, state.expiresAtMs - nowMs) : 0
+);
+
 export const advanceCombo = (state: ComboState, input: ComboInput, nowMs: number): { readonly state: ComboState; readonly action: ComboAction } => {
   const expired = comboExpired(state, nowMs);
   const current = expired ? createComboState() : state;

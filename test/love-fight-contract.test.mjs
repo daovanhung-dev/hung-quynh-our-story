@@ -127,9 +127,14 @@ test('combo timing accepts J/J/K and weapon chain, then resets after timeout', (
   assert.equal(result.action, 'light-2');
   result = comboModule.advanceCombo(combo, 'heavy', 449);
   assert.equal(result.action, 'heavy-finisher');
+  combo = result.state;
   result = comboModule.advanceCombo(combo, 'weapon', 449);
   assert.equal(result.action, 'weapon-chain');
+  combo = result.state;
   assert.equal(comboModule.comboExpired(combo, 900), true);
+  assert.equal(comboModule.comboRemainingMs(combo, 900), 0);
+  const fresh = comboModule.advanceCombo(comboModule.createComboState(), 'light', 1).state;
+  assert.equal(comboModule.comboRemainingMs(fresh, 100), 351);
   assert.equal(comboModule.advanceCombo(combo, 'heavy', 900).action, 'rejected');
 });
 
@@ -149,6 +154,8 @@ test('hitboxes are active only inside their active phase', () => {
   assert.equal(hitboxModule.actionPhase(30, 70, 150, 220), 'anticipation');
   assert.equal(hitboxModule.actionPhase(90, 70, 150, 220), 'active');
   assert.equal(hitboxModule.actionPhase(180, 70, 150, 220), 'recovery');
+  const leftFacing = hitboxModule.normalizedFighterBoxes(300, 452, -1);
+  assert.ok(leftFacing.attacks.light[0].box.x < 300);
 });
 
 test('combat presentation includes pooled VFX and Hùng remains non-physical', async () => {
@@ -159,6 +166,9 @@ test('combat presentation includes pooled VFX and Hùng remains non-physical', a
   assert.match(poolSource, /release/);
   assert.match(sceneSource, /spawnHitSpark/);
   assert.match(sceneSource, /spawnDashTrail/);
+  assert.match(sceneSource, /hitConfirm/);
+  assert.match(sceneSource, /camera\.flash/);
+  assert.match(sceneSource, /hSquashUntilMs/);
   assert.match(sceneSource, /camera\.shake\(finisher \? 80 : 55/);
   assert.doesNotMatch(aiSource, /PUNCH|KICK/);
 });

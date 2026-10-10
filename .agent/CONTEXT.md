@@ -1,39 +1,34 @@
-# AI Coding Context — Our Story
+# Context AI của dự án — Hùng & Quỳnh: Our Story
 
-## Goal
+Đọc mục lục này sau `AGENTS.md`. Chỉ mở tài liệu chuyên đề đúng với task; không nạp toàn bộ subsystem vào mọi lượt làm việc.
 
-Build a private-feeling, romantic static photo timeline for Hùng and Quỳnh. The experience should feel like opening a digital memory book, not using a photo-management dashboard.
+## Tổng quan
 
-## Hard constraints
+- Website tiếng Việt dạng static, dùng Angular standalone, triển khai dưới dạng GitHub Pages project site.
+- Các phần runtime chính: Angular 22, TypeScript strict mode, Phaser 4 cho LOVE FIGHT, Three.js cho bảo tàng 3D và asset ảnh/âm thanh/model nội bộ.
+- Ứng dụng không có backend hoặc xác thực. File nào nằm trong artifact Pages đều công khai với khách truy cập.
+- Xem sơ đồ route và quan hệ ảnh hưởng tại [PROJECT_MAP.md](PROJECT_MAP.md).
 
-1. Frontend Angular standalone components.
-2. Static-only: no backend, database, Supabase, Firebase or server API.
-3. Photos live under `public/images/memories/YYYY/MM/DD/`.
-4. Never hard-code memories in components.
-5. `src/app/generated/memories.generated.ts` is build-generated and must not be manually edited.
-6. Keep animation subtle; respect `prefers-reduced-motion`.
-7. Mobile-first and image-first.
-8. Avoid new dependencies unless native browser/CSS/Angular cannot solve the requirement cleanly.
-9. No secrets or credentials in source.
-10. Preserve GitHub Pages static fallback behavior.
+## Nạp tài liệu theo task
 
-## Main flow
+| Task | Tài liệu |
+| --- | --- |
+| Xác định phạm vi, chọn người phụ trách hoặc điều phối | [TASK_ROUTING.md](TASK_ROUTING.md) |
+| Đổi route, dữ liệu kỷ niệm, trang sinh nhật/truyện, media dùng chung, Museum hoặc LOVE FIGHT | [PROJECT_MAP.md](PROJECT_MAP.md) |
+| Build hoặc xử lý GitHub Pages, static path, fallback 404 hay artifact | [GITHUB_PAGES.md](GITHUB_PAGES.md) |
+| Xem cơ sở thiết kế context hoặc cập nhật nguồn tham khảo | [REFERENCES.md](REFERENCES.md) |
+| Kiểm tra toàn bộ file đã theo dõi và static asset | [FILE_INVENTORY.md](FILE_INVENTORY.md) |
+| Trang secret “Chồng nhớ Quỳnh”, thư gốc, ngày theo VN, playlist và ảnh tim | [PROJECT_MAP.md](PROJECT_MAP.md), [GITHUB_PAGES.md](GITHUB_PAGES.md) |
 
-```text
-Images + optional metadata.json
-  -> validate-memories.mjs
-  -> generate-memory-index.mjs
-  -> MemoryService
-  -> Home/Timeline
-  -> Memory Detail
-  -> Photo Viewer
-```
+## Thông tin cần nhớ
 
-## Next implementation priorities
+- Ảnh/video nguồn nằm trong `public/images/memories/`; thư mục theo ngày có thể chứa `metadata.json`, còn `_unresolved` giữ media chưa xác định được ngày.
+- Các biến thể media được tạo trong `public/images/generated/memories/` và bị Git ignore; index kiểu TypeScript được tạo tại `src/app/generated/memories.generated.ts`. Không sửa file sinh tự động bằng tay.
+- Build và artifact verifier hiện có kiểm tra base href gắn với tên repo. Xem hướng dẫn Pages trước khi đổi tên repo hoặc đường dẫn deploy.
+- Route `/hint/miss-you` dùng surprise gate theo `sessionStorage` của tab; thư tại `public/content/love-letter-miss-you.md` và mọi media trong bundle Pages là nội dung công khai. SHA-256 thư được kiểm ở unit test và artifact verifier.
+- Catalog `core/content/music-tracks.content.ts` là nguồn track chung cho Museum, Love Treasure và Miss You; ảnh tim lấy bốn ID ổn định từ `MemoryService`, còn nền thu là WebP cục bộ có gradient fallback.
+- Khi tài liệu cũ khác với implementation, ưu tiên route, component, script, manifest, test và workflow đang chạy.
 
-1. Real image optimization pipeline (thumbnail/medium/original).
-2. Reserve aspect ratio to reduce CLS.
-3. Image error placeholder.
-4. Prefetch adjacent viewer images.
-5. Better month grouping inside year timeline.
-6. E2E tests for direct route / refresh / mobile viewer.
+## Ảnh chụp kiểm kê
+
+Đợt kiểm toán context này đã phân loại đủ **708 file được theo dõi từ trước**: 119 file text không rỗng, 588 binary và một file placeholder rỗng. [FILE_INVENTORY.md](FILE_INVENTORY.md) ghi từng đường dẫn; mỗi binary có dung lượng, SHA-256, loại được nhận diện, metadata đọc được và nhóm sử dụng theo đường dẫn. Lúc kiểm toán, `public/images/generated/` có 1.047 biến thể WebP và một JSON manifest; đây là output bị ignore. `.git`, `node_modules`, `.angular` và `dist` là nội bộ Git, dependency, cache hoặc build output, không phải source dự án. Số liệu là ảnh chụp theo thời điểm; hãy chạy lại `git ls-files` và kiểm tra output bị ignore khi cần thông tin hiện tại.

@@ -8,7 +8,7 @@ import { decideHungAction } from './hung-ai-controller';
 import { LoveFightProjectileSystem, type ProjectileHost } from './projectile-system';
 import { LoveFightAudioService } from '../services/love-fight-audio.service';
 import { LoveFightSessionService } from '../services/love-fight-session.service';
-import { advanceCombo, createComboState, comboExpired, type ComboState } from './combo-rules';
+import { advanceCombo, createComboState, comboExpired, comboRemainingMs, type ComboState } from './combo-rules';
 import { cameraZoomFor, followCameraX, clampCameraX } from './camera-rules';
 import { createMotionState, DEFAULT_MOTION_CONFIG, isDashReady, stepMotion, interpolate, type MotionState } from './motion-rules';
 import { LoveFightSpritePool, LoveFightVfxPool } from './vfx-pool';
@@ -163,6 +163,13 @@ export class LoveFightScene extends Phaser.Scene implements CombatEffects, Proje
   hitConfirm(action: string, finisher: boolean): void {
     this.spawnHitSpark((this.qMotion.x + this.hX) / 2, GROUND_Y - (finisher ? 175 : 150));
     if (finisher) this.spawnSpeedLines((this.qMotion.x + this.hX) / 2, GROUND_Y - 180, this.qMotion.facing);
+    const recoilDirection = this.qMotion.x <= this.hX ? 1 : -1;
+    this.hX = Phaser.Math.Clamp(this.hX + recoilDirection * (finisher ? 26 : 16), STAGE_MIN_X, STAGE_MAX_X);
+    this.hVelocityX = recoilDirection * (finisher ? 150 : 90);
+    this.hSquashUntilMs = this.simulationMs + (finisher ? 240 : 180);
+    this.combat.triggerHungDefensive('RECOIL', this.simulationMs);
+    this.spawnDust(this.hX, GROUND_Y + 2, finisher ? 0xffd18c : 0xc7e6f5);
+    if (!this.reducedMotion) this.camera.flash(finisher ? 60 : 35, 255, 245, 220);
     this.cameraKick(finisher);
     this.session.announceFeedback(finisher ? 'FINISHER HIT!' : `${action === 'PUNCH' ? 'LIGHT' : action} HIT!`, 'good', finisher ? 1000 : 700);
   }
@@ -214,7 +221,7 @@ export class LoveFightScene extends Phaser.Scene implements CombatEffects, Proje
 
     if (comboExpired(this.combo, this.simulationMs)) {
       this.combo = createComboState();
-      this.session.setCombatSnapshot({ comboCount: 0 });
+      this.session.setCombatSnapshot({ comboCount: 0, comboRemainingMs: 0 });
     }
     if (this.elapsedMs - this.lastHudUpdateMs >= 80) {
       this.lastHudUpdateMs = this.elapsedMs;
@@ -399,7 +406,10 @@ export class LoveFightScene extends Phaser.Scene implements CombatEffects, Proje
   }
 
   private updateFacing(): void {
-    this.qSprite.setFlipX(this.qMotion.x > this.hX);
+    if (!this.qMotion.dashing) {
+      this.qMotion = { ...this.qMotion, facing: this.qMotion.x <= this.hX ? 1 : -1 };
+    }
+    this.qSprite.setFlipX(this.qMotion.facing < 0);
     this.hSprite.setFlipX(this.hX < this.qMotion.x);
   }
 
@@ -439,6 +449,7 @@ export class LoveFightScene extends Phaser.Scene implements CombatEffects, Proje
       isCrouching: this.qMotion.crouching,
       isDashing: this.qMotion.dashing,
       comboCount: this.combo.count,
+      comboRemainingMs: comboRemainingMs(this.combo, this.simulationMs),
       dashReady: isDashReady(this.qMotion, this.simulationMs),
       cameraX: this.cameraX,
       cameraZoom: this.cameraZoom
@@ -446,7 +457,7 @@ export class LoveFightScene extends Phaser.Scene implements CombatEffects, Proje
   }
 
   private showCombo(count: number, label: string): void {
-    this.session.setCombatSnapshot({ comboCount: count });
+    this.session.setCombatSnapshot({ comboCount: count, comboRemainingMs: comboRemainingMs(this.combo, this.simulationMs) });
     this.spawnText(`${count} HIT  ·  ${label}`, this.qMotion.x, GROUND_Y - 290, 0xffe4a4);
   }
 

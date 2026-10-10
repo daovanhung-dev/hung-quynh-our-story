@@ -33,10 +33,12 @@ test('museum dialogue source contains 128 generated combinations and Vietnamese 
   assert.match(source, /MUSEUM_DIALOGUES/);
 });
 
-test('museum audio source keeps exactly the five existing MP3 names', async () => {
-  const source = await readFile(resolve(root, 'src/app/features/museum/museum-audio-player.component.ts'), 'utf8');
+test('shared music catalog keeps exactly the five existing MP3 names for Museum and other listeners', async () => {
+  const source = await readFile(resolve(root, 'src/app/core/content/music-tracks.content.ts'), 'utf8');
   for (const filename of ['Cà phê đắng như ly cafe.mp3', 'Mascara.mp3', 'Mơ.mp3', 'Thằng Điên.mp3', 'Vì anh đâu có biết.mp3']) {
     assert.match(source, new RegExp(filename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
-  assert.doesNotMatch(source, /<audio[^>]+autoplay/i);
+  const museumPlayer = await readFile(resolve(root, 'src/app/features/museum/museum-audio-player.component.ts'), 'utf8');
+  assert.match(museumPlayer, /MUSEUM_TRACKS\s*=\s*MUSIC_TRACKS/);
+  assert.doesNotMatch(museumPlayer, /<audio[^>]+autoplay/i);
 });

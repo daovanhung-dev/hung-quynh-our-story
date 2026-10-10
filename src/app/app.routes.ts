@@ -1,11 +1,19 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router, Routes } from '@angular/router';
+import { MissYouGateService } from './core/services/miss-you-gate.service';
 import { SiteEntryService } from './core/services/site-entry.service';
 
-const welcomeGuard: CanActivateFn = () => {
+const welcomeGuard: CanActivateFn = (route) => {
+  if (route.queryParamMap.get('openMissYouGate') === '1') return true;
   const entry = inject(SiteEntryService);
   const router = inject(Router);
   return entry.hasSeenWelcome() ? router.createUrlTree(['/events']) : true;
+};
+
+const missYouGuard: CanActivateFn = () => {
+  const gate = inject(MissYouGateService);
+  const router = inject(Router);
+  return gate.isUnlocked() ? true : router.createUrlTree(['/'], { queryParams: { openMissYouGate: '1' } });
 };
 
 export const routes: Routes = [
@@ -54,6 +62,11 @@ export const routes: Routes = [
   {
     path: 'unsaid',
     loadComponent: () => import('./features/unsaid/unsaid.page').then((m) => m.UnsaidPage)
+  },
+  {
+    path: 'hint/miss-you',
+    canActivate: [missYouGuard],
+    loadComponent: () => import('./features/miss-you/miss-you.page').then((m) => m.MissYouPage)
   },
   {
     path: '**',
