@@ -31,28 +31,37 @@ import type { HouseDialogState, HouseHotspot, HouseRoomId } from './models/our-h
         <p class="home-intro">{{ room().subtitle }}</p>
       </header>
 
-      @if (room().id === 'entrance') {
-        <section class="welcome-card" aria-labelledby="welcome-title">
-          <div class="welcome-copy">
-            <p class="welcome-eyebrow">{{ introStage() === 'story' ? 'Vợ iu về nhà rồi! 🏡❤️' : 'Một căn nhà nhỏ, luôn để đèn chờ em.' }}</p>
-            <h2 id="welcome-title">{{ introStage() === 'story' ? 'Em cứ ghé vào đây mỗi khi muốn nghỉ một chút nhé.' : 'Có một nơi đang chờ em về.' }}</h2>
-            @if (introStage() === 'story') {
-              <p>Chồng chưa thể ở cạnh em mỗi tối, nên chồng làm cho hai đứa mình một ngôi nhà nhỏ. Khi nào mệt, em cứ về đây nhé.</p>
-              <button class="welcome-primary" type="button" (click)="enterHome()">Vào nhà của chúng mình</button>
-            } @else if (introStage() === 'welcome') {
-              <p>Chạm vào những món đồ trong nhà để xem lời nhắn, ảnh kỷ niệm và những góc nhỏ dành cho em.</p>
-              <div class="welcome-actions">
-                <button class="welcome-primary" type="button" (click)="startIntro()">Mở cánh cửa của chúng mình</button>
-                <button class="welcome-secondary" type="button" (click)="skipIntro()">Bỏ qua lời chào</button>
-              </div>
-            } @else {
-              <p>Ngôi nhà luôn mở. Em có thể tự chọn một căn phòng hoặc ghé thẳng vào phòng khách.</p>
-              <button class="welcome-primary" type="button" (click)="enterHome()">Vào nhà của chúng mình</button>
-            }
-          </div>
-          <div class="welcome-mark" aria-hidden="true">⌂<span>H ♡ Q</span></div>
-        </section>
+      @if (room().id === 'study') {
+        <p class="study-date" data-study-date><span>Hôm nay ở Nhật</span>{{ time.getJapanDate() }} · {{ time.getJapanClock() }}</p>
       }
+
+      <div class="scene-shell">
+        <app-house-scene [room]="room()" [mood]="time.getMood()" [reducedMotion]="reducedMotion()" [lampOn]="lampOn()" [introStage]="introStage()" (activated)="onHotspot($event)" (swiped)="onRoomSwipe($event)" />
+        @if (room().id === 'entrance') {
+          <section class="welcome-card" aria-labelledby="welcome-title">
+            <div class="welcome-copy">
+              <p class="welcome-eyebrow">{{ introStage() === 'story' ? 'Vợ iu về nhà rồi! 🏡❤️' : 'Một căn nhà nhỏ, luôn để đèn chờ em.' }}</p>
+              <h2 id="welcome-title">{{ introStage() === 'story' ? 'Em cứ ghé vào đây mỗi khi muốn nghỉ một chút nhé.' : 'Có một nơi đang chờ em về.' }}</h2>
+              @if (introStage() === 'story') {
+                <p>Chồng chưa thể ở cạnh em mỗi tối, nên chồng làm cho hai đứa mình một ngôi nhà nhỏ. Khi nào mệt, em cứ về đây nhé.</p>
+                <button class="welcome-primary" type="button" (click)="enterHome()">Vào nhà của chúng mình</button>
+              } @else if (introStage() === 'welcome') {
+                <p>Chạm vào những món đồ trong nhà để xem lời nhắn, ảnh kỷ niệm và những góc nhỏ dành cho em.</p>
+                <div class="welcome-actions">
+                  <button class="welcome-primary" type="button" (click)="startIntro()">Mở cánh cửa của chúng mình</button>
+                  <button class="welcome-secondary" type="button" (click)="skipIntro()">Bỏ qua lời chào</button>
+                </div>
+              } @else {
+                <p>Ngôi nhà luôn mở. Em có thể tự chọn một căn phòng hoặc ghé thẳng vào phòng khách.</p>
+                <button class="welcome-primary" type="button" (click)="enterHome()">Vào nhà của chúng mình</button>
+              }
+            </div>
+            <div class="welcome-mark" aria-hidden="true">⌂<span>H ♡ Q</span></div>
+          </section>
+        }
+      </div>
+      <p class="scene-title" aria-live="polite">{{ room().title }}</p>
+      <app-room-navigation [rooms]="rooms" [currentRoomId]="room().id" (selected)="goToRoom($event)" />
 
       <section class="house-controls" aria-label="Điều khiển căn nhà">
         <div class="utility-actions">
@@ -66,14 +75,6 @@ import type { HouseDialogState, HouseHotspot, HouseRoomId } from './models/our-h
           <span>{{ progress().openedLetters.length }}/5 lá thư đã mở</span>
         </div>
       </section>
-
-      @if (room().id === 'study') {
-        <p class="study-date" data-study-date><span>Hôm nay ở Nhật</span>{{ time.getJapanDate() }} · {{ time.getJapanClock() }}</p>
-      }
-
-      <app-house-scene [room]="room()" [mood]="time.getMood()" [reducedMotion]="reducedMotion()" [lampOn]="lampOn()" [introStage]="introStage()" (activated)="onHotspot($event)" (swiped)="onRoomSwipe($event)" />
-      <p class="scene-title" aria-live="polite">{{ room().title }}</p>
-      <app-room-navigation [rooms]="rooms" [currentRoomId]="room().id" (selected)="goToRoom($event)" />
 
       <section class="stamp-strip" aria-label="Những dấu ấn đã nhặt">
         @for (stamp of stampDisplay; track stamp.id) {

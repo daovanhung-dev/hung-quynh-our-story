@@ -9,7 +9,7 @@
 - Requested outcome: implement the P0 Our Home experience at `/our-home` from the supplied plan.
 - In scope: lazy route, six rooms, room hotspots and navigation, room copy and five letters, real memory photos through `MemoryService` and `PhotoViewerComponent`, Vietnam/Japan clocks, validated local progress, skip-able finale, reduced motion, responsive and keyboard support, focused contract/E2E coverage, Pages build verification.
 - Out of scope: P1/P2 polish, private hosting or backend, copying/changing Miss You content, changes to Museum/LOVE FIGHT, an Event Hub card (Hùng chose a direct link), commit, push, deploy, and QR creation (not authorized for now).
-- Baseline asset gap: no Our Home artwork or curated photo IDs existed. The repo already had five public music tracks with Hùng's public-use approval recorded in the 2026-10-10 Miss You worklog, but the initial Our Home implementation did not connect them. Six small original SVG room illustrations, a four-photo selection, and a gesture-gated room music player are now supplied. Hùng approved the current welcome, five letters, final message, six SVG scenes, and four selected photos for public release. No Hùng voice recording was supplied.
+- Baseline asset gap: no Our Home artwork or curated photo IDs existed. The repo already had five public music tracks with Hùng's public-use approval recorded in the 2026-10-10 Miss You worklog, but the initial Our Home implementation did not connect them. The initial version added six project-authored SVG room illustrations, a four-photo selection, and a gesture-gated room music player. Hùng approved the welcome, five letters, final message, the original scenes, and four selected photos for public release. No Hùng voice recording was supplied.
 - Photo source: use a deterministic slice of existing `MemoryService.getAllImageMedia()`; do not copy source media or edit generated memory files.
 - Route impact: `/our-home` and its lazy route registration. `AppComponent` hides the shared footer only while the `/our-home` chunk is loading, then restores it after navigation; a local CLS probe showed this removes a footer shift without changing other routes. Event Hub content, Museum, LOVE FIGHT, Miss You, and GitHub Pages configuration are unchanged.
 
@@ -44,7 +44,7 @@
 ## PHASES 1–13 — Local implementation and QA
 
 - Date completed: 2026-10-14 (Asia/Bangkok).
-- Local P0 route, interaction, storage, accessibility, asset-fallback, and test work is implemented. Hùng approved the current welcome, five letters, final message, original SVG art, and four selected photos. Phase 14 production actions remain deferred because Hùng chose direct-link sharing and explicitly declined commit/deploy for now.
+- Local P0 route, interaction, storage, accessibility, asset-fallback, and test work is implemented. Hùng approved the welcome, five letters, final message, original SVG art, and four selected photos. Phase 14 production actions remain deferred because Hùng chose direct-link sharing and did not authorize publishing.
 
 | Requirement | Implementation | Evidence/result |
 | --- | --- | --- |
@@ -104,15 +104,32 @@ A temporary Playwright `PerformanceObserver` probe on Chromium through `ng serve
 
 A first 4G-throttled artifact probe exposed a real deployment-path issue: font URLs in the HTML's inline critical CSS still pointed to `/fonts/`, although emitted external CSS was already rewritten. `scripts/prepare-static-host.mjs` now rewrites root-relative font URLs in both HTML and emitted styles before copying the prepared HTML to `404.html`, and `scripts/verify-static-artifact.mjs` checks that neither HTML nor CSS contains root-relative font URLs. The final artifact was tested in Chromium at 390×844 with cache disabled, 150 ms RTT, 1.6 Mbps down, and 750 Kbps up, with gzip enabled for HTML/CSS/JS/SVG. After the base-aware idle-prefetch implementation, the rerun measured LCP at 1.888 s and CLS at 0.01975; the living-room art response completed about 344 ms after skipping the welcome, and all four selected gallery images decoded by 5.449 s from navigation. The correct Pages-style server returned the expected 404 document for the direct route while serving real scene/gallery assets under `/hung-quynh-our-story/`; Angular rendered the route with no failed asset requests or page errors. A separate 320 px visual audit confirmed the full artwork remains visible and hotspots align with the named objects. A separate real-media smoke loaded the first catalog MP3 only after the Play click, received HTTP 200 under the Pages base path, decoded 215.2 seconds of duration, and closed/released the audio element after Escape. These are local Chromium measurements, not a Lighthouse run, physical-device test, or evidence from live GitHub Pages.
 
+### Follow-up 2.5D visual pass (2026-10-14)
+
+After comparing the first implementation with the supplied reference, the initial SVG scenes read as flat front views. This follow-up replaces them in the primary path with six original isometric cutaway dioramas and keeps each original SVG as a local error fallback. The square WebPs are 1024 × 1024 at quality 82 and total 666,956 bytes; each is below 136 KB. They were generated with the built-in image-generation tool from the provided bedroom image as a camera/style reference, with distinct room prompts for the cottage entrance, living room, kitchen, study, bedroom, and balcony. No image service is called at runtime, and the feature still has no 3D/game engine dependency.
+
+The scene stage and art now use a square ratio. The 18 hotspot positions were realigned to visible objects. The entrance greeting is positioned over the darkened house scene, and the scene appears before navigation, progress, and utility controls so the home is visible in the first mobile viewport. WebP artwork loads at high priority and falls back to SVG, then to the existing CSS scene if both files fail. `verify-static-artifact.mjs` now requires all twelve local room assets in the Pages output.
+
+| Follow-up verification | Result | Evidence |
+| --- | --- | --- |
+| `npm test` | PASS | 35 tests passed, 0 failed; the art contract checks actual WebP signatures and a total image budget below 800 KB. |
+| `npx playwright test e2e/our-home.spec.ts --reporter=line` | PASS | 28 passed, 2 expected desktop/mobile skips. It additionally checks that the entrance stage intersects the first viewport. The 320–1440 px hotspot matrix passes with the square stage. |
+| `npm run check:scripts` | PASS | Static-host and artifact scripts parse successfully. |
+| `npm run build:pages` | PASS | Production build retained `/hung-quynh-our-story/`; verifier checked 1520 memory references, the letter hash, and all six WebP scenes plus six SVG fallbacks. The Our Home lazy chunk is 81.44 KB raw / 19.13 KB estimated transfer. |
+| 4G artifact probe at 390 × 844 | PASS | Cache disabled, 150 ms RTT, 1.6 Mbps down / 750 Kbps up, gzip. Direct route received the expected 404 fallback document and Angular rendered `/hung-quynh-our-story/our-home`. LCP candidate (H1) was 2.084 s, CLS was 0.00022, entrance WebP transferred 135,670 bytes and completed at 3.249 s from navigation; no failed requests or page errors. |
+| 320 × 780 browser layout audit | PASS | Stage spans y=250–548, and the complete welcome card plus both buttons fit inside the stage. |
+
+The follow-up is recorded in a local commit after the original feature commit `a451568`; it has not been pushed or deployed. The published Pages version has not been checked.
+
 ### Phase 14 publication gate and remaining work
 
-- Phase 14 status: Hùng approved the current welcome, five letters, final message, six original SVG scenes, and four selected photos. He chose to share a direct link, so no Event Hub card was added. Existing public music catalog tracks are available in the Our Home player under the earlier public-use approval record. The implementation is committed locally; push, GitHub Actions deploy, live Pages/mobile verification, and QR generation are not authorized yet. No voice recording is included.
+- Phase 14 status: Hùng approved the welcome, five letters, final message, original SVG scenes, and four selected photos. He chose to share a direct link, so no Event Hub card was added. Existing public music catalog tracks are available in the Our Home player under the earlier public-use approval record. The initial implementation is committed locally; push, GitHub Actions deploy, live Pages/mobile verification, and QR generation are not authorized yet. No voice recording is included.
 - The record-player uses the existing five-track public catalog, whose public-use approval is recorded in the existing Miss You worklog. It requires a play gesture, uses `preload="none"`, persists mute preference, and pauses/releases the source when its dialog or route closes. No Hùng voice recording is included. There is no new Event Hub card. The project remains a static public site; browser-local progress is not access control, and any shipped asset/content is public.
 - P1/P2 are deferred: character/chibi animation, real voice, seasonal themes, mini-game, and shareable room query state. No backend or new runtime engine was added.
-- The implementation plan file was user-provided and remains unchanged and uncommitted. No push or deployment was made. Production URL has not been checked; local Pages build is not deployment evidence.
+- The implementation plan file was user-provided and remains unchanged. No push or deployment was made. Production URL has not been checked; local Pages build is not deployment evidence.
 
 ### Editing and rollback notes
 
-- Hùng can revise the copy in `content/house-copy.content.ts` and `content/letters.content.ts`, change the approved photo IDs in `content/photo-selection.ts`, and replace project-owned art under `public/our-home/rooms/` while preserving the six room IDs/viewBox and hotspot-safe composition.
-- To add a room, update `HouseRoomId`, `room-map.content.ts`, add a corresponding local art file, update the SVG contract test and the E2E room matrix, then rerun the documented checks.
+- Hùng can revise the copy in `content/house-copy.content.ts` and `content/letters.content.ts`, change the approved photo IDs in `content/photo-selection.ts`, and replace project-owned art under `public/our-home/rooms/` while preserving the square stage and hotspot-safe composition.
+- To add a room, update `HouseRoomId`, `room-map.content.ts`, add primary and fallback scene art, update the asset contract and the E2E room matrix, then rerun the documented checks.
 - To revert this implementation after it is committed, use `git revert <commit-sha>`. The supplied plan remains outside that commit; retain or separately edit this worklog as desired.

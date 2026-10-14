@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, OnChanges, OnDestroy, Output, signal, SimpleChanges } from '@angular/core';
 import { HOUSE_ROOMS } from '../content/room-map.content';
 import type { HouseHotspot, HouseRoom, HouseRoomId } from '../models/our-home.model';
 
@@ -9,8 +9,8 @@ import type { HouseHotspot, HouseRoom, HouseRoomId } from '../models/our-home.mo
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="scene-stage" [class]="'scene-stage mood-' + mood + (reducedMotion ? ' is-reduced-motion' : '') + (lampOn ? '' : ' is-lamp-off') + (room.id === 'entrance' && introStage === 'welcome' ? ' is-welcome' : '') + (room.id === 'entrance' && introStage === 'story' ? ' is-waking' : '')" [attr.data-room-id]="room.id" [attr.aria-label]="room.title" (pointerdown)="onPointerDown($event)" (pointerup)="onPointerUp($event)" (pointercancel)="clearPointer()">
-      @if (!failedArtworkRooms.has(room.id)) {
-        <img class="room-art" [attr.data-room-art]="room.id" [src]="artworkPath(room.id)" alt="" aria-hidden="true" draggable="false" (load)="animateArtwork($event)" (error)="markArtworkFailed(room.id)">
+      @if (!failedArtworkRooms().has(room.id)) {
+        <img class="room-art" [attr.data-room-art]="room.id" [src]="artworkPath(room.id)" alt="" aria-hidden="true" draggable="false" fetchpriority="high" decoding="async" (load)="animateArtwork($event)" (error)="onArtworkError(room.id)">
       } @else {
         <div class="scene-fallback" aria-hidden="true"><span class="fallback-moon">☾</span><span class="fallback-home">⌂</span><span class="fallback-title">{{ room.title }}</span><span class="fallback-note">Một góc nhỏ dành cho chúng mình</span></div>
       }
@@ -35,7 +35,8 @@ export class HouseSceneComponent implements OnChanges, OnDestroy {
   @Input() introStage: 'welcome' | 'story' | 'done' = 'done';
   @Output() readonly activated = new EventEmitter<HouseHotspot>();
   @Output() readonly swiped = new EventEmitter<'previous' | 'next'>();
-  protected readonly failedArtworkRooms = new Set<HouseRoomId>();
+  private readonly vectorFallbackRooms = signal<ReadonlySet<HouseRoomId>>(new Set());
+  protected readonly failedArtworkRooms = signal<ReadonlySet<HouseRoomId>>(new Set());
   private readonly document = inject(DOCUMENT);
   private readonly prefetchedRooms = new Set<HouseRoomId>();
   private pendingIdleHandle?: number;
@@ -84,11 +85,16 @@ export class HouseSceneComponent implements OnChanges, OnDestroy {
   }
 
   protected artworkPath(roomId: HouseRoomId): string {
-    return `our-home/rooms/${roomId}.svg`;
+    const extension = this.vectorFallbackRooms().has(roomId) ? '.svg' : '-isometric.webp';
+    return `our-home/rooms/${roomId}${extension}`;
   }
 
-  protected markArtworkFailed(roomId: HouseRoomId): void {
-    this.failedArtworkRooms.add(roomId);
+  protected onArtworkError(roomId: HouseRoomId): void {
+    if (!this.vectorFallbackRooms().has(roomId)) {
+      this.vectorFallbackRooms.update((rooms) => new Set(rooms).add(roomId));
+      return;
+    }
+    this.failedArtworkRooms.update((rooms) => new Set(rooms).add(roomId));
   }
 
   private scheduleNextArtworkPrefetch(currentRoomId: HouseRoomId): void {
@@ -105,7 +111,7 @@ export class HouseSceneComponent implements OnChanges, OnDestroy {
       const link = this.document.createElement('link');
       link.rel = 'prefetch';
       link.as = 'image';
-      link.href = new URL(`our-home/rooms/${nextRoom.id}.svg`, this.document.baseURI).href;
+      link.href = new URL(`our-home/rooms/${nextRoom.id}-isometric.webp`, this.document.baseURI).href;
       link.dataset['ourHomePrefetch'] = nextRoom.id;
       this.document.head.append(link);
       this.prefetchedRooms.add(nextRoom.id);

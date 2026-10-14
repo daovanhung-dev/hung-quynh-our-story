@@ -27,6 +27,14 @@ for (const required of ['index.html', '404.html', '.nojekyll', 'favicon.svg', 'i
   if (!(await exists(path.join(artifactRoot, required)))) throw new Error(`Artifact thiếu: dist/our-story/${required}`);
 }
 
+const houseRooms = ['entrance', 'living', 'kitchen', 'study', 'bedroom', 'balcony'];
+for (const room of houseRooms) {
+  for (const asset of [`${room}-isometric.webp`, `${room}.svg`]) {
+    const relativePath = path.join('our-home', 'rooms', asset);
+    if (!(await exists(path.join(artifactRoot, relativePath)))) throw new Error(`Artifact thiếu artwork Our Home: dist/our-story/${relativePath}`);
+  }
+}
+
 const indexHtml = await readFile(path.join(artifactRoot, 'index.html'), 'utf8');
 if (!indexHtml.includes(`<base href="${expectedBaseHref}">`)) throw new Error(`Artifact có base href sai, cần ${expectedBaseHref}`);
 if (/url\(\s*["']?\/fonts\//.test(indexHtml)) throw new Error('Artifact HTML còn tham chiếu font từ root path, không tương thích GitHub Pages project base path.');

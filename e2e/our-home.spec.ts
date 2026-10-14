@@ -7,6 +7,11 @@ async function expectNoHorizontalOverflow(page: import('@playwright/test').Page)
 test('direct route opens the house and every room remains freely accessible', async ({ page }) => {
   await page.goto('/our-home');
   await expect(page.getByRole('heading', { name: /Ngôi nhà nhỏ/i })).toBeVisible();
+  await expect(page.locator('.welcome-card')).toBeVisible();
+  await expect.poll(() => page.locator('.scene-stage').evaluate((stage) => {
+    const bounds = stage.getBoundingClientRect();
+    return bounds.top < window.innerHeight && bounds.bottom > 0;
+  })).toBe(true);
   await expect(page.getByRole('button', { name: /Mở cánh cửa của chúng mình/i })).toBeVisible();
   await page.getByRole('button', { name: 'Bỏ qua lời chào' }).click();
   await expect(page.locator('.scene-stage')).toHaveAttribute('data-room-id', 'living');
@@ -79,7 +84,7 @@ test('idle prefetch warms only the next room illustration under the current base
   await expect(prefetchLinks.first()).toHaveAttribute('data-our-home-prefetch', 'living');
   await expect(prefetchLinks.first()).toHaveAttribute('rel', 'prefetch');
   await expect(prefetchLinks.first()).toHaveAttribute('as', 'image');
-  const expectedPath = await page.evaluate(() => new URL('our-home/rooms/living.svg', document.baseURI).pathname);
+  const expectedPath = await page.evaluate(() => new URL('our-home/rooms/living-isometric.webp', document.baseURI).pathname);
   expect(new URL(await prefetchLinks.first().getAttribute('href') ?? '').pathname).toBe(expectedPath);
 
   await page.locator('[data-room-nav="living"]').click();
@@ -118,7 +123,7 @@ test('mobile scene swipe changes rooms without intercepting hotspot taps or mous
 });
 
 test('missing room artwork shows a fallback and leaves room controls usable', async ({ page }) => {
-  await page.route('**/our-home/rooms/*.svg', (route) => route.abort());
+  await page.route('**/our-home/rooms/*', (route) => route.abort());
   await page.goto('/our-home');
   await expect(page.locator('.scene-fallback')).toBeVisible();
   await page.locator('[data-room-nav="kitchen"]').click();
@@ -457,8 +462,8 @@ test('scene hotspots stay visible and at least 44 pixels across the target viewp
       });
       expect(stage).not.toBeNull();
       expect(art).not.toBeNull();
-      expect(Math.abs((stage?.width ?? 0) / (stage?.height ?? 1) - 800 / 520), `${roomId} artwork stage keeps the SVG ratio at ${width}px`).toBeLessThan(0.02);
-      expect(Math.abs((art?.width ?? 0) / (art?.height ?? 1) - 800 / 520), `${roomId} artwork box keeps the SVG ratio at ${width}px`).toBeLessThan(0.02);
+      expect(Math.abs((stage?.width ?? 0) / (stage?.height ?? 1) - 1), `${roomId} diorama stage stays square at ${width}px`).toBeLessThan(0.02);
+      expect(Math.abs((art?.width ?? 0) / (art?.height ?? 1) - 1), `${roomId} room artwork stays square at ${width}px`).toBeLessThan(0.02);
       await expect(page.locator('.room-art')).toHaveCSS('object-fit', 'contain');
       expect(boxes).toHaveLength(3);
       for (const box of boxes) {

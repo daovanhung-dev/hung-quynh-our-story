@@ -111,19 +111,30 @@ test('the four approved gallery photos are explicit existing couple memories', a
   for (const id of selection) assert.match(generated, new RegExp(`"id":\\s*"${id}"`), `${id} must exist in the generated catalog`);
 });
 
-test('all six room illustrations are original local SVG files without remote dependencies', async () => {
+test('all six 2.5D scenes have optimized local WebP art and script-free SVG fallbacks', async () => {
   const rooms = ['entrance', 'living', 'kitchen', 'study', 'bedroom', 'balcony'];
   const directory = resolve(root, 'public/our-home/rooms');
-  assert.deepEqual((await readdir(directory)).sort(), rooms.map((room) => `${room}.svg`).sort());
-  let totalBytes = 0;
+  const expectedAssets = rooms.flatMap((room) => [`${room}.svg`, `${room}-isometric.webp`]).sort();
+  assert.deepEqual((await readdir(directory)).sort(), expectedAssets);
+  const scene = await readFeature('components/house-scene.component.ts');
+  assert.match(scene, /-isometric\.webp/);
+  assert.match(scene, /rooms\/\$\{roomId\}\$\{extension\}/);
+  let totalRasterBytes = 0;
   for (const room of rooms) {
-    const path = resolve(directory, `${room}.svg`);
-    const [source, metadata] = await Promise.all([readFile(path, 'utf8'), stat(path)]);
-    totalBytes += metadata.size;
-    assert.match(source, /^<svg\s+xmlns="http:\/\/www\.w3\.org\/2000\/svg"[^>]*viewBox="0 0 800 520"/);
-    assert.doesNotMatch(source, /<script|https?:\/\/(?!www\.w3\.org\/2000\/svg)/i, `${room} art must not load scripts or remote assets`);
+    const svgPath = resolve(directory, `${room}.svg`);
+    const webpPath = resolve(directory, `${room}-isometric.webp`);
+    const [svg, svgMetadata, webpHeader, webpMetadata] = await Promise.all([
+      readFile(svgPath, 'utf8'), stat(svgPath), readFile(webpPath), stat(webpPath)
+    ]);
+    totalRasterBytes += webpMetadata.size;
+    assert.match(svg, /^<svg\s+xmlns="http:\/\/www\.w3\.org\/2000\/svg"[^>]*viewBox="0 0 800 520"/);
+    assert.doesNotMatch(svg, /<script|https?:\/\/(?!www\.w3\.org\/2000\/svg)/i, `${room} SVG fallback must not load scripts or remote assets`);
+    assert.ok(svgMetadata.size < 10_000, `${room} vector fallback should stay small`);
+    assert.equal(webpHeader.toString('ascii', 0, 4), 'RIFF', `${room} artwork must use the WebP container`);
+    assert.equal(webpHeader.toString('ascii', 8, 12), 'WEBP', `${room} artwork must be an actual WebP image`);
+    assert.ok(webpMetadata.size < 200_000, `${room} WebP should stay below 200 KB; got ${webpMetadata.size}`);
   }
-  assert.ok(totalBytes < 40_000, `room art should stay small; got ${totalBytes} bytes`);
+  assert.ok(totalRasterBytes < 800_000, `all six room scenes should stay below 800 KB; got ${totalRasterBytes}`);
 });
 
 test('uncollected stamp labels meet normal-text contrast on the paper surface', async () => {

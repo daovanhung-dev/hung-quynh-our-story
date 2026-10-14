@@ -6,13 +6,13 @@
   position: relative;
   isolation: isolate;
   width: min(100%, 950px);
-  aspect-ratio: 800 / 520;
+  aspect-ratio: 1;
   margin-inline: auto;
   overflow: hidden;
   border: 1px solid #c8a997;
   border-radius: 16px;
-  background: linear-gradient(180deg, #f3daca, #dbaea0 58%, #98756f);
-  box-shadow: 0 16px 44px #583a3420;
+  background: #2a202d;
+  box-shadow: 0 18px 54px #32233338;
   touch-action: pan-y;
 }
 
