@@ -250,8 +250,8 @@ export class HouseSceneComponent implements AfterViewInit, OnChanges, OnDestroy 
     this.roomAnchors = room.anchors;
     this.activeLamp = room.lamp;
     this.scene.add(room.group);
-    this.controls.target.set(0, 1.05, 0);
-    this.camera.position.set(0, 4.65, 9.0);
+    this.controls.target.set(...room.cameraTarget);
+    this.camera.position.set(...room.cameraPosition);
     this.controls.update();
     this.controls.saveState();
     this.updateHotspotProjection(room.anchors);
@@ -260,12 +260,21 @@ export class HouseSceneComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   private disposeRoomModel(): void {
     if (!this.roomModel) return;
+    const geometries = new Set<THREE.BufferGeometry>();
+    const materials = new Set<THREE.Material>();
+    const textures = new Set<THREE.Texture>();
     this.roomModel.traverse((object) => {
       if (!(object instanceof THREE.Mesh)) return;
-      object.geometry.dispose();
-      const materials = Array.isArray(object.material) ? object.material : [object.material];
-      for (const material of materials) material.dispose();
+      geometries.add(object.geometry);
+      const meshMaterials = Array.isArray(object.material) ? object.material : [object.material];
+      for (const material of meshMaterials) {
+        materials.add(material);
+        if (material.map) textures.add(material.map);
+      }
     });
+    for (const geometry of geometries) geometry.dispose();
+    for (const material of materials) material.dispose();
+    for (const texture of textures) texture.dispose();
     this.scene?.remove(this.roomModel);
     this.roomModel.clear();
     this.roomModel = undefined;

@@ -119,7 +119,7 @@ The scene stage and art now use a square ratio. The 18 hotspot positions were re
 | 4G artifact probe at 390 × 844 | PASS | Cache disabled, 150 ms RTT, 1.6 Mbps down / 750 Kbps up, gzip. Direct route received the expected 404 fallback document and Angular rendered `/hung-quynh-our-story/our-home`. LCP candidate (H1) was 2.084 s, CLS was 0.00022, entrance WebP transferred 135,670 bytes and completed at 3.249 s from navigation; no failed requests or page errors. |
 | 320 × 780 browser layout audit | PASS | Stage spans y=250–548, and the complete welcome card plus both buttons fit inside the stage. |
 
-The follow-up is recorded in a local commit after the original feature commit `a451568`; it has not been pushed or deployed. The published Pages version has not been checked.
+The follow-up is recorded in a local commit after the original feature commit `a451568`; it has not been pushed or deployed. The published Pages version had not been checked at that point.
 
 ### Follow-up: rotatable 3D rooms (2026-10-14)
 
@@ -138,12 +138,27 @@ Three.js carries the MIT license; the production artifact includes Angular's gen
 
 The browser preview is a local Chromium emulation, not a physical-device check. A successful local build does not establish that GitHub Pages has deployed the 3D version.
 
+### Follow-up: visual-detail pass for the 3D rooms (2026-10-14)
+
+Hùng asked for the six models to show the objects in the approved room references more accurately and completely. The procedural builder now composes each room from denser, room-specific geometry: the entrance has a tiled gable roof, timbered doorway, windows, porch, mailbox, path and flower beds; the living room has framed pictures, a layered sofa and throw, record player, book shelves, armchair and patterned rug; the kitchen has an L-shaped counter, sink and faucet, tiled backsplash, stove and hood, hanging utensils, fridge note and two place settings; the study has night window and curtains, a pinned corkboard, desk journal, task lamp, shelves and reading corner; the bedroom has a layered quilted bed, three pillows, dresser, keepsake box, shelves, prints and pouf; and the open balcony has a dusk skyline, crescent, wicker chair, round clock table, flowers and a fairy-lit shrub.
+
+Canvas textures are generated locally for the roof tiles, wall art, windows, rugs and city view. The camera target is chosen per room so the taller entrance and open balcony fit the square stage. Once the welcome flow is complete, its card no longer obscures the entrance. Room swaps now dispose of unique geometries, materials and their textures without repeatedly disposing shared cached materials. The existing three room actions and hotspot IDs remain available.
+
+| Verification | Result | Evidence |
+| --- | --- | --- |
+| `npm run build:pages` | PASS | Production Pages build and artifact verifier completed with the expected `/hung-quynh-our-story/` base, 1,520 memory references and unchanged letter hash. Our Home lazy chunk is 145.21 KB raw / 36.43 KB estimated transfer; shared Three.js chunk is 545.68 KB / 113.47 KB. The only emitted CSS budget warnings are the existing LOVE FIGHT and LOVE TREASURE styles. Media preparation generated variants for 349 images; no stale variants were removed, and the generated memory index left no tracked diff. |
+| Manual Chromium preview at 390 × 844 | PASS | All six models reached WebGL `ready`, exposed three room actions, and produced no page errors or failed requests. The 45° rotate control updated the view to 45°. The completed welcome card is absent when revisiting the entrance. Each room was captured and visually inspected. |
+| `git diff --check` | PASS | No whitespace errors. |
+| Automated tests | NOT RUN | No unit or E2E suite was run for this visual pass. |
+
+The new 3D preview is a local Chromium emulation, not a physical-device check. A read-only check of the previously published Pages site found the root URL returned HTTP 200. The direct `/our-home` route returned the expected GitHub Pages `404.html` fallback with HTTP 404, then Angular rendered the Our Home page and WebGL scene (`ready`) without page errors. That public site predates this local visual-detail pass; the changes below are not deployed.
+
 ### Phase 14 publication gate and remaining work
 
-- Phase 14 status: Hùng approved the welcome, five letters, final message, original SVG scenes, and four selected photos. He chose to share a direct link, so no Event Hub card was added. Existing public music catalog tracks are available in the Our Home player under the earlier public-use approval record. The initial implementation and 3D follow-up are committed locally; push, GitHub Actions deploy, live Pages/mobile verification, and QR generation remain unauthorized. No voice recording is included.
+- Phase 14 status: Hùng approved the welcome, five letters, final message, original SVG scenes, and four selected photos. He chose to share a direct link, so no Event Hub card was added. Existing public music catalog tracks are available in the Our Home player under the earlier public-use approval record. The initial implementation and 3D follow-ups are committed locally; the visual-detail pass has not been pushed or deployed. No voice recording is included.
 - The record-player uses the existing five-track public catalog, whose public-use approval is recorded in the existing Miss You worklog. It requires a play gesture, uses `preload="none"`, persists mute preference, and pauses/releases the source when its dialog or route closes. No Hùng voice recording is included. There is no new Event Hub card. The project remains a static public site; browser-local progress is not access control, and any shipped asset/content is public.
 - P1/P2 are deferred: character/chibi animation, real voice, seasonal themes, mini-game, and shareable room query state. No backend or new dependency was added; Our Home reuses the project's existing Three.js dependency.
-- The implementation plan file was user-provided and remains unchanged. No push or deployment was made. Production URL has not been checked; local Pages build is not deployment evidence.
+- The implementation plan file was user-provided and remains unchanged. No push or deployment of the visual-detail pass was made. The existing public site is reachable at `https://daovanhung-dev.github.io/hung-quynh-our-story/`; its `/our-home` browser route uses the static-host fallback and renders client-side. A local Pages build does not prove the new visual-detail pass has been deployed.
 
 ### Editing and rollback notes
 

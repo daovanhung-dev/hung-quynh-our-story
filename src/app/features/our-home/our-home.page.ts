@@ -37,7 +37,7 @@ import type { HouseDialogState, HouseHotspot, HouseRoomId } from './models/our-h
 
       <div class="scene-shell">
         <app-house-scene [room]="room()" [mood]="time.getMood()" [reducedMotion]="reducedMotion()" [lampOn]="lampOn()" [introStage]="introStage()" (activated)="onHotspot($event)" />
-        @if (room().id === 'entrance') {
+        @if (room().id === 'entrance' && introStage() !== 'done') {
           <section class="welcome-card" aria-labelledby="welcome-title">
             <div class="welcome-copy">
               <p class="welcome-eyebrow">{{ introStage() === 'story' ? 'Vợ iu về nhà rồi! 🏡❤️' : 'Một căn nhà nhỏ, luôn để đèn chờ em.' }}</p>

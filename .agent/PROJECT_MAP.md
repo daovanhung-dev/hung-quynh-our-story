@@ -8,7 +8,7 @@
 | --- | --- | --- |
 | `/` | `features/home/home.page.ts` | Màn chào; `SiteEntryService` ghi nhận lần vào trong session và chuyển người đã quay lại tới `/events`. |
 | `/events` | `features/events/events.page.ts` | Hub lấy nội dung từ `core/content/hub.content.ts`, liên kết sinh nhật, LOVE FIGHT và Museum. |
-| `/our-home` | `features/our-home/our-home.page.ts` | Sáu phòng diorama low-poly Three.js có thể xoay đủ vòng, chạm đồ vật để mở hotspot; ảnh từ `MemoryService`, năm thư, đồng hồ VN/Nhật, tiến trình cục bộ và player nhạc. Route lazy, có ảnh dự phòng khi WebGL không khả dụng; chưa có card Event Hub theo quyết định giữ link trực tiếp. |
+| `/our-home` | `features/our-home/our-home.page.ts` | Sáu phòng diorama Three.js có hình học và họa tiết riêng (nhà vườn, đồ gỗ, bếp chữ L, phố đêm), xoay đủ vòng và chạm đồ vật để mở hotspot; ảnh từ `MemoryService`, năm thư, đồng hồ VN/Nhật, tiến trình cục bộ và player nhạc. Route lazy, có ảnh dự phòng khi WebGL không khả dụng; chưa có card Event Hub theo quyết định giữ link trực tiếp. |
 | `/birthday/home` | `features/birthday/birthday-home.component.ts` | Trang sinh nhật, lời chúc, bánh và ảnh lấy từ `MemoryService`. |
 | `/birthday` | `features/birthday/birthday.page.ts` → `birthday-experience.component.ts` | Hành trình chúc mừng → quà → phong thư → lá thư; dùng ảnh kỷ niệm, trạng thái journey và các liên kết ẩn tới `/japan-notes`, `/love-treasure`, `/unsaid`. |
 | `/timeline` | `features/timeline/timeline.page.ts` → `timeline.component.ts` | Duyệt kỷ niệm theo năm/tháng, thẻ ảnh, media bonus/chưa phân loại và photo viewer. |
