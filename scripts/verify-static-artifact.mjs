@@ -29,6 +29,12 @@ for (const required of ['index.html', '404.html', '.nojekyll', 'favicon.svg', 'i
 
 const indexHtml = await readFile(path.join(artifactRoot, 'index.html'), 'utf8');
 if (!indexHtml.includes(`<base href="${expectedBaseHref}">`)) throw new Error(`Artifact có base href sai, cần ${expectedBaseHref}`);
+if (/url\(\s*["']?\/fonts\//.test(indexHtml)) throw new Error('Artifact HTML còn tham chiếu font từ root path, không tương thích GitHub Pages project base path.');
+const styleFiles = (await readdir(artifactRoot)).filter((file) => /^styles(?:[-.][a-z0-9]+)?\.css$/i.test(file));
+for (const styleFile of styleFiles) {
+  const styles = await readFile(path.join(artifactRoot, styleFile), 'utf8');
+  if (/url\(\s*["']?\/fonts\//.test(styles)) throw new Error(`Artifact ${styleFile} còn tham chiếu font từ root path, không tương thích GitHub Pages project base path.`);
+}
 
 const [sourceLetter, publicLetter, artifactLetter] = await Promise.all([
   readFile(path.join(projectRoot, 'LOVE_LETTER_ORIGINAL.md')),

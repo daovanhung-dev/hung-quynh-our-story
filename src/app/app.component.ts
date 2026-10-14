@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { SITE_CONFIG } from './core/constants/site.config';
 import { BirthdayJourneyService } from './core/services/birthday-journey.service';
 
@@ -28,7 +29,7 @@ import { BirthdayJourneyService } from './core/services/birthday-journey.service
 
     <main id="main-content" tabindex="-1"><router-outlet /></main>
 
-    <footer class="site-footer" [class.journey-hidden]="journey.active()">
+    <footer class="site-footer" [class.journey-hidden]="journey.active() || ourHomeLoading()">
       <span class="footer-mark" aria-hidden="true">H ♡ Q</span>
       <span>{{ site.footerText }}</span>
       <span class="footer-note">— Hùng · 05.09.2026</span>
@@ -63,4 +64,17 @@ import { BirthdayJourneyService } from './core/services/birthday-journey.service
 export class AppComponent {
   protected readonly journey = inject(BirthdayJourneyService);
   protected readonly site = SITE_CONFIG;
+  protected readonly ourHomeLoading = signal(false);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
+
+  constructor() {
+    this.router.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        this.ourHomeLoading.set(event.url.split(/[?#]/, 1)[0] === '/our-home');
+      } else if (event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError) {
+        this.ourHomeLoading.set(false);
+      }
+    });
+  }
 }

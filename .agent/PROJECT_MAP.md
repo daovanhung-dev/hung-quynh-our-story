@@ -8,6 +8,7 @@
 | --- | --- | --- |
 | `/` | `features/home/home.page.ts` | Màn chào; `SiteEntryService` ghi nhận lần vào trong session và chuyển người đã quay lại tới `/events`. |
 | `/events` | `features/events/events.page.ts` | Hub lấy nội dung từ `core/content/hub.content.ts`, liên kết sinh nhật, LOVE FIGHT và Museum. |
+| `/our-home` | `features/our-home/our-home.page.ts` | Sáu phòng, hotspot, ảnh thật từ `MemoryService`, năm thư, đồng hồ VN/Nhật, tiến trình cục bộ và player nhạc theo thao tác người dùng. Route lazy; chưa có card Event Hub theo quyết định giữ link trực tiếp. |
 | `/birthday/home` | `features/birthday/birthday-home.component.ts` | Trang sinh nhật, lời chúc, bánh và ảnh lấy từ `MemoryService`. |
 | `/birthday` | `features/birthday/birthday.page.ts` → `birthday-experience.component.ts` | Hành trình chúc mừng → quà → phong thư → lá thư; dùng ảnh kỷ niệm, trạng thái journey và các liên kết ẩn tới `/japan-notes`, `/love-treasure`, `/unsaid`. |
 | `/timeline` | `features/timeline/timeline.page.ts` → `timeline.component.ts` | Duyệt kỷ niệm theo năm/tháng, thẻ ảnh, media bonus/chưa phân loại và photo viewer. |
@@ -39,6 +40,8 @@ flowchart LR
   K[core/content/music-tracks.content.ts] --> H
   K --> I
   K --> L[Miss You audio player]
+  F --> P[Our Home gallery: bốn ID ảnh đã duyệt]
+  K --> Q[Our Home player: tải khi bấm Phát]
   M[LOVE_LETTER_ORIGINAL.md] --> N[public/content/love-letter-miss-you.md]
   N --> O[Pages artifact + verifier hash]
 ```
@@ -57,7 +60,7 @@ flowchart LR
 - `MissYouGateService` chỉ lưu flag vào `sessionStorage` theo tab. `HyeuQ` ở client code là Easter egg công khai, không phải xác thực.
 - `LOVE_LETTER_ORIGINAL.md` được copy byte-for-byte vào `public/content/love-letter-miss-you.md`. `letter-parser.ts` chỉ chia segment `**bold**`; template Angular render text binding an toàn. `miss-you-content.test.mjs` và `verify-static-artifact.mjs` so hash, byte size và dòng.
 - `days-apart.ts` tính ngày lịch VN và delay tới nửa đêm VN; page cập nhật khi timer tới hạn, mỗi phút cho clock hiển thị và khi tab resume.
-- `music-tracks.content.ts` là catalog chung. Museum giữ tên alias `MUSEUM_TRACKS`; Love Treasure chỉ thêm adapter duration đang đo trong media element. Miss You tạo một audio element, thử autoplay khi vào route, báo fallback nếu browser chặn và dừng nó khi route bị destroy.
+- `music-tracks.content.ts` là catalog chung cho Museum, Love Treasure, Miss You và Our Home. Museum giữ tên alias `MUSEUM_TRACKS`; Love Treasure thêm adapter duration đang đo trong media element. Miss You có autoplay fallback theo chính sách route đó; Our Home chỉ tải/phát audio sau nút Play, lưu mute preference, và pause/xóa nguồn khi dialog hoặc route bị hủy.
 - Background mới là `public/images/illustrations/miss-you-autumn.webp` (WebP 1600×900, 206,632 bytes); CSS gradient là fallback. Gallery dùng `PhotoViewerComponent` để giữ keyboard/touch/focus behavior dùng chung.
 
 ## UI dùng chung và style toàn cục
@@ -97,8 +100,7 @@ Khi thông tin khác nhau, ưu tiên theo thứ tự: mã ứng dụng và execu
 ## Toolchain và sơ đồ kiểm tra
 
 - Angular 22, TypeScript strict mode, Node `>=22.22.3`, npm; phiên bản và lệnh nằm trong `package.json`/`package-lock.json`.
-- Node built-in tests nằm trong `test/`: memory scanner, Museum asset/tối ưu hóa và LOVE FIGHT contract.
-- Node built-in tests nằm trong `test/`: memory scanner, Museum asset/tối ưu hóa, LOVE FIGHT contract và `miss-you-content.test.mjs`.
+- Node built-in tests nằm trong `test/`: memory scanner, Museum asset/tối ưu hóa, LOVE FIGHT contract, Miss You content và Our Home content/asset contract.
 - Playwright E2E có `e2e/our-story.spec.ts` hiện hữu và `e2e/miss-you-secret-page.spec.ts` riêng; cấu hình viewport desktop Chromium và mobile trong `playwright.config.ts`.
 - `npm start` chạy prestart để tạo media và memory index; E2E gọi lệnh này khi khởi động web server.
 - Xem [GITHUB_PAGES.md](GITHUB_PAGES.md) để biết quy trình build Pages và quy tắc artifact.
