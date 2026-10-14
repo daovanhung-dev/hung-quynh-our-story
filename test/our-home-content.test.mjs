@@ -11,11 +11,17 @@ async function readFeature(path) {
   return readFile(resolve(feature, path), 'utf8');
 }
 
-test('Our Home is a lazy static Angular route and does not import a 3D/game engine', async () => {
+test('Our Home stays a lazy static route and loads its real 3D scene inside the feature', async () => {
   const routes = await readFile(resolve(root, 'src/app/app.routes.ts'), 'utf8');
   const page = await readFeature('our-home.page.ts');
+  const scene = await readFeature('components/house-scene.component.ts');
   assert.match(routes, /path:\s*'our-home'[\s\S]*?loadComponent:\s*\(\)\s*=>\s*import\('\.\/features\/our-home\/our-home\.page'/);
   assert.doesNotMatch(page, /from\s+['"](?:three|phaser)(?:\/|['"])/);
+  assert.match(scene, /from 'three'/);
+  assert.match(scene, /three\/addons\/controls\/OrbitControls\.js/);
+  assert.match(scene, /minAzimuthAngle = -Infinity/);
+  assert.match(scene, /maxAzimuthAngle = Infinity/);
+  assert.match(scene, /WebGLRenderer/);
 });
 
 test('all six rooms have unique, accessible, in-bounds hotspots and real action content', async () => {
@@ -26,7 +32,7 @@ test('all six rooms have unique, accessible, in-bounds hotspots and real action 
   assert.equal(roomBlocks.length, 6);
   assert.deepEqual(roomBlocks.map((match) => match[1]), expectedRooms);
 
-  const hotspotPattern = /^\s{6}\{ id: '([^']+)', label: '([^']+)', visualLabel: '([^']+)', icon: '([^']+)', action: '([^']+)'(?:, payloadId: '([^']+)')?, position: \{ x: (\d+), y: (\d+) \}(?:, awardsStamp: '([^']+)')? \},?$/gm;
+  const hotspotPattern = /^\s{6}\{ id: '([^']+)', label: '([^']+)', visualLabel: '([^']+)', icon: '([^']+)', action: '([^']+)'(?:, payloadId: '([^']+)')?(?:, awardsStamp: '([^']+)')? \},?$/gm;
   const hotspots = [...source.matchAll(hotspotPattern)];
   assert.equal(hotspots.length, 18);
   assert.equal(new Set(hotspots.map((match) => match[1])).size, hotspots.length);
@@ -34,11 +40,9 @@ test('all six rooms have unique, accessible, in-bounds hotspots and real action 
   const allowedActions = new Set(['navigate', 'dialog', 'photo-gallery', 'letter-box', 'toggle-light', 'reveal', 'clocks', 'audio']);
   const allowedStamps = new Set(['memory', 'care', 'courage', 'letters', 'moon']);
 
-  for (const [, id, label, visualLabel, , action, payloadId, xText, yText, stamp] of hotspots) {
+  for (const [, id, label, visualLabel, , action, payloadId, stamp] of hotspots) {
     assert.ok(id && label.trim() && visualLabel.trim(), `hotspot ${id} must have an accessible label`);
     assert.ok(allowedActions.has(action), `${id} has unsupported action ${action}`);
-    assert.ok(Number(xText) >= 0 && Number(xText) <= 100, `${id} x is out of bounds`);
-    assert.ok(Number(yText) >= 0 && Number(yText) <= 100, `${id} y is out of bounds`);
     if (payloadId && action !== 'navigate') assert.ok(copyKeys.has(payloadId), `${id} points to missing copy ${payloadId}`);
     if (action === 'navigate') assert.ok(expectedRooms.includes(payloadId), `${id} points to missing room ${payloadId}`);
     if (stamp) assert.ok(allowedStamps.has(stamp), `${id} points to unknown stamp ${stamp}`);
@@ -111,14 +115,19 @@ test('the four approved gallery photos are explicit existing couple memories', a
   for (const id of selection) assert.match(generated, new RegExp(`"id":\\s*"${id}"`), `${id} must exist in the generated catalog`);
 });
 
-test('all six 2.5D scenes have optimized local WebP art and script-free SVG fallbacks', async () => {
+test('all six rooms have low-poly 3D models plus optimized local WebP and script-free SVG fallbacks', async () => {
   const rooms = ['entrance', 'living', 'kitchen', 'study', 'bedroom', 'balcony'];
   const directory = resolve(root, 'public/our-home/rooms');
   const expectedAssets = rooms.flatMap((room) => [`${room}.svg`, `${room}-isometric.webp`]).sort();
   assert.deepEqual((await readdir(directory)).sort(), expectedAssets);
   const scene = await readFeature('components/house-scene.component.ts');
+  const model = await readFeature('components/house-3d-room.ts');
   assert.match(scene, /-isometric\.webp/);
   assert.match(scene, /rooms\/\$\{roomId\}\$\{extension\}/);
+  assert.match(model, /new THREE\.BoxGeometry/);
+  assert.match(model, /new THREE\.CylinderGeometry/);
+  assert.match(model, /anchors\.set\('moon'/);
+  for (const room of rooms) assert.match(model, new RegExp(`case '${room}'`));
   let totalRasterBytes = 0;
   for (const room of rooms) {
     const svgPath = resolve(directory, `${room}.svg`);

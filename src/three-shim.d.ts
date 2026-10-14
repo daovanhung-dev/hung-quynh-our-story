@@ -57,7 +57,9 @@ declare module 'three' {
     matrixWorld: Matrix4;
     quaternion: Quaternion;
     add(...objects: Object3D[]): this;
+    remove(...objects: Object3D[]): this;
     getWorldPosition(target: Vector3): this;
+    updateMatrixWorld(force?: boolean): void;
     addEventListener(type: string, listener: () => void): void;
     traverse(callback: (object: Object3D) => void): void;
     clear(): void;
@@ -66,7 +68,7 @@ declare module 'three' {
   export class Group extends Object3D {}
 
   export class Scene extends Object3D {
-    background: Color;
+    background: Color | null;
     fog?: Fog;
     clear(): void;
   }
@@ -181,10 +183,17 @@ declare module 'three' {
 
   export class HemisphereLight extends Object3D {
     constructor(skyColor: string, groundColor: string, intensity: number);
+    intensity: number;
+  }
+
+  export class DirectionalLight extends Object3D {
+    constructor(color?: string | number, intensity?: number);
+    intensity: number;
   }
 
   export class PointLight extends Object3D {
     constructor(color: string, intensity: number, distance: number, decay: number);
+    intensity: number;
   }
 
   export class SpotLight extends Object3D {
@@ -214,7 +223,7 @@ declare module 'three' {
   }
 
   export class WebGLRenderer {
-    constructor(parameters?: { canvas?: HTMLCanvasElement; antialias?: boolean; powerPreference?: string });
+    constructor(parameters?: { canvas?: HTMLCanvasElement; alpha?: boolean; antialias?: boolean; powerPreference?: string });
     domElement: HTMLCanvasElement;
     outputColorSpace: string;
     xr: {
@@ -225,6 +234,7 @@ declare module 'three' {
     };
     setPixelRatio(value: number): void;
     setSize(width: number, height: number, updateStyle?: boolean): void;
+    setClearColor(color: string | number, alpha?: number): void;
     setAnimationLoop(callback: ((time: number) => void) | null): void;
     render(scene: Scene, camera: Camera): void;
     dispose(): void;
@@ -245,6 +255,31 @@ declare module 'three/addons/controls/PointerLockControls.js' {
     isLocked: boolean;
     lock(): void;
     disconnect(): void;
+  }
+}
+
+declare module 'three/addons/controls/OrbitControls.js' {
+  import type { Camera, Vector3 } from 'three';
+
+  export class OrbitControls {
+    constructor(object: Camera, domElement: HTMLElement);
+    target: Vector3;
+    enableDamping: boolean;
+    enablePan: boolean;
+    enableZoom: boolean;
+    minDistance: number;
+    maxDistance: number;
+    minPolarAngle: number;
+    maxPolarAngle: number;
+    minAzimuthAngle: number;
+    maxAzimuthAngle: number;
+    addEventListener(type: 'change', listener: () => void): void;
+    removeEventListener(type: 'change', listener: () => void): void;
+    update(): boolean;
+    getAzimuthalAngle(): number;
+    saveState(): void;
+    reset(): void;
+    dispose(): void;
   }
 }
 

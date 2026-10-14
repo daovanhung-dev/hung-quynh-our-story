@@ -5,7 +5,7 @@
 ## Tổng quan
 
 - Website tiếng Việt dạng static, dùng Angular standalone, triển khai dưới dạng GitHub Pages project site.
-- Các phần runtime chính: Angular 22, TypeScript strict mode, Phaser 4 cho LOVE FIGHT, Three.js cho bảo tàng 3D và asset ảnh/âm thanh/model nội bộ.
+- Các phần runtime chính: Angular 22, TypeScript strict mode, Phaser 4 cho LOVE FIGHT, Three.js cho bảo tàng và các phòng 3D xoay được trong Our Home; asset ảnh/âm thanh/model được quản lý nội bộ.
 - Ứng dụng không có backend hoặc xác thực. File nào nằm trong artifact Pages đều công khai với khách truy cập.
 - Xem sơ đồ route và quan hệ ảnh hưởng tại [PROJECT_MAP.md](PROJECT_MAP.md).
 

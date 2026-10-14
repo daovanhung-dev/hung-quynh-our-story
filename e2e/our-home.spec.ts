@@ -4,6 +4,16 @@ async function expectNoHorizontalOverflow(page: import('@playwright/test').Page)
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 }
 
+async function expectSceneReady(page: import('@playwright/test').Page): Promise<string> {
+  const stage = page.locator('.scene-stage');
+  await expect.poll(() => stage.getAttribute('data-render-status')).toMatch(/ready|fallback/);
+  const status = await stage.getAttribute('data-render-status') ?? 'fallback';
+  if (status === 'fallback') {
+    await expect.poll(() => page.locator('.room-art').evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+  }
+  return status;
+}
+
 test('direct route opens the house and every room remains freely accessible', async ({ page }) => {
   await page.goto('/our-home');
   await expect(page.getByRole('heading', { name: /Ngôi nhà nhỏ/i })).toBeVisible();
@@ -15,9 +25,14 @@ test('direct route opens the house and every room remains freely accessible', as
   await expect(page.getByRole('button', { name: /Mở cánh cửa của chúng mình/i })).toBeVisible();
   await page.getByRole('button', { name: 'Bỏ qua lời chào' }).click();
   await expect(page.locator('.scene-stage')).toHaveAttribute('data-room-id', 'living');
-  await expect.poll(() => page.locator('.room-art').evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
-  await expect(page.locator('.room-art')).toHaveCSS('animation-name', /scene-art-enter/);
-  await expect.poll(() => page.locator('.scene-stage .hotspot').first().evaluate((button) => getComputedStyle(button, '::after').animationName)).toMatch(/hotspot-glow$/);
+  const initialStatus = await expectSceneReady(page);
+  await expect(page.locator('.scene-interactions .interaction-button')).toHaveCount(3);
+  if (initialStatus === 'ready') {
+    const initialView = await page.locator('.scene-stage').getAttribute('data-view-degrees');
+    await page.getByRole('button', { name: 'Xoay mô hình sang phải 45 độ' }).click();
+    await expect.poll(() => page.locator('.scene-stage').getAttribute('data-view-degrees')).not.toBe(initialView);
+    await page.getByRole('button', { name: 'Đưa mô hình về góc nhìn ban đầu' }).click();
+  }
 
   for (const [id, title] of [
     ['entrance', 'Cửa nhà'], ['living', 'Phòng khách'], ['kitchen', 'Căn bếp'],
@@ -25,10 +40,10 @@ test('direct route opens the house and every room remains freely accessible', as
   ]) {
     await page.locator(`[data-room-nav="${id}"]`).click();
     await expect(page.locator('.scene-stage')).toHaveAttribute('data-room-id', id);
-    await expect(page.locator('.room-art')).toHaveAttribute('data-room-art', id);
-    await expect(page.locator('.scene-stage .hotspot')).toHaveCount(3);
-    await expect.poll(() => page.locator('.room-art').evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
-    await expect(page.locator('.room-art')).toHaveCSS('animation-name', /scene-art-enter/);
+    const status = await expectSceneReady(page);
+    await expect(page.locator('.scene-interactions .interaction-button')).toHaveCount(3);
+    if (status === 'ready') await expect(page.locator('.house-canvas')).toHaveAttribute('data-room-model', id);
+    else await expect(page.locator('.room-art')).toHaveAttribute('data-room-art', id);
     await expect(page.getByText(new RegExp(title, 'i')).first()).toBeVisible();
 
     if (id === 'kitchen') {
@@ -78,53 +93,30 @@ test('welcome darkens the entrance and the greeting wakes the house before entry
   await expect.poll(() => wash.evaluate((element) => getComputedStyle(element, '::after').opacity)).toBe('0');
 });
 
-test('idle prefetch warms only the next room illustration under the current base path', async ({ page }) => {
-  await page.goto('/our-home');
-  const prefetchLinks = page.locator('link[data-our-home-prefetch]');
-  await expect(prefetchLinks.first()).toHaveAttribute('data-our-home-prefetch', 'living');
-  await expect(prefetchLinks.first()).toHaveAttribute('rel', 'prefetch');
-  await expect(prefetchLinks.first()).toHaveAttribute('as', 'image');
-  const expectedPath = await page.evaluate(() => new URL('our-home/rooms/living-isometric.webp', document.baseURI).pathname);
-  expect(new URL(await prefetchLinks.first().getAttribute('href') ?? '').pathname).toBe(expectedPath);
-
-  await page.locator('[data-room-nav="living"]').click();
-  await expect(prefetchLinks.nth(1)).toHaveAttribute('data-our-home-prefetch', 'kitchen');
-  await expect(prefetchLinks).toHaveCount(2);
-});
-
-test('mobile scene swipe changes rooms without intercepting hotspot taps or mouse drags', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'mobile', 'Swipe navigation is specific to touch input.');
+test('mobile users can turn the 3D room and still use its object actions', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'Runs in the mobile project.');
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/our-home');
   await page.getByRole('button', { name: 'Bỏ qua lời chào' }).click();
-
-  const dispatchPointer = async (target: string, startX: number, endX: number, pointerType = 'touch'): Promise<void> => {
-    await page.locator(target).evaluate((element, coordinates) => {
-      const make = (eventType: string, x: number) => new PointerEvent(eventType, {
-        bubbles: true,
-        pointerId: 1,
-        pointerType: coordinates.pointerType,
-        clientX: x,
-        clientY: 420
-      });
-      element.dispatchEvent(make('pointerdown', coordinates.startX));
-      element.dispatchEvent(make('pointerup', coordinates.endX));
-    }, { pointerType, startX, endX });
-  };
-
-  await dispatchPointer('.scene-stage', 280, 190);
+  await page.locator('[data-room-nav="kitchen"]').tap();
+  const status = await expectSceneReady(page);
+  if (status === 'ready') {
+    const initialView = await page.locator('.scene-stage').getAttribute('data-view-degrees');
+    await page.getByRole('button', { name: 'Xoay mô hình sang trái 45 độ' }).tap();
+    await expect.poll(() => page.locator('.scene-stage').getAttribute('data-view-degrees')).not.toBe(initialView);
+  }
+  await page.locator('[data-hotspot-id="tea"]').tap();
+  await expect(page.locator('.reveal-art--tea')).toBeVisible();
   await expect(page.locator('.scene-stage')).toHaveAttribute('data-room-id', 'kitchen');
-  await dispatchPointer('[data-hotspot-id="tea"]', 280, 190);
-  await expect(page.locator('.scene-stage')).toHaveAttribute('data-room-id', 'kitchen');
-  await dispatchPointer('.scene-stage', 190, 280);
-  await expect(page.locator('.scene-stage')).toHaveAttribute('data-room-id', 'living');
-  await dispatchPointer('.scene-stage', 280, 190, 'mouse');
-  await expect(page.locator('.scene-stage')).toHaveAttribute('data-room-id', 'living');
 });
 
 test('missing room artwork shows a fallback and leaves room controls usable', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', { configurable: true, value: () => null });
+  });
   await page.route('**/our-home/rooms/*', (route) => route.abort());
   await page.goto('/our-home');
+  await expect(page.locator('.scene-stage')).toHaveAttribute('data-render-status', 'fallback');
   await expect(page.locator('.scene-fallback')).toBeVisible();
   await page.locator('[data-room-nav="kitchen"]').click();
   await expect(page.locator('.scene-stage')).toHaveAttribute('data-room-id', 'kitchen');
@@ -298,9 +290,11 @@ test('kitchen, study, clocks and accessibility controls respond to mouse and key
   await expect(page.locator('.scene-stage')).not.toHaveClass(/is-reduced-motion/);
   await page.getByRole('button', { name: 'Tắt chuyển động' }).click();
   await expect(page.locator('.scene-stage')).toHaveClass(/is-reduced-motion/);
-  await expect(page.locator('.room-art')).toHaveCSS('animation-name', 'none');
+  const status = await page.locator('.scene-stage').getAttribute('data-render-status');
+  if (status === 'fallback') await expect(page.locator('.room-art')).toHaveCSS('animation-name', 'none');
+  else await expect(page.locator('.view-button').first()).toHaveCSS('transition-duration', '0s');
   await expectNoHorizontalOverflow(page);
-  await expect(page.locator('.scene-stage .hotspot').first()).toHaveCSS('transition-duration', '0s');
+  await expect(page.locator('.interaction-button').first()).toHaveCSS('transition-duration', '0s');
   await page.getByRole('button', { name: 'Mở hộp quà' }).click();
   await expect(page.locator('.gift-box')).toHaveCSS('animation-name', 'none');
   await page.locator('[data-finale]').getByRole('button', { name: /Chồng ôm vợ một cái nhé/ }).click();
@@ -437,7 +431,7 @@ test('stored progress removes unknown and duplicate IDs and survives a refresh',
   await expect(page.locator('.progress-summary')).toContainText('0/5 dấu ấn');
 });
 
-test('scene hotspots stay visible and at least 44 pixels across the target viewport matrix', async ({ page }, testInfo) => {
+test('3D scene and accessible object controls fit across the target viewport matrix', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop', 'The viewport matrix is covered in the desktop project; mobile flow runs separately.');
   test.setTimeout(60_000);
   const rooms = ['entrance', 'living', 'kitchen', 'study', 'bedroom', 'balcony'];
@@ -448,31 +442,36 @@ test('scene hotspots stay visible and at least 44 pixels across the target viewp
       await page.locator(`[data-room-nav="${roomId}"]`).click();
       const scene = page.locator('.scene-stage');
       await expect(scene).toHaveAttribute('data-room-id', roomId);
-      const { stage, art, boxes } = await scene.evaluate((stageElement) => {
+      await expectSceneReady(page);
+      const { stage, art, wrapper, boxes, fallback } = await scene.evaluate((stageElement) => {
         const readBox = (element: Element | null) => {
           if (!element) return null;
           const rect = element.getBoundingClientRect();
           return { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom, width: rect.width, height: rect.height };
         };
+        const art = stageElement.querySelector('.house-canvas:not(.is-hidden), .room-art, .scene-fallback');
+        const fallback = stageElement.querySelector('.room-art');
         return {
           stage: readBox(stageElement),
-          art: readBox(stageElement.querySelector('.room-art')),
-          boxes: Array.from(stageElement.querySelectorAll('.hotspot')).map((button) => readBox(button))
+          art: readBox(art),
+          wrapper: readBox(stageElement.parentElement),
+          fallback: Boolean(fallback),
+          boxes: Array.from(stageElement.parentElement?.querySelectorAll('.interaction-button') ?? []).map((button) => readBox(button))
         };
       });
       expect(stage).not.toBeNull();
       expect(art).not.toBeNull();
       expect(Math.abs((stage?.width ?? 0) / (stage?.height ?? 1) - 1), `${roomId} diorama stage stays square at ${width}px`).toBeLessThan(0.02);
-      expect(Math.abs((art?.width ?? 0) / (art?.height ?? 1) - 1), `${roomId} room artwork stays square at ${width}px`).toBeLessThan(0.02);
-      await expect(page.locator('.room-art')).toHaveCSS('object-fit', 'contain');
+      expect(Math.abs((art?.width ?? 0) / (art?.height ?? 1) - 1), `${roomId} scene view stays square at ${width}px`).toBeLessThan(0.02);
+      if (fallback) await expect(page.locator('.room-art')).toHaveCSS('object-fit', 'contain');
       expect(boxes).toHaveLength(3);
       for (const box of boxes) {
         expect(box).not.toBeNull();
         expect(Math.min(box?.width ?? 0, box?.height ?? 0), `${roomId} at ${width}px has ${JSON.stringify(box)}`).toBeGreaterThanOrEqual(44);
-        expect(box?.left).toBeGreaterThanOrEqual((stage?.left ?? 0) - 1);
-        expect(box?.top).toBeGreaterThanOrEqual((stage?.top ?? 0) - 1);
-        expect(box?.right).toBeLessThanOrEqual((stage?.right ?? 0) + 1);
-        expect(box?.bottom).toBeLessThanOrEqual((stage?.bottom ?? 0) + 1);
+        expect(box?.left).toBeGreaterThanOrEqual((wrapper?.left ?? 0) - 1);
+        expect(box?.top).toBeGreaterThanOrEqual((wrapper?.top ?? 0) - 1);
+        expect(box?.right).toBeLessThanOrEqual((wrapper?.right ?? 0) + 1);
+        expect(box?.bottom).toBeLessThanOrEqual((wrapper?.bottom ?? 0) + 1);
       }
       for (let first = 0; first < boxes.length; first += 1) {
         for (let second = first + 1; second < boxes.length; second += 1) {

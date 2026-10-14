@@ -121,11 +121,28 @@ The scene stage and art now use a square ratio. The 18 hotspot positions were re
 
 The follow-up is recorded in a local commit after the original feature commit `a451568`; it has not been pushed or deployed. The published Pages version has not been checked.
 
+### Follow-up: rotatable 3D rooms (2026-10-14)
+
+After the 2.5D pass, Hùng clarified that he wanted the house to feel like a game scene and asked for a model he could rotate through a full 360°. He explicitly allowed free libraries. The route now builds each of its six rooms from original low-poly Three.js geometry: floor, cutaway walls, furniture, lamps, frames, clocks, plants and room-specific objects. Existing `three@0.180.0` was already a project dependency for Museum, so no package was installed. `OrbitControls` is used from the official Three.js addon with unrestricted horizontal orbit, bounded vertical tilt, zoom, 45° buttons, and a reset button. Dragging rotates the view; raycasting opens a room action when its actual 3D object is touched. The three accessible room actions remain visible below the scene for keyboard use and when an object is turned away. The scene does not autoplay or run a continuous animation loop, and it falls back to the existing WebP → SVG → CSS art if WebGL or artwork is unavailable. Old 2D hotspot coordinates were removed from room data because the camera now projects anchors from the 3D models.
+
+Three.js carries the MIT license; the production artifact includes Angular's generated `3rdpartylicenses.txt`. No external model, texture, or runtime asset URL was added. See the [OrbitControls documentation](https://threejs.org/docs/pages/OrbitControls.html) and the [Three.js license](https://github.com/mrdoob/three.js/blob/dev/LICENSE).
+
+| Verification | Result | Evidence |
+| --- | --- | --- |
+| `npx ng build --configuration development --base-href /hung-quynh-our-story/` | PASS | Angular compiled the standalone route, procedural room builder, Three.js controls and template. |
+| `npm run build:pages` | PASS | Production static build and artifact verifier passed: `/hung-quynh-our-story/` base path, 1,520 asset references, letter hash, no original images. Existing CSS budget warnings remain limited to LOVE TREASURE and LOVE FIGHT. Initial output is 292.59 KB raw / 78.35 KB estimated transfer; Our Home route chunk is 118.82 KB / 28.15 KB, plus the shared Three.js chunk at 545.68 KB / 113.54 KB. |
+| Manual Chromium preview at 390 × 844 | PASS | WebGL status `ready`; camera changed from 0° to 45° and reset to 0°; dragging moved the view; clicking the sofa in the 3D scene opened its dialog; the accessible tea action worked. No page errors or failed requests occurred. |
+| Forced WebGL failure with room images blocked | PASS | Existing CSS fallback appeared and the room action buttons remained usable. |
+| `git diff --check` | PASS | No whitespace errors. |
+| Automated tests | NOT RUN | Existing Our Home unit/E2E contracts were updated for the 3D scene but were not run in this follow-up. |
+
+The browser preview is a local Chromium emulation, not a physical-device check. A successful local build does not establish that GitHub Pages has deployed the 3D version.
+
 ### Phase 14 publication gate and remaining work
 
-- Phase 14 status: Hùng approved the welcome, five letters, final message, original SVG scenes, and four selected photos. He chose to share a direct link, so no Event Hub card was added. Existing public music catalog tracks are available in the Our Home player under the earlier public-use approval record. The initial implementation is committed locally; push, GitHub Actions deploy, live Pages/mobile verification, and QR generation are not authorized yet. No voice recording is included.
+- Phase 14 status: Hùng approved the welcome, five letters, final message, original SVG scenes, and four selected photos. He chose to share a direct link, so no Event Hub card was added. Existing public music catalog tracks are available in the Our Home player under the earlier public-use approval record. The initial implementation and 3D follow-up are committed locally; push, GitHub Actions deploy, live Pages/mobile verification, and QR generation remain unauthorized. No voice recording is included.
 - The record-player uses the existing five-track public catalog, whose public-use approval is recorded in the existing Miss You worklog. It requires a play gesture, uses `preload="none"`, persists mute preference, and pauses/releases the source when its dialog or route closes. No Hùng voice recording is included. There is no new Event Hub card. The project remains a static public site; browser-local progress is not access control, and any shipped asset/content is public.
-- P1/P2 are deferred: character/chibi animation, real voice, seasonal themes, mini-game, and shareable room query state. No backend or new runtime engine was added.
+- P1/P2 are deferred: character/chibi animation, real voice, seasonal themes, mini-game, and shareable room query state. No backend or new dependency was added; Our Home reuses the project's existing Three.js dependency.
 - The implementation plan file was user-provided and remains unchanged. No push or deployment was made. Production URL has not been checked; local Pages build is not deployment evidence.
 
 ### Editing and rollback notes

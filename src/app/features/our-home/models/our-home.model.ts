@@ -17,7 +17,6 @@ export interface HouseHotspot {
   readonly icon: string;
   readonly action: HouseHotspotAction;
   readonly payloadId?: string;
-  readonly position: { readonly x: number; readonly y: number };
   readonly awardsStamp?: string;
 }
 

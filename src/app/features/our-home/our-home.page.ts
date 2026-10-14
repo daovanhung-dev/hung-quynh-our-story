@@ -36,7 +36,7 @@ import type { HouseDialogState, HouseHotspot, HouseRoomId } from './models/our-h
       }
 
       <div class="scene-shell">
-        <app-house-scene [room]="room()" [mood]="time.getMood()" [reducedMotion]="reducedMotion()" [lampOn]="lampOn()" [introStage]="introStage()" (activated)="onHotspot($event)" (swiped)="onRoomSwipe($event)" />
+        <app-house-scene [room]="room()" [mood]="time.getMood()" [reducedMotion]="reducedMotion()" [lampOn]="lampOn()" [introStage]="introStage()" (activated)="onHotspot($event)" />
         @if (room().id === 'entrance') {
           <section class="welcome-card" aria-labelledby="welcome-title">
             <div class="welcome-copy">
@@ -230,13 +230,6 @@ export class OurHomePage implements OnDestroy {
     this.progressService.exploreRoom(roomId);
     if (roomId !== 'entrance' && !this.progress().introSeen) this.progressService.markIntroSeen();
     if (roomId !== 'entrance') this.introStage.set('done');
-  }
-
-  protected onRoomSwipe(direction: 'previous' | 'next'): void {
-    const index = this.rooms.findIndex((item) => item.id === this.room().id);
-    const nextIndex = index + (direction === 'next' ? 1 : -1);
-    const nextRoom = this.rooms[nextIndex];
-    if (nextRoom) this.goToRoom(nextRoom.id);
   }
 
   protected onHotspot(hotspot: HouseHotspot): void {
